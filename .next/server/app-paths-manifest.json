@@ -1,0 +1,8 @@
+{
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
+  "/lessons/t-test/page": "app/lessons/t-test/page.js",
+  "/lessons/mean-deviation-editable/page": "app/lessons/mean-deviation-editable/page.js",
+  "/lessons/t-test-editable/page": "app/lessons/t-test-editable/page.js",
+  "/lessons/t-test-editable-2/page": "app/lessons/t-test-editable-2/page.js"
+}

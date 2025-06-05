@@ -1,0 +1,446 @@
+'use client'
+
+import { useState, useEffect, useRef, useCallback } from 'react'
+import * as d3 from 'd3'
+import SmileyViridis from '@/app/components/SmileyViridis'
+
+interface DataPoint {
+  value: number
+  frequency: number
+}
+
+interface SmileyPoint {
+  id: number
+  value: number
+  x: number
+  y: number
+  isPopulation: boolean
+}
+
+// Función para generar un valor de la distribución normal
+const generateNormalValue = (mean: number, std: number): number => {
+  let u = 0, v = 0
+  while (u === 0) u = Math.random()
+  while (v === 0) v = Math.random()
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v)
+  return Math.max(5, Math.min(35, mean + z * std))
+}
+
+export default function SamplingEditable() {
+  // Estados para la población
+  const [populationData, setPopulationData] = useState<DataPoint[]>([])
+  const [populationSmileys, setPopulationSmileys] = useState<SmileyPoint[]>([])
+  const [populationMean, setPopulationMean] = useState<number>(22.32)
+  const [populationStd, setPopulationStd] = useState<number>(5.78)
+  const [populationSize, setPopulationSize] = useState<number>(200)
+
+  // Estados para la muestra
+  const [sampleData, setSampleData] = useState<DataPoint[]>([])
+  const [sampleSmileys, setSampleSmileys] = useState<SmileyPoint[]>([])
+  const [sampleSize, setSampleSize] = useState<number>(30)
+  const [showMean, setShowMean] = useState<boolean>(true)
+  const [isAnimating, setIsAnimating] = useState<boolean>(false)
+  const [animationSpeed, setAnimationSpeed] = useState<number>(800)
+  const [smileyCount, setSmileyCount] = useState<number>(0)
+
+  // Referencias para los gráficos
+  const populationHistogramRef = useRef<SVGSVGElement>(null)
+  const sampleHistogramRef = useRef<SVGSVGElement>(null)
+  const smileysRef = useRef<SVGSVGElement>(null)
+
+  // Función para generar la población inicial
+  const generatePopulation = useCallback(() => {
+    const newPopulationSmileys: SmileyPoint[] = []
+    const newData: { [key: number]: number } = {}
+
+    for (let i = 0; i < populationSize; i++) {
+      const value = generateNormalValue(populationMean, populationStd)
+      const binIndex = Math.floor((value - 5) / 5)
+      newData[binIndex] = (newData[binIndex] || 0) + 1
+
+      newPopulationSmileys.push({
+        id: i,
+        value,
+        x: (i % 20) * 40 + 20,
+        y: Math.floor(i / 20) * 40 + 20,
+        isPopulation: true
+      })
+    }
+
+    const populationDataArray = Object.entries(newData).map(([bin, freq]) => ({
+      value: 5 + Number(bin) * 5,
+      frequency: freq
+    }))
+
+    setPopulationData(populationDataArray)
+    setPopulationSmileys(newPopulationSmileys)
+  }, [populationMean, populationStd, populationSize])
+
+  // Efecto para generar la población inicial
+  useEffect(() => {
+    generatePopulation()
+  }, [generatePopulation])
+
+  // Función para tomar una muestra
+  const takeSample = useCallback(() => {
+    if (smileyCount >= sampleSize) {
+      setIsAnimating(false)
+      setSmileyCount(0)
+      return
+    }
+
+    // Seleccionar un elemento aleatorio de la población
+    const randomIndex = Math.floor(Math.random() * populationSize)
+    const selectedSmiley = populationSmileys[randomIndex]
+
+    // Actualizar histograma de la muestra
+    const binIndex = Math.floor((selectedSmiley.value - 5) / 5)
+    setSampleData(prevData => {
+      const newData = [...prevData]
+      while (newData.length <= binIndex) {
+        newData.push({ value: 5 + newData.length * 5, frequency: 0 })
+      }
+      newData[binIndex].frequency++
+      return newData
+    })
+
+    // Agregar nuevo smiley a la muestra
+    const newSmiley: SmileyPoint = {
+      id: smileyCount,
+      value: selectedSmiley.value,
+      x: (smileyCount % 10) * 40 + 20,
+      y: Math.floor(smileyCount / 10) * 40 + 20,
+      isPopulation: false
+    }
+    setSampleSmileys(prev => [...prev, newSmiley])
+    setSmileyCount(prev => prev + 1)
+  }, [smileyCount, sampleSize, populationSmileys, populationSize])
+
+  // Efecto para manejar la animación del muestreo
+  useEffect(() => {
+    if (!isAnimating) return
+
+    const timeoutId = setTimeout(takeSample, animationSpeed)
+    return () => clearTimeout(timeoutId)
+  }, [isAnimating, takeSample, animationSpeed])
+
+  // Función para actualizar histogramas
+  const updateHistogram = useCallback((
+    ref: React.RefObject<SVGSVGElement>,
+    data: DataPoint[],
+    maxFreq: number,
+    showSampleMean: boolean = false
+  ) => {
+    if (!ref.current) return
+
+    const margin = { top: 40, right: 40, bottom: 60, left: 60 }
+    const width = 800 - margin.left - margin.right
+    const height = 400 - margin.top - margin.bottom
+
+    // Limpiar SVG
+    d3.select(ref.current).selectAll('*').remove()
+
+    // Crear SVG
+    const svg = d3.select(ref.current)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`)
+
+    // Escalas
+    const x = d3.scaleLinear()
+      .domain([0, 40])
+      .range([0, width])
+
+    const y = d3.scaleLinear()
+      .domain([0, maxFreq])
+      .range([height, 0])
+
+    // Ejes
+    svg.append('g')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(x).ticks(8))
+      .append('text')
+      .attr('x', width / 2)
+      .attr('y', 40)
+      .attr('fill', 'black')
+      .style('text-anchor', 'middle')
+      .text('Nivel de Satisfacción')
+
+    svg.append('g')
+      .call(d3.axisLeft(y))
+      .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', -40)
+      .attr('x', -height / 2)
+      .attr('fill', 'black')
+      .style('text-anchor', 'middle')
+      .text('Frecuencia')
+
+    // Barras
+    svg.selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('x', d => x(d.value - 2.5))
+      .attr('y', d => y(d.frequency))
+      .attr('width', width / 16)
+      .attr('height', d => height - y(d.frequency))
+      .attr('fill', '#4F46E5')
+      .attr('opacity', 0.7)
+
+    // Línea de la media poblacional
+    if (showMean) {
+      svg.append('line')
+        .attr('x1', x(populationMean))
+        .attr('x2', x(populationMean))
+        .attr('y1', 0)
+        .attr('y2', height)
+        .attr('stroke', 'red')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '5,5')
+
+      svg.append('text')
+        .attr('x', x(populationMean))
+        .attr('y', -10)
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'red')
+        .text(`Media poblacional: ${populationMean.toFixed(2)}`)
+    }
+
+    // Media muestral
+    if (showSampleMean && data.length > 0) {
+      const allValues = data.flatMap(d => Array(d.frequency).fill(d.value))
+      const sampleMean = d3.mean(allValues) || 0
+
+      svg.append('line')
+        .attr('x1', x(sampleMean))
+        .attr('x2', x(sampleMean))
+        .attr('y1', 0)
+        .attr('y2', height)
+        .attr('stroke', 'green')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '5,5')
+
+      svg.append('text')
+        .attr('x', x(sampleMean))
+        .attr('y', -25)
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'green')
+        .text(`Media muestral: ${sampleMean.toFixed(2)}`)
+    }
+  }, [populationMean])
+
+  // Efecto para actualizar los histogramas
+  useEffect(() => {
+    updateHistogram(populationHistogramRef, populationData, Math.ceil(populationSize * 0.4), true)
+    updateHistogram(sampleHistogramRef, sampleData, Math.ceil(sampleSize * 0.4), true)
+  }, [updateHistogram, populationData, sampleData, sampleSize, populationSize])
+
+  const startAnimation = () => {
+    setSampleData([])
+    setSampleSmileys([])
+    setSmileyCount(0)
+    setIsAnimating(true)
+  }
+
+  const stopAnimation = () => {
+    setIsAnimating(false)
+  }
+
+  return (
+    <div className="py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Muestreo Aleatorio Simple (Editor)
+          </h1>
+          <p className="mt-4 text-lg text-gray-500">
+            Modifica los parámetros de la población y observa cómo afectan al muestreo.
+            La línea roja muestra la media poblacional, mientras que la línea verde muestra la media muestral.
+          </p>
+        </div>
+
+        <div className="mt-12">
+          {/* Panel de control */}
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Controles de Simulación</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Tamaño de población: {populationSize}
+                </label>
+                <input
+                  type="range"
+                  min={50}
+                  max={500}
+                  step={50}
+                  value={populationSize}
+                  onChange={(e) => {
+                    setPopulationSize(Number(e.target.value))
+                    generatePopulation()
+                  }}
+                  disabled={isAnimating}
+                  className="mt-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Tamaño de muestra: {sampleSize}
+                </label>
+                <input
+                  type="range"
+                  min={5}
+                  max={100}
+                  step={5}
+                  value={sampleSize}
+                  onChange={(e) => setSampleSize(Number(e.target.value))}
+                  disabled={isAnimating}
+                  className="mt-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Media poblacional: {populationMean.toFixed(1)}
+                </label>
+                <input
+                  type="range"
+                  min={5}
+                  max={35}
+                  step={0.1}
+                  value={populationMean}
+                  onChange={(e) => {
+                    setPopulationMean(Number(e.target.value))
+                    generatePopulation()
+                  }}
+                  disabled={isAnimating}
+                  className="mt-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Desviación estándar: {populationStd.toFixed(1)}
+                </label>
+                <input
+                  type="range"
+                  min={0.1}
+                  max={10}
+                  step={0.1}
+                  value={populationStd}
+                  onChange={(e) => {
+                    setPopulationStd(Number(e.target.value))
+                    generatePopulation()
+                  }}
+                  disabled={isAnimating}
+                  className="mt-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Velocidad de animación
+                </label>
+                <select
+                  value={animationSpeed}
+                  onChange={(e) => setAnimationSpeed(Number(e.target.value))}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                >
+                  <option value={2000}>Muy lenta</option>
+                  <option value={1200}>Lenta</option>
+                  <option value={800}>Normal</option>
+                  <option value={400}>Rápida</option>
+                  <option value={200}>Muy rápida</option>
+                </select>
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-4">
+              <button
+                onClick={isAnimating ? stopAnimation : startAnimation}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {isAnimating ? 'Detener' : 'Comenzar Muestreo'}
+              </button>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={showMean}
+                  onChange={(e) => setShowMean(e.target.checked)}
+                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <span className="ml-2 text-gray-700">Mostrar Medias</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Población */}
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Población (N={populationSize})</h3>
+            <div className="mt-4 flex justify-center">
+              <svg ref={populationHistogramRef}></svg>
+            </div>
+          </div>
+
+          {/* Muestra */}
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Muestra (n={sampleSize})</h3>
+            <div className="mt-4 flex justify-center">
+              <svg ref={sampleHistogramRef}></svg>
+            </div>
+            <div className="mt-4 flex justify-center">
+              <svg 
+                ref={smileysRef}
+                width="400"
+                height={Math.ceil(sampleSize / 10) * 40 + 40}
+                className="border border-gray-200 rounded-lg"
+              >
+                {sampleSmileys.map(smiley => (
+                  <SmileyViridis
+                    key={smiley.id}
+                    cx={smiley.x}
+                    cy={smiley.y}
+                    happiness={(smiley.value - 5) / 30}
+                  />
+                ))}
+              </svg>
+            </div>
+          </div>
+
+          {/* Explicación */}
+          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Explicación</h3>
+            <div className="prose max-w-none">
+              <h4 className="text-base font-medium text-gray-900">Parámetros de la Población</h4>
+              <p className="text-gray-600 mb-4">
+                Puedes modificar:
+              </p>
+              <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                <li>El tamaño de la población (N)</li>
+                <li>La media poblacional (μ)</li>
+                <li>La desviación estándar poblacional (σ)</li>
+              </ul>
+
+              <h4 className="text-base font-medium text-gray-900 mt-4">Tamaño de Muestra</h4>
+              <p className="text-gray-600 mb-4">
+                Un tamaño de muestra mayor generalmente resulta en:
+              </p>
+              <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                <li>Estimaciones más precisas de la media poblacional</li>
+                <li>Menor variabilidad entre muestras</li>
+                <li>Mayor representatividad de la población</li>
+              </ul>
+
+              <h4 className="text-base font-medium text-gray-900 mt-4">Variabilidad</h4>
+              <p className="text-gray-600 mb-4">
+                La desviación estándar controla la dispersión de los datos:
+              </p>
+              <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                <li>Valores pequeños concentran los datos cerca de la media</li>
+                <li>Valores grandes dispersan los datos</li>
+                <li>Afecta la precisión de las estimaciones muestrales</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+} 

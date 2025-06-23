@@ -13,32 +13,42 @@ export default function SmileyViridis({ cx, cy, radius = 18, happiness }: Smiley
   // Escala de colores viridis
   const color = d3.interpolateViridis(happiness)
   
+  // Calcular el color de los ojos y boca basado en el nivel de felicidad
+  // Para valores bajos usar blanco, para valores altos usar negro
+  const getFaceColor = () => {
+    if (happiness < 0.3) {
+      return 'white' // Blanco para valores bajos (colores oscuros de fondo)
+    } else {
+      return 'black' // Negro para valores altos (colores claros de fondo)
+    }
+  }
+  
+  const faceColor = getFaceColor()
+  
   // Calcular la curva de la sonrisa basada en el nivel de felicidad
   const smileCurve = () => {
     const smileRadius = radius * 0.6
-    const smileOffset = radius * 0.1
-    // Ajustar para que valores bajos den cara triste y altos cara feliz
-    const smileHeight = radius * 0.4 * (happiness - 0.5) // Aumentamos el factor a 0.4 para expresiones más marcadas
+    const smileOffset = radius * 0.25 // Aumentamos de 0.1 a 0.25 para mover la boca más abajo
+    // Exagerar aún más la curvatura para expresiones más dramáticas
+    const smileHeight = radius * 1.2 * (happiness - 0.5) // Aumentamos de 0.8 a 1.2
     
-    // Para valores bajos (< 0.3), hacer una curva hacia abajo
-    // Para valores medios (0.3-0.7), hacer una línea casi recta
-    // Para valores altos (> 0.7), hacer una curva hacia arriba
+    // Para valores bajos (< 0.3), hacer una curva hacia abajo (triste)
+    // Para valores medios (0.3-0.7), hacer una línea recta
+    // Para valores altos (> 0.7), hacer una curva hacia arriba (feliz)
     if (happiness < 0.3) {
-      // Cara triste - curva hacia abajo
+      // Cara triste - curva hacia abajo con arco más pronunciado
       return `M ${cx - smileRadius} ${cy + smileOffset} 
-              Q ${cx} ${cy + smileOffset - smileHeight}, 
+              Q ${cx} ${cy + smileOffset - Math.abs(smileHeight)}, 
                 ${cx + smileRadius} ${cy + smileOffset}`
     } else if (happiness > 0.7) {
-      // Cara feliz - curva hacia arriba
+      // Cara feliz - curva hacia arriba con arco más pronunciado
       return `M ${cx - smileRadius} ${cy + smileOffset} 
-              Q ${cx} ${cy + smileOffset + smileHeight}, 
+              Q ${cx} ${cy + smileOffset + Math.abs(smileHeight)}, 
                 ${cx + smileRadius} ${cy + smileOffset}`
     } else {
-      // Cara neutral - casi recta con ligera curvatura
-      const neutralHeight = radius * 0.1 * (happiness - 0.5)
+      // Cara neutral - línea recta horizontal
       return `M ${cx - smileRadius} ${cy + smileOffset} 
-              Q ${cx} ${cy + smileOffset + neutralHeight}, 
-                ${cx + smileRadius} ${cy + smileOffset}`
+              L ${cx + smileRadius} ${cy + smileOffset}`
     }
   }
 
@@ -78,7 +88,7 @@ export default function SmileyViridis({ cx, cy, radius = 18, happiness }: Smiley
         cy={cy} 
         r={radius} 
         fill={color}
-        stroke="black"
+        stroke="#8c7ddc"
         strokeWidth="0.2"
       />
       
@@ -88,22 +98,22 @@ export default function SmileyViridis({ cx, cy, radius = 18, happiness }: Smiley
         cy={cy - radius * 0.2} 
         rx={eyes.rx} 
         ry={eyes.ry} 
-        fill="black" 
+        fill={faceColor} 
       />
       <ellipse 
         cx={cx + radius * 0.3} 
         cy={cy - radius * 0.2} 
         rx={eyes.rx} 
         ry={eyes.ry} 
-        fill="black" 
+        fill={faceColor} 
       />
       
       {/* Sonrisa */}
       <path 
         d={smileCurve()} 
         fill="transparent" 
-        stroke="black" 
-        strokeWidth="0.2" 
+        stroke={faceColor} 
+        strokeWidth="1.5" 
       />
     </g>
   )

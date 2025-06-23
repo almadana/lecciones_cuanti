@@ -13,10 +13,10 @@ interface CellData {
   totalPercentage: number
 }
 
-interface StackData {
-  [key: string]: number | string
+interface StackedDataItem {
   _row?: string
   _col?: string
+  [key: string]: string | number | undefined
 }
 
 const calculatePercentages = (data: { value: number, row: string, col: string }[]): CellData[] => {
@@ -244,63 +244,63 @@ export default function BivariateTables() {
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
             Tablas Bivariadas
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-600">
             Relación entre nivel educativo y satisfacción con la vida
           </p>
         </div>
 
         <div className="mt-12">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Frecuencias Absolutas</h3>
+          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Frecuencias Absolutas</h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gris-borde">
                 <thead>
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <tr className="bg-morado-claro">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Nivel Educativo
                     </th>
                     {cols.map(col => (
-                      <th key={col} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th key={col} className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                         {col}
                       </th>
                     ))}
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Total
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-blanco divide-y divide-gris-borde">
                   {rows.map(row => (
                     <tr key={row}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                         {row}
                       </td>
                       {cols.map(col => {
                         const cell = data.find(d => d.row === row && d.col === col)
                         return (
-                          <td key={col} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <td key={col} className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {cell?.value}
                           </td>
                         )
                       })}
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                         {rowTotals.find(t => t.row === row)?.total}
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <tr className="bg-gris-claro">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                       Total
                     </td>
                     {cols.map(col => (
-                      <td key={col} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td key={col} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                         {colTotals.find(t => t.col === col)?.total}
                       </td>
                     ))}
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                       {grandTotal}
                     </td>
                   </tr>
@@ -309,32 +309,32 @@ export default function BivariateTables() {
             </div>
           </div>
 
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Frecuencias Porcentuales</h3>
+          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Frecuencias Porcentuales</h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gris-borde">
                 <thead>
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <tr className="bg-morado-claro">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Nivel Educativo
                     </th>
                     {cols.map(col => (
-                      <th key={col} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th key={col} className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                         {col}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-blanco divide-y divide-gris-borde">
                   {rows.map(row => (
                     <tr key={row}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                         {row}
                       </td>
                       {cols.map(col => {
                         const cell = data.find(d => d.row === row && d.col === col)
                         return (
-                          <td key={col} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <td key={col} className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {normalization === 'row' 
                               ? `${cell?.rowPercentage.toFixed(1)}%`
                               : `${cell?.colPercentage.toFixed(1)}%`
@@ -350,19 +350,19 @@ export default function BivariateTables() {
           </div>
 
           <div className="mt-8">
-            <h3 className="text-lg font-medium text-gray-900">Visualización</h3>
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block">Visualización</h3>
             <div className="mt-4 flex items-center space-x-4">
               <label className="text-sm text-gray-600">Normalización:</label>
               <select
                 value={normalization}
                 onChange={(e) => setNormalization(e.target.value as 'row' | 'column')}
-                className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="rounded-md border-gris-borde shadow-sm focus:border-morado-oscuro focus:ring-morado-oscuro p-2"
               >
                 <option value="row">Por filas</option>
                 <option value="column">Por columnas</option>
               </select>
             </div>
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-gray-600">
               El gráfico muestra la distribución porcentual {normalization === 'row' ? 'por nivel educativo' : 'por nivel de satisfacción'}
             </p>
             <div className="mt-4 flex justify-center">
@@ -390,8 +390,8 @@ export default function BivariateTables() {
             />
           </div>
 
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Interpretación</h3>
+          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Interpretación</h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-600">
               <li>La tabla muestra la relación entre el nivel educativo y la satisfacción con la vida</li>
               <li>Se presentan dos tablas:

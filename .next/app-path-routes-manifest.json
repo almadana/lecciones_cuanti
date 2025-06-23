@@ -1,0 +1,23 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/lessons/bivariate-tables-editable-2/page": "/lessons/bivariate-tables-editable-2",
+  "/lessons/bivariate-tables-editable/page": "/lessons/bivariate-tables-editable",
+  "/lessons/bivariate-tables/page": "/lessons/bivariate-tables",
+  "/lessons/chi-square-editable/page": "/lessons/chi-square-editable",
+  "/lessons/chi-square/page": "/lessons/chi-square",
+  "/lessons/confidence-interval/page": "/lessons/confidence-interval",
+  "/lessons/correlation-editable/page": "/lessons/correlation-editable",
+  "/lessons/correlation/page": "/lessons/correlation",
+  "/lessons/descriptive-stats-editable/page": "/lessons/descriptive-stats-editable",
+  "/lessons/descriptive-stats/page": "/lessons/descriptive-stats",
+  "/lessons/mean-deviation-editable/page": "/lessons/mean-deviation-editable",
+  "/lessons/mean-deviation/page": "/lessons/mean-deviation",
+  "/lessons/sampling/page": "/lessons/sampling",
+  "/lessons/t-test-editable-2/page": "/lessons/t-test-editable-2",
+  "/lessons/t-test-editable/page": "/lessons/t-test-editable",
+  "/lessons/t-test/page": "/lessons/t-test",
+  "/lessons/univariate-tables-editable/page": "/lessons/univariate-tables-editable",
+  "/lessons/univariate-tables/page": "/lessons/univariate-tables",
+  "/page": "/"
+}

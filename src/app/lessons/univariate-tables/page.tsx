@@ -81,49 +81,49 @@ export default function UnivariateTables() {
       .attr('y', d => y(d.value))
       .attr('width', x.bandwidth())
       .attr('height', d => height - y(d.value))
-      .attr('fill', '#4F46E5')
+      .attr('fill', '#8c7ddc')
   }, [data]) // Only re-run if data changes
 
   return (
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
             Resultados de la Encuesta de Satisfacción con la Vida
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-600">
             La encuesta Latinobarómetro de 2017 preguntó a las personas sobre su grado de satisfacción con la vida.
             Estos son los resultados para Uruguay.
           </p>
         </div>
 
         <div className="mt-12">
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gris-borde">
                 <thead>
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <tr className="bg-morado-claro">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Nivel de Satisfacción
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Frecuencia
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Porcentaje
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-blanco divide-y divide-gris-borde">
                   {data.map((item) => (
                     <tr key={item.category}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                         {item.category}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {item.value}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {item.percentage.toFixed(1)}%
                       </td>
                     </tr>
@@ -133,7 +133,7 @@ export default function UnivariateTables() {
             </div>
 
             <div className="mt-8">
-              <h3 className="text-lg font-medium text-gray-900">Visualización</h3>
+              <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block">Visualización</h3>
               <div className="mt-4 flex justify-center">
                 <svg ref={svgRef}></svg>
               </div>

@@ -1,8 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-morado-claro: #b4a5fa;
+  --color-morado-oscuro: #8c7ddc;
+  --color-verde-claro: #9bfa82;
+  --color-gris-claro: #ededed;
+  --color-gris-borde: #cbcbcb;
+  --color-negro: #000000;
+  --color-blanco: #ffffff;
 }
 
 @theme inline {
@@ -22,5 +30,58 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }
+
+/* Estilos globales para sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background: #000000;
+  height: 3px;
+  border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-track {
+  width: 100%;
+  height: 3px;
+  background: #000000;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 3px;
+  background: #000000;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #8c7ddc;
+  cursor: pointer;
+  border: 2px solid #8c7ddc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #8c7ddc;
+  cursor: pointer;
+  border: 2px solid #8c7ddc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Ejemplo de uso de colores personalizados en Tailwind:
+   bg-[var(--color-morado-claro)] text-[var(--color-negro)]
+   border-[var(--color-morado-oscuro)]
+*/

@@ -34,23 +34,23 @@ export default function Question({
   }
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm">
-      <p className="text-lg font-medium text-gray-900">{question}</p>
+    <div className="bg-blanco rounded-lg p-6 shadow-lg border border-gris-borde">
+      <p className="text-lg font-medium text-negro">{question}</p>
       {hint && (
-        <p className="mt-2 text-sm text-gray-500">{hint}</p>
+        <p className="mt-2 text-sm text-gray-600">{hint}</p>
       )}
 
       <div className="mt-4">
         {type === 'multiple-choice' && options && (
           <div className="space-y-2">
-            {options.map((option) => (
+            {options.map((option, index) => (
               <button
-                key={option.text}
+                key={`${index}-${option.text}`}
                 onClick={() => setAnswer(option.text)}
-                className={`block w-full text-left px-4 py-2 rounded-md border ${
+                className={`block w-full text-left px-4 py-2 rounded-md border transition-colors duration-200 ${
                   answer === option.text
-                    ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-300 hover:border-indigo-300'
+                    ? 'border-morado-oscuro bg-morado-claro text-negro font-bold'
+                    : 'border-gris-borde hover:border-morado-oscuro hover:bg-morado-claro'
                 }`}
               >
                 {option.text}
@@ -64,7 +64,7 @@ export default function Question({
             type="number"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="block w-full rounded-md border-gris-borde shadow-sm focus:border-morado-oscuro focus:ring-morado-oscuro p-2"
             placeholder="Ingresa tu respuesta"
             step="0.1"
           />
@@ -72,18 +72,18 @@ export default function Question({
 
         <button
           onClick={checkAnswer}
-          className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-negro bg-morado-oscuro hover:bg-verde-claro transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-morado-oscuro"
         >
           Verificar Respuesta
         </button>
 
         {isCorrect !== null && (
-          <div className={`mt-4 p-4 rounded-md ${isCorrect ? 'bg-green-50' : 'bg-red-50'}`}>
-            <p className={`text-sm ${isCorrect ? 'text-green-800' : 'text-red-800'}`}>
+          <div className={`mt-4 p-4 rounded-md ${isCorrect ? 'bg-verde-claro' : 'bg-red-100'}`}>
+            <p className={`text-sm font-bold ${isCorrect ? 'text-negro' : 'text-red-800'}`}>
               {isCorrect ? '¡Correcto!' : '¡Inténtalo de nuevo!'}
             </p>
             {showExplanation && (
-              <p className="mt-2 text-sm text-gray-600">{explanation}</p>
+              <p className="mt-2 text-sm text-negro">{explanation}</p>
             )}
           </div>
         )}

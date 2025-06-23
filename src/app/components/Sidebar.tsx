@@ -3,6 +3,10 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+interface SidebarProps {
+  isOpen: boolean;
+}
+
 const lessons = [
   {
     id: '1',
@@ -73,41 +77,84 @@ const lessons = [
         href: '/lessons/t-test-editable-2',
       }
     ]
+  },
+  {
+    id: '6',
+    title: 'Chi cuadrado',
+    href: '/lessons/chi-square',
+    subLessons: [
+      {
+        id: '6.1',
+        title: 'Editor de Chi cuadrado',
+        href: '/lessons/chi-square-editable',
+      }
+    ]
+  },
+  {
+    id: '7',
+    title: 'Correlación',
+    href: '/lessons/correlation',
+    subLessons: [
+      {
+        id: '7.1',
+        title: 'Editor de Correlación',
+        href: '/lessons/correlation-editable',
+      }
+    ]
+  },
+  {
+    id: '8',
+    title: 'Estadísticas Descriptivas',
+    href: '/lessons/descriptive-stats',
+    subLessons: [
+      {
+        id: '8.1',
+        title: 'Editor de Estadísticas Descriptivas',
+        href: '/lessons/descriptive-stats-editable',
+      }
+    ]
   }
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen }: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <nav className="flex flex-col space-y-1">
-      {lessons.map((lesson) => (
-        <div key={lesson.id}>
-          <Link
-            href={lesson.href}
-            className={`${
-              pathname === lesson.href
-                ? 'bg-gray-100 text-gray-900'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-            } group flex items-center px-3 py-2 text-sm font-medium rounded-md`}
-          >
-            <span className="truncate">{lesson.id}. {lesson.title}</span>
-          </Link>
-          {lesson.subLessons.map((subLesson) => (
-            <Link
-              key={subLesson.id}
-              href={subLesson.href}
-              className={`${
-                pathname === subLesson.href
-                  ? 'bg-gray-100 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-              } group flex items-center pl-8 pr-3 py-2 text-sm font-medium rounded-md`}
-            >
-              <span className="truncate">{subLesson.id}. {subLesson.title}</span>
-            </Link>
+    <aside className={`fixed left-0 top-0 h-full w-64 bg-blanco shadow-lg border-r border-gris-borde overflow-y-auto transition-transform duration-300 z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className="p-4">
+        <h2 className="text-lg font-bold text-negro mb-4 bg-morado-claro p-3 rounded-lg">
+          Lecciones de Estadística
+        </h2>
+        <nav className="space-y-1">
+          {lessons.map((lesson) => (
+            <div key={lesson.id}>
+              <Link
+                href={lesson.href}
+                className={`${
+                  pathname === lesson.href
+                    ? 'bg-morado-oscuro text-blanco font-bold'
+                    : 'text-negro hover:bg-morado-oscuro hover:text-blanco hover:font-bold'
+                } group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
+              >
+                <span className="truncate">{lesson.id}. {lesson.title}</span>
+              </Link>
+              {lesson.subLessons.map((subLesson) => (
+                <Link
+                  key={subLesson.id}
+                  href={subLesson.href}
+                  className={`${
+                    pathname === subLesson.href
+                      ? 'bg-morado-oscuro text-blanco font-bold'
+                      : 'text-negro hover:bg-morado-oscuro hover:text-blanco hover:font-bold'
+                  } group flex items-center pl-8 pr-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
+                >
+                  <span className="truncate">{subLesson.id}. {subLesson.title}</span>
+                </Link>
+              ))}
+            </div>
           ))}
-        </div>
-      ))}
-    </nav>
+        </nav>
+      </div>
+    </aside>
   )
 } 

@@ -1,0 +1,175 @@
+/*Nuevos ajustes Yose*/
+
+th {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.logo {
+  height: 95%;
+}
+.barraPie {
+  /*background: #FFFFEE; 
+  border-bottom: 1px solid #CCC; 
+  height: 75px;
+  line-height: 75px;
+  text-align: center;*/
+  border-top: 1px solid #CCC;
+  height: 100px;
+  font-size: 100% !important;
+  line-height: 75px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 60px;
+  padding-top: 20px;
+}
+
+
+body {
+	font-family: "Roboto", sans-serif !important;
+	background-image: url(https://i.ibb.co/CHZLyFH/Recurso-33.png);
+  background-repeat: no-repeat;
+  background-position-x: 90%;
+  background-size: 30%;
+  background-position-y: 3%;
+}
+
+a {
+  color: #000 !important;
+}
+
+a:focus, a:hover {
+  color: #6446fa !important;
+}
+
+
+.h1 {
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+}
+
+.well {
+  background-color: #e7e6ff !important;
+	border-radius: 15px !important;
+	border: 2px solid #8c7ddc !important;
+	margin-left: 10px !important; 
+  }
+
+
+.nav-tabs {
+  margin-bottom: 30px !important;
+}
+
+.nav > li > a:focus, .nav > li > a:hover {
+  background-color: #e7e6ff !important;
+  font-weight: bold !important;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+  outline: none 1px #000;
+}
+
+
+.container-fluid {
+  width: 85%;
+	padding-top: 50px;
+}
+
+.container-fluid::before {
+  background-image: url(https://psico.edu.uy/themes/custom/hemet/logo-m.png);
+  background-repeat: no-repeat;
+  background-position: left top;
+  height: 60px;
+  width: 100%;
+  background-size: 25%;
+}
+
+.irs--shiny .irs-bar {
+   border-top: 1px solid #9bfa82  !important;
+  border-bottom: 1px solid #9bfa82  !important;
+  background: #9bfa82  !important;
+}
+.irs--shiny .irs-from, .irs--shiny .irs-to, .irs--shiny .irs-single {
+  background-color: #6446fa !important;
+}
+
+  .table > tbody > tr > td, 
+  .table > tbody > tr > th, 
+  .table > tfoot > tr > td, 
+  .table > tfoot > tr > th, 
+  .table > thead > tr > td, 
+  .table > thead > tr > th {
+  border-top: 1px solid #8c7ddc;
+}
+
+.table > thead > tr > th {
+  border-bottom: 2px solid #8c7ddc;
+}
+
+ol, ul {
+  margin-top: 30px !important;
+}
+
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  body {
+    background-position-x: center;
+    background-image: none;
+    background-size: 100%;
+    padding: 10px;
+  }
+
+  .logo {
+	display: none;
+  }
+
+  .barraPie {
+    height: auto;
+    line-height: normal;
+    margin-top: 20px;
+    margin-bottom: 10px;
+	font-size: 80% !important;
+  }
+		
+  .container-fluid {
+    width: 100%;
+    padding-top: 20px;
+  }
+	
+.container-fluid::before {
+  background-image: url(https://psico.edu.uy/themes/custom/hemet/logo-m.png);
+  background-repeat: no-repeat;
+  background-position: left top;
+  height: 60px;
+  width: 100%;
+  background-size: 50%;
+}
+
+  .h1 {
+    font-size: 1.5rem;
+    margin: 20px 0;
+  }
+
+  .well {
+    margin-left: 0;
+    padding: 15px;
+    font-size: 1rem;
+  }
+
+  .table > tbody > tr > td, 
+  .table > tbody > tr > th, 
+  .table > tfoot > tr > td, 
+  .table > tfoot > tr > th, 
+  .table > thead > tr > td, 
+  .table > thead > tr > th {
+    font-size: 0.9rem;
+    padding: 5px;
+  }
+
+  ol, ul {
+    margin-top: 15px !important;
+  }
+}
+

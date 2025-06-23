@@ -41,7 +41,7 @@ export default function ConfidenceInterval() {
   const [populationSmileys, setPopulationSmileys] = useState<SmileyPoint[]>([])
   const [populationMean, setPopulationMean] = useState<number>(22.32)
   const [populationStd, setPopulationStd] = useState<number>(5.78)
-  const populationSize = 50 // Tamaño fijo de la población más pequeño
+  const populationSize = 200 // Cambiado de 50 a 200
 
   // Estados para las muestras e intervalos
   const [currentSampleData, setCurrentSampleData] = useState<DataPoint[]>([])
@@ -53,6 +53,7 @@ export default function ConfidenceInterval() {
   const [animationSpeed, setAnimationSpeed] = useState<number>(800)
   const [sampleCount, setSampleCount] = useState<number>(0)
   const [coverage, setCoverage] = useState<number>(0)
+  const [showPopulationPanel, setShowPopulationPanel] = useState<boolean>(true) // Estado para controlar visibilidad del panel de población
 
   // Referencias para los gráficos
   const populationHistogramRef = useRef<SVGSVGElement>(null)
@@ -100,8 +101,8 @@ export default function ConfidenceInterval() {
       newPopulationSmileys.push({
         id: i,
         value,
-        x: (i % 10) * 60 + 30,
-        y: Math.floor(i / 10) * 60 + 30,
+        x: (i % 20) * 30 + 15, // Cambiado de 10*60+30 a 20*30+15 para más columnas y smileys más pequeños
+        y: Math.floor(i / 20) * 30 + 15, // Cambiado de 60 a 30 para smileys más pequeños
         isSelected: false
       })
     })
@@ -144,7 +145,7 @@ export default function ConfidenceInterval() {
     // Calcular estadísticas de la muestra
     const sampleValues = Array.from(selectedIndices).map(i => populationSmileys[i].value)
     const sampleMean = d3.mean(sampleValues) || 0
-    const sampleStd = d3.deviation(sampleValues) || 0
+    const sampleStd = d3.deviation(sampleValues) || 0 // Desvío estándar muestral (con n-1 en denominador)
     const standardError = sampleStd / Math.sqrt(sampleSize)
     const zValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, sampleSize - 1)
     
@@ -264,7 +265,7 @@ export default function ConfidenceInterval() {
       .data(data)
       .enter()
       .append('rect')
-      .attr('x', d => x(d.value - binWidth/2) + 0.5)
+      .attr('x', d => Math.max(0, x(d.value - binWidth/2) + 0.5))
       .attr('y', d => y(d.frequency))
       .attr('width', barWidth)
       .attr('height', d => innerHeight - y(d.frequency))
@@ -303,15 +304,6 @@ export default function ConfidenceInterval() {
       if (currentInterval) {
         const { mean: currentMean, lower, upper } = currentInterval
         
-        // Intervalo de confianza
-        svg.append('rect')
-          .attr('x', x(lower))
-          .attr('y', -5)
-          .attr('width', x(upper) - x(lower))
-          .attr('height', 10)
-          .attr('fill', '#2563EB')
-          .attr('opacity', 0.2)
-
         // Línea de la media muestral
         svg.append('line')
           .attr('x1', x(currentMean))
@@ -453,12 +445,17 @@ export default function ConfidenceInterval() {
 
   // Efecto para actualizar los gráficos
   useEffect(() => {
-    if (populationHistogramRef.current && currentSampleHistogramRef.current) {
+    // Solo actualizar gráfico de población si el panel está visible
+    if (showPopulationPanel && populationHistogramRef.current) {
       updateHistogram(populationHistogramRef as React.RefObject<SVGSVGElement>, populationData, Math.ceil(populationSize * 0.4), false, [5, 35], 800, 200)
+    }
+    
+    // Siempre actualizar gráficos de muestreo
+    if (currentSampleHistogramRef.current && intervalsPlotRef.current) {
       updateHistogram(currentSampleHistogramRef as React.RefObject<SVGSVGElement>, currentSampleData, Math.ceil(sampleSize * 0.4), true, [5, 35], 800, 200)
       updateIntervalsPlot()
     }
-  }, [updateHistogram, populationData, currentSampleData, updateIntervalsPlot, populationSize, sampleSize])
+  }, [updateHistogram, populationData, currentSampleData, updateIntervalsPlot, populationSize, sampleSize, showPopulationPanel])
 
   const startAnimation = () => {
     setSampleIntervals([])
@@ -566,42 +563,67 @@ export default function ConfidenceInterval() {
             </div>
           </div>
 
-          {/* Población */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Población (N={populationSize})</h3>
-            <div className="mt-4 flex justify-center">
-              <svg ref={populationHistogramRef}></svg>
-            </div>
-            <div className="mt-4 flex justify-center">
-              <svg 
-                ref={populationSmileysRef}
-                width="600"
-                height={Math.ceil(populationSize / 10) * 60 + 60}
-                className="border border-gray-200 rounded-lg"
-              >
-                {populationSmileys.map(smiley => (
-                  <g key={smiley.id}>
-                    {smiley.isSelected && (
-                      <circle
+          {/* Población - Solo mostrar si showPopulationPanel es true */}
+          {showPopulationPanel && (
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-medium text-gray-900">Población (N={populationSize})</h3>
+                <button
+                  onClick={() => setShowPopulationPanel(!showPopulationPanel)}
+                  className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Ocultar Panel de Población
+                </button>
+              </div>
+              <div className="mt-4 flex justify-center">
+                <svg ref={populationHistogramRef}></svg>
+              </div>
+              <div className="mt-4 flex justify-center">
+                <svg 
+                  ref={populationSmileysRef}
+                  width="600"
+                  height={Math.ceil(populationSize / 20) * 30 + 30} // Ajustado para 20 columnas y 30px de altura
+                  className="border border-gray-200 rounded-lg"
+                >
+                  {populationSmileys.map(smiley => (
+                    <g key={smiley.id}>
+                      {smiley.isSelected && (
+                        <circle
+                          cx={smiley.x}
+                          cy={smiley.y}
+                          r="12" // Reducido de 25 a 12 para smileys más pequeños
+                          fill="#DC2626"
+                          opacity="0.3"
+                        />
+                      )}
+                      <SmileyViridis
                         cx={smiley.x}
                         cy={smiley.y}
-                        r="25"
-                        fill="#DC2626"
-                        opacity="0.3"
+                        radius={8} // Reducido de 18 (por defecto) a 8
+                        happiness={(smiley.value - 5) / 30}
                       />
-                    )}
-                    <SmileyViridis
-                      cx={smiley.x}
-                      cy={smiley.y}
-                      happiness={(smiley.value - 5) / 30}
-                    />
-                  </g>
-                ))}
-              </svg>
+                    </g>
+                  ))}
+                </svg>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Muestra Actual */}
+          {/* Botón para mostrar panel de población cuando está oculto */}
+          {!showPopulationPanel && (
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setShowPopulationPanel(true)}
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Mostrar Panel de Población
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Muestra Actual - Siempre mostrar */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               Muestra Actual (n={sampleSize}, muestra #{sampleCount} de {numSamples})
@@ -611,7 +633,7 @@ export default function ConfidenceInterval() {
             </div>
           </div>
 
-          {/* Intervalos de Confianza */}
+          {/* Intervalos de Confianza - Siempre mostrar */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               Intervalos de Confianza ({sampleIntervals.length} muestras)

@@ -230,10 +230,10 @@ export default function MeanDeviation() {
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
             Media y Desviación Estándar
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-600">
             Desde el año 2015, en el curso "Métodos y Técnicas Cuantitativas", recabamos datos sobre la satisfacción general con la vida de los estudiantes.
             La escala va de 5 a 35 puntos, con una media de 22.32 y un desvío estándar de 5.78.
           </p>
@@ -241,8 +241,8 @@ export default function MeanDeviation() {
 
         <div className="mt-12">
           {/* Panel de control */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Controles de Simulación</h3>
+          <div className="bg-blanco rounded-lg shadow-lg p-6 mb-8 border border-gris-borde">
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Controles de Simulación</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -252,7 +252,7 @@ export default function MeanDeviation() {
                   value={sampleSize}
                   onChange={(e) => setSampleSize(Number(e.target.value))}
                   disabled={isAnimating}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-md border-gris-borde shadow-sm focus:border-morado-oscuro focus:ring-morado-oscuro p-2"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
@@ -269,7 +269,7 @@ export default function MeanDeviation() {
                 <select
                   value={animationSpeed}
                   onChange={(e) => setAnimationSpeed(Number(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-md border-gris-borde shadow-sm focus:border-morado-oscuro focus:ring-morado-oscuro p-2"
                 >
                   <option value={2000}>Muy lenta</option>
                   <option value={1200}>Lenta</option>
@@ -282,7 +282,7 @@ export default function MeanDeviation() {
             <div className="mt-4 flex space-x-4">
               <button
                 onClick={isAnimating ? stopAnimation : startAnimation}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-negro bg-morado-oscuro hover:bg-verde-claro transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-morado-oscuro"
               >
                 {isAnimating ? 'Detener' : 'Comenzar'}
               </button>
@@ -291,7 +291,7 @@ export default function MeanDeviation() {
                   type="checkbox"
                   checked={showMean}
                   onChange={(e) => setShowMean(e.target.checked)}
-                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="rounded border-gris-borde text-morado-oscuro focus:ring-morado-oscuro"
                 />
                 <span className="ml-2 text-gray-700">Mostrar Media</span>
               </label>
@@ -300,7 +300,7 @@ export default function MeanDeviation() {
                   type="checkbox"
                   checked={showMedian}
                   onChange={(e) => setShowMedian(e.target.checked)}
-                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="rounded border-gris-borde text-morado-oscuro focus:ring-morado-oscuro"
                 />
                 <span className="ml-2 text-gray-700">Mostrar Mediana</span>
               </label>
@@ -309,7 +309,7 @@ export default function MeanDeviation() {
                   type="checkbox"
                   checked={showMode}
                   onChange={(e) => setShowMode(e.target.checked)}
-                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="rounded border-gris-borde text-morado-oscuro focus:ring-morado-oscuro"
                 />
                 <span className="ml-2 text-gray-700">Mostrar Moda</span>
               </label>
@@ -317,14 +317,14 @@ export default function MeanDeviation() {
           </div>
 
           {/* Área de Smileys */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Muestra Actual</h3>
+          <div className="bg-blanco rounded-lg shadow-lg p-6 mb-8 border border-gris-borde">
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Muestra Actual</h3>
             <div className="mt-4 flex justify-center">
               <svg 
                 ref={smileysRef}
                 width="800"
                 height={Math.ceil(sampleSize / 20) * 40 + 40}
-                className="border border-gray-200 rounded-lg"
+                className="border border-gris-borde rounded-lg"
               >
                 {smileys.map(smiley => (
                   <SmileyViridis
@@ -339,30 +339,30 @@ export default function MeanDeviation() {
           </div>
 
           {/* Histograma */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Distribución de Satisfacción con la Vida</h3>
+          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Distribución de Satisfacción con la Vida</h3>
             <div className="mt-4 flex justify-center">
               <svg ref={histogramRef}></svg>
             </div>
           </div>
 
           {/* Explicación */}
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Explicación</h3>
+          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Explicación</h3>
             <div className="prose max-w-none">
-              <h4 className="text-base font-medium text-gray-900">Media</h4>
+              <h4 className="text-base font-medium text-negro">Media</h4>
               <p className="text-gray-600 mb-4">
                 La media es el promedio aritmético de todos los valores. Se calcula sumando todos los valores y dividiendo por el número total de observaciones.
                 En nuestra encuesta, la media de satisfacción es 22.32, lo que indica un nivel moderado-alto de satisfacción general.
               </p>
 
-              <h4 className="text-base font-medium text-gray-900">Desviación Estándar</h4>
+              <h4 className="text-base font-medium text-negro">Desviación Estándar</h4>
               <p className="text-gray-600 mb-4">
                 La desviación estándar (5.78 en nuestra encuesta) mide qué tan dispersos están los valores respecto a la media.
                 Un desvío menor indica que los valores tienden a estar más cerca de la media, mientras que un desvío mayor indica mayor dispersión.
               </p>
 
-              <h4 className="text-base font-medium text-gray-900">Interpretación</h4>
+              <h4 className="text-base font-medium text-negro">Interpretación</h4>
               <ul className="list-disc pl-5 space-y-2 text-gray-600">
                 <li>Aproximadamente el 68% de los estudiantes tienen un nivel de satisfacción entre 16.54 y 28.10 (media ± 1 desvío)</li>
                 <li>Cerca del 95% tienen un nivel entre 10.76 y 33.88 (media ± 2 desvíos)</li>

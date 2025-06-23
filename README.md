@@ -20,6 +20,26 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Estilos personalizados
+
+El proyecto ahora incluye los colores principales y la fuente Roboto del diseño original en la configuración de Tailwind. Puedes usarlos así:
+
+```jsx
+<div className="bg-morado-claro text-negro font-sans p-4 rounded-lg">
+  Ejemplo de tarjeta con los nuevos estilos
+</div>
+
+<button className="bg-morado-oscuro hover:bg-verde-claro text-negro font-bold py-2 px-4 rounded">
+  Botón personalizado
+</button>
+
+<table className="border border-gris-borde bg-gris-claro">
+  ...
+</table>
+```
+
+Puedes seguir usando utilidades de Tailwind para espaciados, bordes, etc. La fuente Roboto es la predeterminada para todo el sitio.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

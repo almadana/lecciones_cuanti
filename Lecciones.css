@@ -1,0 +1,227 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Observaciones:
+   Quitar uno de los "lecciones" y agregar "Métodos y Técnicas cuantitativas" */
+
+/* Contenido principal */
+
+html {
+  font-family: Roboto;
+}
+
+.body_content {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(10rem, 1fr) 3fr;
+  grid-auto-rows: auto;
+  container-type: inline-size;
+  container-name: body_content;
+  position: relative;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+header {
+  margin-top: 2%;
+}
+
+/* Sidebar */
+aside {
+  grid-column: 1 / -1;
+  overflow: auto;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 20%;
+  height: 100vh;
+  border-radius: 0 20px 20px 0;
+  background: #fff;
+  transform: translate(0);
+  transition: transform .5s cubic-bezier(.77,.2,.05,1), background .5s cubic-bezier(.77,.2,.05,1), opacity .55s ease;
+  z-index: 100;
+  box-shadow: 0 4.61807px 18.47226px #0000000d, 0 3.69445px 18.47226px #0000000d;
+}
+
+a {
+  text-decoration: none !important;
+	color: black !important;
+}
+
+/* Encabezados */
+h2 {
+  text-align: center !important;
+  margin-top: 30px;
+}
+
+aside h2 {
+  background-color: #b4a5fa;
+  padding: 10px 10px 10px 15px;
+  text-align: left !important;
+  font-size: 18px;
+}
+
+main h2 {
+  text-align: left !important;
+}
+
+h3 {
+  font-weight: normal !important;
+}
+
+/* Main */
+main {
+ 	width: 70%;
+  float: left;
+  padding-left: 0px;
+}
+
+/* Listas y enlaces */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #fff;
+  font-weight: normal !important;
+}
+
+ol li ul li {
+  color: #000;
+  margin: 5px 14px;
+  text-decoration: none;
+  border-bottom: 1px dotted #a4a4a4;
+  padding-left: 5px;
+}
+
+li {
+  padding: 8px 0px;
+}
+
+li::marker {
+  color: #8c7ddc;
+  font-weight: bold;
+}
+
+li a:hover {
+  background-color: #8c7ddc;
+  color: white !important;
+  font-weight: bold;
+  padding: 4px;
+  border-radius: 5px;
+}
+
+/* Footer */
+footer .logos img {
+  max-height: 5rem !important;
+  margin-bottom: 40px;
+  margin-inline: 125px;
+  margin-top: 50px !important;
+}
+
+/* Tablas */
+.pure-table {
+  background-color: #ededed;
+  border: 2px solid #cbcbcb !important;
+  width: 100%;
+}
+
+.pure-table thead {
+  background-color: #b4a5fa !important;
+  text-align: center !important;
+}
+
+.pure-table-bordered td {
+  border-bottom: 1px solid #cbcbcb !important;
+  text-align: center;
+}
+
+/* Botones */
+.pure-button {
+  background-color: #8c7ddc !important;
+  border-radius: 7px !important;
+  font-weight: bold;
+  color: rgb(0, 0, 0) !important;
+}
+
+.pure-button:hover {
+  background-color: #9bfa82 !important;
+}
+
+/* Formularios */
+button, input, optgroup, select, textarea {
+  line-height: 1.7 !important;
+  margin-right: 20px !important;
+}
+
+/* Responsivo */
+
+@media (min-width: 1390px) {
+aside {
+  width: 15%;
+}	
+}
+
+@media (min-width: 801px) and (max-width: 1050px) {
+  main {
+	width: 70%;
+  margin-left: 10%;
+}	
+}
+
+@media (min-width: 1051px) {
+  main {
+	width: 80%;
+	  margin-left: 20px;
+}	
+}
+@media (max-width: 800px) {
+  .body_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5% 10%;
+  }
+
+  aside {
+    position: inherit;
+    width: 100%;
+    height: 80vh;
+    border-radius: 0;
+    box-shadow: 0 4.61807px 18.47226px #0000000d,0 3.69445px 18.47226px #0000000d;
+  }
+
+  h2, h3 {
+    text-align: center !important;
+    margin-top: 20px;
+  }
+
+  main {
+    margin-right: 0;
+    width: 100%;
+	    padding-left: 0px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .pure-button {
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  footer .logos img {
+    margin-inline: 15px;
+  }
+  
+  .question {
+    font-size: 14px !important;
+
+  }
+}
+
+

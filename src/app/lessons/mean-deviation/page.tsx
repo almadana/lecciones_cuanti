@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import * as d3 from 'd3'
 import SmileyViridis from '@/app/components/SmileyViridis'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface DataPoint {
   value: number
@@ -25,7 +26,7 @@ const generateNormalValue = (mean: number, std: number): number => {
   return Math.max(5, Math.min(35, mean + z * std))
 }
 
-export default function MeanDeviation() {
+export default function MeanDeviationPage() {
   const [data, setData] = useState<DataPoint[]>([])
   const [smileys, setSmileys] = useState<SmileyPoint[]>([])
   const [sampleSize, setSampleSize] = useState<number>(100)
@@ -228,10 +229,16 @@ export default function MeanDeviation() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/mean-deviation-editable"
+        showPrevious={false}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Media y Desviación Estándar
+            Media y Desviación (1 de 2)
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             Desde el año 2015, en el curso "Métodos y Técnicas Cuantitativas", recabamos datos sobre la satisfacción general con la vida de los estudiantes.
@@ -373,6 +380,12 @@ export default function MeanDeviation() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/mean-deviation-editable"
+        showPrevious={false}
+      />
     </div>
   )
 } 

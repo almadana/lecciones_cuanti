@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import SmileyViridis from '@/app/components/SmileyViridis'
 import jStat from 'jstat'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface Person {
   id: number
@@ -183,10 +184,16 @@ export default function TTestEditable() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={2}
+        totalSteps={3}
+        previousUrl="/lessons/t-test"
+        nextUrl="/lessons/t-test-editable-2"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Prueba t de Student (Editable)
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Prueba T - Editable (2 de 3)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Comparación de la satisfacción con la vida entre hombres y mujeres
@@ -382,6 +389,12 @@ export default function TTestEditable() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={2}
+        totalSteps={3}
+        previousUrl="/lessons/t-test"
+        nextUrl="/lessons/t-test-editable-2"
+      />
     </div>
   )
 } 

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import * as d3 from 'd3'
 import SmileyViridis from '@/app/components/SmileyViridis'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface DataPoint {
   value: number
@@ -31,7 +32,7 @@ const generateNormalValue = (mean: number, std: number): number => {
   return Math.max(5, Math.min(35, mean + z * std))
 }
 
-export default function Sampling() {
+export default function SamplingPage() {
   // Estados para la población
   const [populationData, setPopulationData] = useState<DataPoint[]>([])
   const [populationSmileys, setPopulationSmileys] = useState<SmileyPoint[]>([])
@@ -478,10 +479,16 @@ export default function Sampling() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/sampling-editable"
+        showPrevious={false}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Distribución Muestral de la Media
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Muestreo (1 de 2)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Observa cómo se forma la distribución muestral de la media a medida que tomamos muestras repetidas.
@@ -658,6 +665,12 @@ export default function Sampling() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/sampling-editable"
+        showPrevious={false}
+      />
     </div>
   )
 } 

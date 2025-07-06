@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
+import LessonHeader from '@/app/components/LessonHeader';
+import LessonNavigation from '@/app/components/LessonNavigation';
 import Question from '@/app/components/Question'
 
 interface DataPoint {
@@ -104,7 +106,7 @@ export default function EditableUnivariateTables() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">
-            Editor de Tablas Univariadas
+            Editor de Tablas Univariadas (2 de 2)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Modifica las frecuencias de la encuesta de satisfacción y observa cómo cambian los porcentajes y la visualización
@@ -204,6 +206,14 @@ export default function EditableUnivariateTables() {
             </ul>
           </div>
         </div>
+
+        {/* Navegación */}
+        <LessonNavigation
+          currentStep={2}
+          totalSteps={2}
+          previousUrl="/lessons/univariate-tables"
+          showNext={false}
+        />
       </div>
     </div>
   )

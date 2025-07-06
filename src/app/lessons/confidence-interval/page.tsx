@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import * as d3 from 'd3'
 import SmileyViridis from '@/app/components/SmileyViridis'
 import jStat from 'jstat'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface DataPoint {
   value: number
@@ -35,7 +36,7 @@ const generateNormalValue = (mean: number, std: number): number => {
   return Math.max(5, Math.min(35, mean + z * std))
 }
 
-export default function ConfidenceInterval() {
+export default function ConfidenceIntervalPage() {
   // Estados para la población
   const [populationData, setPopulationData] = useState<DataPoint[]>([])
   const [populationSmileys, setPopulationSmileys] = useState<SmileyPoint[]>([])
@@ -471,10 +472,16 @@ export default function ConfidenceInterval() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={1}
+        showPrevious={false}
+        showNext={false}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Intervalos de Confianza
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Intervalo de Confianza (1 de 1)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Observa cómo se construyen los intervalos de confianza y su cobertura.
@@ -685,6 +692,12 @@ export default function ConfidenceInterval() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={1}
+        showPrevious={false}
+        showNext={false}
+      />
     </div>
   )
 } 

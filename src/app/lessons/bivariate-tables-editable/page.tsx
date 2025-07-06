@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import Question from '@/app/components/Question'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface CellData {
   row: string
@@ -42,7 +43,7 @@ const rawData = [
   { row: 'Universidad', col: 'Satisfecho', value: 189 },
 ]
 
-export default function BivariateTables() {
+export default function EditableBivariateTables() {
   const [data, setData] = useState<CellData[]>(calculatePercentages(rawData))
   const [normalization, setNormalization] = useState<'row' | 'column'>('row')
   const svgRef = useRef<SVGSVGElement>(null)
@@ -261,10 +262,16 @@ export default function BivariateTables() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={2}
+        totalSteps={2}
+        previousUrl="/lessons/bivariate-tables"
+        showNext={false}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Editor de Tablas Bivariadas
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Tablas Bivariadas - Editable (2 de 2)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Modifica los valores de la tabla y observa cómo cambian los porcentajes y la visualización
@@ -440,6 +447,12 @@ export default function BivariateTables() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={2}
+        totalSteps={2}
+        previousUrl="/lessons/bivariate-tables"
+        showNext={false}
+      />
     </div>
   )
 } 

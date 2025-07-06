@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import jStat from 'jstat';
 import LessonHeader from '@/app/components/LessonHeader';
+import LessonNavigation from '@/app/components/LessonNavigation';
 import Question from '@/app/components/Question';
 
 // Configuración de la población
@@ -99,7 +100,7 @@ export default function DescriptiveStatsPage() {
 
   return (
     <article className="max-w-4xl mx-auto p-4">
-      <LessonHeader title="Estadísticas Descriptivas" />
+      <LessonHeader title="Estadísticas Descriptivas (1 de 2)" />
       
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Distribución de Horas de Sueño</h2>
@@ -435,6 +436,14 @@ export default function DescriptiveStatsPage() {
           explanation="El 50% de los datos se encuentra entre el primer cuartil (Q1) y el tercer cuartil (Q3). Esto se conoce como el rango intercuartílico."
         />
       </section>
+
+      {/* Navegación */}
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/descriptive-stats-editable"
+        showPrevious={false}
+      />
     </article>
   );
 } 

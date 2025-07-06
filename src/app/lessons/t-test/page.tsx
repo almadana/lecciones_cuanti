@@ -5,6 +5,7 @@ import * as d3 from 'd3'
 import SmileyViridis from '@/app/components/SmileyViridis'
 import { createRoot } from 'react-dom/client'
 import jStat from 'jstat'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface Person {
   id: number
@@ -36,7 +37,7 @@ const sampleData: Person[] = [
   }))
 ]
 
-export default function TTest() {
+export default function TTestPage() {
   // Referencias para los gráficos
   const maleHistogramRef = useRef<SVGSVGElement>(null)
   const femaleHistogramRef = useRef<SVGSVGElement>(null)
@@ -170,10 +171,16 @@ export default function TTest() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={3}
+        nextUrl="/lessons/t-test-editable"
+        showPrevious={false}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Prueba t de Student
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Prueba T (1 de 3)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Comparación de la satisfacción con la vida entre hombres y mujeres
@@ -320,6 +327,12 @@ export default function TTest() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={3}
+        nextUrl="/lessons/t-test-editable"
+        showPrevious={false}
+      />
     </div>
   )
 } 

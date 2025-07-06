@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import Question from '@/app/components/Question'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface CellData {
   row: string
@@ -242,10 +243,16 @@ export default function BivariateTables() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/bivariate-tables-editable"
+        showPrevious={false}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Tablas Bivariadas
+            Tablas Bivariadas (1 de 2)
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             Relación entre nivel educativo y satisfacción con la vida
@@ -411,6 +418,12 @@ export default function BivariateTables() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/bivariate-tables-editable"
+        showPrevious={false}
+      />
     </div>
   )
 } 

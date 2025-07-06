@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import SmileyViridis from '@/app/components/SmileyViridis'
 import jStat from 'jstat'
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 interface Person {
   id: number
@@ -22,7 +23,7 @@ const generateNormalData = (n: number, mean: number, std: number): number[] => {
   })
 }
 
-export default function TTestEditableAdvanced() {
+export default function TTestEditable2Page() {
   // Estados para las medias y desviaciones estándar
   const [maleMean, setMaleMean] = useState(21.5)
   const [femaleMean, setFemaleMean] = useState(23.1)
@@ -204,10 +205,16 @@ export default function TTestEditableAdvanced() {
 
   return (
     <div className="py-8">
+      <LessonNavigation
+        currentStep={3}
+        totalSteps={3}
+        previousUrl="/lessons/t-test-editable"
+        showNext={false}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Prueba t de Student (Editor Avanzado)
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Prueba T - Avanzado (3 de 3)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Comparación de la satisfacción con la vida entre hombres y mujeres
@@ -448,6 +455,12 @@ export default function TTestEditableAdvanced() {
           </div>
         </div>
       </div>
+      <LessonNavigation
+        currentStep={3}
+        totalSteps={3}
+        previousUrl="/lessons/t-test-editable"
+        showNext={false}
+      />
     </div>
   )
 } 

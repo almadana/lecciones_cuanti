@@ -7,6 +7,7 @@ import LessonHeader from '@/app/components/LessonHeader';
 import SmileyViridis from '@/app/components/SmileyViridis';
 import Clocky from '@/app/components/Clocky';
 import { regressionLinear } from 'd3-regression';
+import LessonNavigation from '@/app/components/LessonNavigation';
 
 // Configuración de la población
 const POPULATION_SIZE = 50;
@@ -51,10 +52,32 @@ function pearsonCorrelation(x: number[], y: number[]) {
   return numerator / denominator;
 }
 
+// Función para calcular el p-valor de la correlación
+function calculatePValue(r: number, n: number) {
+  if (n <= 2) return 1;
+  
+  const t = r * Math.sqrt((n - 2) / (1 - r * r));
+  const df = n - 2;
+  
+  // Usar la distribución t de Student para calcular el p-valor
+  const pValue = 2 * (1 - (jStat as any).studentt.cdf(Math.abs(t), df));
+  return pValue;
+}
+
+// Función para determinar si la correlación es significativa
+function isSignificant(pValue: number, alpha: number = 0.05) {
+  return pValue < alpha;
+}
+
 export default function CorrelationPage() {
   const [alpha, setAlpha] = useState(1);
   const [data, setData] = useState<[number, number][]>([]);
   const [pearson, setPearson] = useState(1);
+  const [showPValue, setShowPValue] = useState(false);
+
+  // Calcular p-valor y significancia
+  const pValue = calculatePValue(pearson, data.length);
+  const isSignificantResult = isSignificant(pValue);
 
   // Escalas
   const xScale = d3.scaleLinear()
@@ -116,7 +139,7 @@ export default function CorrelationPage() {
 
   return (
     <article className="max-w-4xl mx-auto p-4">
-      <LessonHeader title="Correlación" />
+      <LessonHeader title="Correlación (1 de 2)" />
       
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Satisfacción con la vida y horas de sueño</h2>
@@ -132,6 +155,35 @@ export default function CorrelationPage() {
           <h3 className="text-xl font-bold">
             R de Pearson = {pearson.toFixed(2)} | R² = {(pearson * pearson).toFixed(2)}
           </h3>
+          
+          <div className="flex items-center mb-2">
+            <input
+              type="checkbox"
+              id="showPValue"
+              checked={showPValue}
+              onChange={(e) => setShowPValue(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="showPValue" className="text-sm font-medium">
+              Mostrar p-valor y prueba de significancia
+            </label>
+          </div>
+          
+          {showPValue && (
+            <div className="mt-2 p-3 bg-gray-100 rounded">
+              <p className="text-sm">
+                <strong>p-valor:</strong> {pValue.toFixed(4)}
+              </p>
+              <p className="text-sm">
+                <strong>Significancia estadística:</strong>{' '}
+                {isSignificantResult ? (
+                  <span className="text-green-600 font-semibold">Sí, la correlación es estadísticamente significativa (p &lt; 0.05)</span>
+                ) : (
+                  <span className="text-red-600 font-semibold">No, la correlación no es estadísticamente significativa (p ≥ 0.05)</span>
+                )}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mb-8">
@@ -279,6 +331,14 @@ export default function CorrelationPage() {
           <li>R = -1 indica una correlación negativa perfecta</li>
         </ul>
       </section>
+
+      {/* Navegación */}
+      <LessonNavigation
+        currentStep={1}
+        totalSteps={2}
+        nextUrl="/lessons/correlation-editable"
+        showPrevious={false}
+      />
     </article>
   );
 } 

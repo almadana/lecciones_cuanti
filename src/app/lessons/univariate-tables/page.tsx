@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
+import LessonHeader from '@/app/components/LessonHeader';
+import LessonNavigation from '@/app/components/LessonNavigation';
 import Question from '@/app/components/Question'
 
 interface DataPoint {
@@ -89,7 +91,7 @@ export default function UnivariateTables() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Resultados de la Encuesta de Satisfacción con la Vida
+            Resultados de la Encuesta de Satisfacción con la Vida (1 de 2)
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             La encuesta Latinobarómetro de 2017 preguntó a las personas sobre su grado de satisfacción con la vida.
@@ -160,6 +162,14 @@ export default function UnivariateTables() {
             />
           </div>
         </div>
+
+        {/* Navegación */}
+        <LessonNavigation
+          currentStep={1}
+          totalSteps={2}
+          nextUrl="/lessons/univariate-tables-editable"
+          showPrevious={false}
+        />
       </div>
     </div>
   )

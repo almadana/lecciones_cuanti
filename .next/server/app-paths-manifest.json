@@ -1,23 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/lessons/bivariate-tables-editable-2/page": "app/lessons/bivariate-tables-editable-2/page.js",
-  "/lessons/bivariate-tables-editable/page": "app/lessons/bivariate-tables-editable/page.js",
+  "/lessons/univariate-tables-editable/page": "app/lessons/univariate-tables-editable/page.js",
   "/lessons/bivariate-tables/page": "app/lessons/bivariate-tables/page.js",
-  "/lessons/chi-square-editable/page": "app/lessons/chi-square-editable/page.js",
-  "/lessons/chi-square/page": "app/lessons/chi-square/page.js",
-  "/lessons/confidence-interval/page": "app/lessons/confidence-interval/page.js",
-  "/lessons/correlation-editable/page": "app/lessons/correlation-editable/page.js",
-  "/lessons/correlation/page": "app/lessons/correlation/page.js",
-  "/lessons/descriptive-stats-editable/page": "app/lessons/descriptive-stats-editable/page.js",
-  "/lessons/descriptive-stats/page": "app/lessons/descriptive-stats/page.js",
-  "/lessons/mean-deviation-editable/page": "app/lessons/mean-deviation-editable/page.js",
   "/lessons/mean-deviation/page": "app/lessons/mean-deviation/page.js",
   "/lessons/sampling/page": "app/lessons/sampling/page.js",
-  "/lessons/t-test-editable-2/page": "app/lessons/t-test-editable-2/page.js",
-  "/lessons/t-test-editable/page": "app/lessons/t-test-editable/page.js",
-  "/lessons/t-test/page": "app/lessons/t-test/page.js",
-  "/lessons/univariate-tables-editable/page": "app/lessons/univariate-tables-editable/page.js",
-  "/lessons/univariate-tables/page": "app/lessons/univariate-tables/page.js",
-  "/page": "app/page.js"
+  "/lessons/sampling-editable/page": "app/lessons/sampling-editable/page.js"
 }

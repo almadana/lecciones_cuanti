@@ -42,11 +42,11 @@ export default function LessonNavigation({
   };
 
   return (
-    <section className="flex justify-between items-center py-8 border-t">
+    <section className="flex justify-between items-center py-8 border-t border-gris-borde">
       {showPrevious ? (
         <button
           onClick={handlePrevious}
-          className="flex items-center gap-2 px-6 py-3 bg-[#8c7ddc] text-white rounded-lg hover:bg-[#7a6bc8] transition-colors"
+          className="flex items-center gap-2 px-6 py-3 bg-morado-oscuro text-blanco rounded-lg hover:bg-[#7a6bc8] transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -64,7 +64,7 @@ export default function LessonNavigation({
       {showNext ? (
         <button
           onClick={handleNext}
-          className="flex items-center gap-2 px-6 py-3 bg-[#9bfa82] text-black rounded-lg hover:bg-[#8ae671] transition-colors"
+          className="flex items-center gap-2 px-6 py-3 bg-verde-claro text-negro rounded-lg hover:bg-[#8ae671] transition-colors"
         >
           <span>Siguiente</span>
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

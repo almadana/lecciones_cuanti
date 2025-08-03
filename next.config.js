@@ -5,8 +5,8 @@ const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
-  basePath: isProd ? '/lecciones_cuanti' : '',
-  assetPrefix: isProd ? '/lecciones_cuanti/' : '',
+  basePath: isProd ? '/lecciones' : '',
+  assetPrefix: isProd ? '/lecciones/' : '',
   eslint: {
     // Warning: only use this in development
     ignoreDuringBuilds: true,

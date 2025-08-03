@@ -664,6 +664,50 @@ export default function SamplingPage() {
             </div>
           </div>
         </div>
+
+        {/* Resumen de la Lección */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+            Resumen de Conceptos Clave
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-bold text-negro mb-2">Conceptos de Muestreo:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>Población:</strong> Conjunto completo de elementos de interés</li>
+                <li><strong>Muestra:</strong> Subconjunto representativo de la población</li>
+                <li><strong>Parámetro:</strong> Característica numérica de la población</li>
+                <li><strong>Estadístico:</strong> Característica numérica de la muestra</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-negro mb-2">Tipos de Muestreo:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>Aleatorio simple:</strong> Cada elemento tiene igual probabilidad</li>
+                <li><strong>Sistemático:</strong> Selección a intervalos regulares</li>
+                <li><strong>Estratificado:</strong> División en grupos homogéneos</li>
+                <li><strong>Por conglomerados:</strong> Selección de grupos completos</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+            <h3 className="font-bold text-negro mb-2">Conceptos Importantes:</h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <strong>Error de muestreo:</strong><br/>
+                <code>Error = |Estadístico - Parámetro|</code><br/>
+                <strong>Precisión:</strong><br/>
+                <code>Precisión ∝ 1/√n</code>
+              </div>
+              <div>
+                <strong>Sesgo:</strong><br/>
+                <code>Sesgo = E[Estadístico] - Parámetro</code><br/>
+                <strong>Tamaño de muestra:</strong><br/>
+                <code>n = (z²σ²) / E²</code>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <LessonNavigation
         currentStep={1}

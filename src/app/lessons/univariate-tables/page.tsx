@@ -161,6 +161,50 @@ export default function UnivariateTables() {
               explanation="Esta afirmación es falsa. Mirando los datos, solo 37 personas (aproximadamente 3.1%) no están 'Para nada satisfechas' con su vida. Esto está lejos de ser una mayoría."
             />
           </div>
+
+          {/* Resumen de la Lección */}
+          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+              Resumen de Conceptos Clave
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-bold text-negro mb-2">Tablas de Frecuencia:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li><strong>Frecuencia absoluta:</strong> Número de casos en cada categoría</li>
+                  <li><strong>Frecuencia relativa:</strong> Proporción o porcentaje del total</li>
+                  <li><strong>Frecuencia acumulada:</strong> Suma de frecuencias hasta esa categoría</li>
+                  <li><strong>Total:</strong> Suma de todas las frecuencias absolutas</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li>Las tablas organizan datos categóricos de manera clara</li>
+                  <li>Los porcentajes facilitan la comparación entre categorías</li>
+                  <li>Los gráficos de barras complementan la información numérica</li>
+                  <li>La moda es la categoría con mayor frecuencia</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+              <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
+              <div className="grid md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <strong>Frecuencia relativa:</strong><br/>
+                  <code>fr = f / N × 100%</code>
+                </div>
+                <div>
+                  <strong>Porcentaje:</strong><br/>
+                  <code>% = (f / N) × 100</code>
+                </div>
+                <div>
+                  <strong>Total:</strong><br/>
+                  <code>N = Σf</code>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Navegación */}

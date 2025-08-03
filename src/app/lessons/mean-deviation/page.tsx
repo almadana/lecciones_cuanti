@@ -379,6 +379,50 @@ export default function MeanDeviationPage() {
             </div>
           </div>
         </div>
+
+        {/* Resumen de la Lección */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+            Resumen de Conceptos Clave
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-bold text-negro mb-2">Medidas de Tendencia Central:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>Media aritmética:</strong> Suma de valores dividida por el número de casos</li>
+                <li><strong>Mediana:</strong> Valor que divide la distribución en dos partes iguales</li>
+                <li><strong>Moda:</strong> Valor que aparece con mayor frecuencia</li>
+                <li><strong>Media ponderada:</strong> Media que considera diferentes pesos</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-negro mb-2">Medidas de Dispersión:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>Rango:</strong> Diferencia entre valor máximo y mínimo</li>
+                <li><strong>Varianza:</strong> Promedio de desviaciones al cuadrado</li>
+                <li><strong>Desviación estándar:</strong> Raíz cuadrada de la varianza</li>
+                <li><strong>Coeficiente de variación:</strong> Desviación estándar relativa a la media</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+            <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <strong>Media aritmética:</strong><br/>
+                <code>μ = Σx / n</code><br/>
+                <strong>Varianza:</strong><br/>
+                <code>σ² = Σ(x - μ)² / n</code>
+              </div>
+              <div>
+                <strong>Desviación estándar:</strong><br/>
+                <code>σ = √σ²</code><br/>
+                <strong>Coeficiente de variación:</strong><br/>
+                <code>CV = (σ / μ) × 100%</code>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <LessonNavigation
         currentStep={1}

@@ -394,6 +394,50 @@ export default function Regression() {
             </div>
           </div>
         </div>
+
+        {/* Resumen de la Lección */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+            Resumen de Conceptos Clave
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-bold text-negro mb-2">Regresión Lineal:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>Ecuación:</strong> y = mx + b</li>
+                <li><strong>Pendiente (m):</strong> Cambio en Y por unidad de cambio en X</li>
+                <li><strong>Intercepto (b):</strong> Valor de Y cuando X = 0</li>
+                <li><strong>R²:</strong> Porcentaje de variabilidad explicada</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>R² &gt; 0.9:</strong> Excelente predicción</li>
+                <li><strong>R² 0.7-0.9:</strong> Buena predicción</li>
+                <li><strong>R² 0.3-0.7:</strong> Predicción moderada</li>
+                <li><strong>R² &lt; 0.3:</strong> Predicción débil</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+            <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <strong>Pendiente:</strong><br/>
+                <code>m = (nΣxy - ΣxΣy) / (nΣx² - (Σx)²)</code><br/>
+                <strong>Intercepto:</strong><br/>
+                <code>b = (Σy - mΣx) / n</code>
+              </div>
+              <div>
+                <strong>R²:</strong><br/>
+                <code>R² = 1 - (SSres / SStot)</code><br/>
+                <strong>Predicción:</strong><br/>
+                <code>ŷ = mx + b</code>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <LessonNavigation
         currentStep={1}

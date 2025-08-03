@@ -228,6 +228,50 @@ export default function ChiSquarePage() {
             explanation="El p-valor representa la probabilidad de obtener una diferencia igual o más extrema que la observada en la muestra, asumiendo que las variables son independientes en la población (hipótesis nula)."
           />
         </section>
+
+        {/* Resumen de la Lección */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+            Resumen de Conceptos Clave
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-bold text-negro mb-2">Prueba Chi Cuadrado:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>Propósito:</strong> Analizar independencia entre variables categóricas</li>
+                <li><strong>Hipótesis nula:</strong> Las variables son independientes</li>
+                <li><strong>Hipótesis alternativa:</strong> Las variables están relacionadas</li>
+                <li><strong>Nivel de significancia:</strong> α = 0.05</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>p &lt; 0.05:</strong> Rechazar H₀, variables relacionadas</li>
+                <li><strong>p ≥ 0.05:</strong> No rechazar H₀, variables independientes</li>
+                <li><strong>Chi cuadrado:</strong> Mide la magnitud de la asociación</li>
+                <li><strong>Grados de libertad:</strong> (r-1)(c-1)</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+            <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <strong>Chi cuadrado:</strong><br/>
+                <code>χ² = Σ[(O-E)²/E]</code><br/>
+                <strong>Frecuencia esperada:</strong><br/>
+                <code>E = (R×C)/N</code>
+              </div>
+              <div>
+                <strong>Grados de libertad:</strong><br/>
+                <code>df = (r-1)(c-1)</code><br/>
+                <strong>Residuo:</strong><br/>
+                <code>Residuo = (O-E)/√E</code>
+              </div>
+            </div>
+          </div>
+        </div>
       </article>
       <LessonNavigation
         currentStep={1}

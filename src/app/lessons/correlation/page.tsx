@@ -332,6 +332,50 @@ export default function CorrelationPage() {
         </ul>
       </section>
 
+      {/* Resumen de la Lección */}
+      <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+          Resumen de Conceptos Clave
+        </h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="font-bold text-negro mb-2">Correlación de Pearson:</h3>
+            <ul className="list-disc pl-5 space-y-1 text-sm">
+              <li><strong>Rango:</strong> Varía entre -1 y +1</li>
+              <li><strong>Correlación positiva:</strong> R &gt; 0, variables aumentan juntas</li>
+              <li><strong>Correlación negativa:</strong> R &lt; 0, una aumenta cuando otra disminuye</li>
+              <li><strong>Sin correlación:</strong> R ≈ 0, no hay relación lineal</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
+            <ul className="list-disc pl-5 space-y-1 text-sm">
+              <li><strong>R = ±1:</strong> Correlación perfecta</li>
+              <li><strong>R = ±0.7 a ±1:</strong> Correlación fuerte</li>
+              <li><strong>R = ±0.3 a ±0.7:</strong> Correlación moderada</li>
+              <li><strong>R = ±0.1 a ±0.3:</strong> Correlación débil</li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+          <h3 className="font-bold text-negro mb-2">Fórmula y Conceptos:</h3>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <strong>Coeficiente de correlación:</strong><br/>
+              <code>r = Σ(x-x̄)(y-ȳ) / √[Σ(x-x̄)²Σ(y-ȳ)²]</code><br/>
+              <strong>Coeficiente de determinación:</strong><br/>
+              <code>R² = r²</code>
+            </div>
+            <div>
+              <strong>Significancia estadística:</strong><br/>
+              <code>p &lt; 0.05</code><br/>
+              <strong>Correlación no implica causalidad</strong><br/>
+              <code>R ≠ Causa</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Navegación */}
       <LessonNavigation
         currentStep={1}

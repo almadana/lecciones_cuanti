@@ -416,6 +416,50 @@ export default function BivariateTables() {
               <li>Los totales marginales ayudan a entender la distribución general de cada variable</li>
             </ul>
           </div>
+
+          {/* Resumen de la Lección */}
+          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+              Resumen de Conceptos Clave
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-bold text-negro mb-2">Tablas Bivariadas:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li><strong>Tabla de contingencia:</strong> Organiza datos de dos variables categóricas</li>
+                  <li><strong>Frecuencias absolutas:</strong> Número de casos en cada combinación</li>
+                  <li><strong>Frecuencias porcentuales:</strong> Distribución relativa por filas o columnas</li>
+                  <li><strong>Totales marginales:</strong> Suma de filas y columnas</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li>Las tablas bivariadas revelan patrones de asociación</li>
+                  <li>Los porcentajes por filas muestran distribución condicional</li>
+                  <li>Los porcentajes por columnas permiten comparar grupos</li>
+                  <li>Los gráficos apilados visualizan las distribuciones</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+              <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
+              <div className="grid md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <strong>Porcentaje por filas:</strong><br/>
+                  <code>% = (fij / fi.) × 100</code>
+                </div>
+                <div>
+                  <strong>Porcentaje por columnas:</strong><br/>
+                  <code>% = (fij / f.j) × 100</code>
+                </div>
+                <div>
+                  <strong>Porcentaje del total:</strong><br/>
+                  <code>% = (fij / N) × 100</code>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <LessonNavigation

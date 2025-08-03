@@ -327,6 +327,50 @@ export default function TTestPage() {
             </div>
           </div>
         </div>
+
+        {/* Resumen de la Lección */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+            Resumen de Conceptos Clave
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-bold text-negro mb-2">Prueba t de Student:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>Propósito:</strong> Comparar medias entre dos grupos</li>
+                <li><strong>Hipótesis nula:</strong> No hay diferencia entre grupos</li>
+                <li><strong>Hipótesis alternativa:</strong> Existe diferencia entre grupos</li>
+                <li><strong>Nivel de significancia:</strong> α = 0.05</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li><strong>p &lt; 0.05:</strong> Rechazar H₀, diferencia significativa</li>
+                <li><strong>p ≥ 0.05:</strong> No rechazar H₀, diferencia no significativa</li>
+                <li><strong>Estadístico t:</strong> Mide la magnitud de la diferencia</li>
+                <li><strong>Grados de libertad:</strong> n₁ + n₂ - 2</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 p-4 bg-gris-claro rounded-lg">
+            <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <strong>Estadístico t:</strong><br/>
+                <code>t = (x̄₁ - x̄₂) / SE</code><br/>
+                <strong>Error estándar:</strong><br/>
+                <code>SE = √[s²(1/n₁ + 1/n₂)]</code>
+              </div>
+              <div>
+                <strong>Varianza combinada:</strong><br/>
+                <code>s² = [(n₁-1)s₁² + (n₂-1)s₂²] / (n₁+n₂-2)</code><br/>
+                <strong>Grados de libertad:</strong><br/>
+                <code>df = n₁ + n₂ - 2</code>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <LessonNavigation
         currentStep={1}

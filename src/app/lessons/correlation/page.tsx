@@ -336,8 +336,9 @@ export default function CorrelationPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
-        nextUrl="/lessons/correlation-editable"
-        showPrevious={false}
+        nextUrl="/lessons/regression"
+        showPrevious={true}
+        previousUrl="/lessons/sampling"
       />
     </article>
   );

@@ -166,9 +166,10 @@ export default function UnivariateTables() {
         {/* Navegación */}
         <LessonNavigation
           currentStep={1}
-          totalSteps={2}
+          totalSteps={5}
+          previousUrl="/lessons/introduction"
           nextUrl="/lessons/univariate-tables-editable"
-          showPrevious={false}
+          showPrevious={true}
         />
       </div>
     </div>

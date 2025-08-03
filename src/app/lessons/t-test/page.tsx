@@ -175,7 +175,8 @@ export default function TTestPage() {
         currentStep={1}
         totalSteps={3}
         nextUrl="/lessons/t-test-editable"
-        showPrevious={false}
+        showPrevious={true}
+        previousUrl="/lessons/regression-editable"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">

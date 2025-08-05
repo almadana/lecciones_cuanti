@@ -53,11 +53,14 @@ const initialData: DataPoint[] = [
   { x: 8, y: 92 }
 ]
 
+// Punto fijo que siempre estará presente
+const fixedPoint: DataPoint = { x: 5, y: 80 }
+
 export default function RegressionEditable() {
-  const [data, setData] = useState<DataPoint[]>(initialData)
+  const [data, setData] = useState<DataPoint[]>([fixedPoint, ...initialData])
   const [newX, setNewX] = useState<string>('')
   const [newY, setNewY] = useState<string>('')
-  const [regression, setRegression] = useState<RegressionLine>(calculateRegression(initialData))
+  const [regression, setRegression] = useState<RegressionLine>(calculateRegression([fixedPoint, ...initialData]))
   const [showLine, setShowLine] = useState(true)
   const [showEquation, setShowEquation] = useState(true)
   const svgRef = useRef<SVGSVGElement>(null)
@@ -72,8 +75,6 @@ export default function RegressionEditable() {
     // Clear previous content
     d3.select(svgRef.current).selectAll('*').remove()
 
-    if (data.length === 0) return
-
     // Set up dimensions
     const margin = { top: 40, right: 40, bottom: 60, left: 60 }
     const width = 600 - margin.left - margin.right
@@ -86,14 +87,14 @@ export default function RegressionEditable() {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
 
-    // Create scales
+    // Create scales with fixed domain
     const x = d3.scaleLinear()
       .range([0, width])
-      .domain([0, d3.max(data, d => d.x) || 0])
+      .domain([0, 15]) // Dominio fijo de 0 a 15
 
     const y = d3.scaleLinear()
       .range([height, 0])
-      .domain([0, d3.max(data, d => d.y) || 0])
+      .domain([0, 120]) // Dominio fijo de 0 a 120
 
     // Add X axis
     svg.append('g')
@@ -137,15 +138,17 @@ export default function RegressionEditable() {
       .attr('cx', d => x(d.x))
       .attr('cy', d => y(d.y))
       .attr('r', 6)
-      .attr('fill', '#8c7ddc')
-      .attr('stroke', '#6b5b95')
+      .attr('fill', d => d === fixedPoint ? '#ff6b6b' : '#8c7ddc') // Punto fijo en rojo
+      .attr('stroke', d => d === fixedPoint ? '#cc0000' : '#6b5b95')
       .attr('stroke-width', 2)
       .on('click', (event, d) => {
-        // Remove point on click
-        setData(data.filter(point => point !== d))
+        // Solo permitir eliminar puntos que no sean el fijo
+        if (d !== fixedPoint) {
+          setData(data.filter(point => point !== d))
+        }
       })
       .append('title')
-      .text(d => `(${d.x}, ${d.y}) - Click para eliminar`)
+      .text(d => d === fixedPoint ? `(${d.x}, ${d.y}) - Punto fijo` : `(${d.x}, ${d.y}) - Click para eliminar`)
 
     // Add equation text
     if (showEquation && data.length >= 2) {
@@ -178,15 +181,57 @@ export default function RegressionEditable() {
   }
 
   const resetData = () => {
-    setData(initialData)
+    setData([fixedPoint, ...initialData])
   }
 
   const clearData = () => {
-    setData([])
+    setData([fixedPoint]) // Siempre mantener el punto fijo
   }
 
   const predictValue = (x: number) => {
     return regression.slope * x + regression.intercept
+  }
+
+  // Función para manejar clics en el gráfico
+  const handleGraphClick = (event: React.MouseEvent<SVGSVGElement>) => {
+    if (!svgRef.current) return
+
+    const svg = svgRef.current
+    const rect = svg.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+
+    // Obtener las escalas fijas
+    const margin = { top: 40, right: 40, bottom: 60, left: 60 }
+    const width = 600 - margin.left - margin.right
+    const height = 400 - margin.top - margin.bottom
+
+    // Convertir coordenadas del clic a valores de datos usando escalas fijas
+    const xScale = d3.scaleLinear()
+      .range([0, width])
+      .domain([0, 15])
+
+    const yScale = d3.scaleLinear()
+      .range([height, 0])
+      .domain([0, 120])
+
+    // Ajustar por el margen
+    const adjustedX = x - margin.left
+    const adjustedY = y - margin.top
+
+    // Convertir a valores de datos
+    const dataX = xScale.invert(adjustedX)
+    const dataY = yScale.invert(adjustedY)
+
+    // Verificar que el clic esté dentro del área del gráfico
+    if (adjustedX >= 0 && adjustedX <= width && adjustedY >= 0 && adjustedY <= height) {
+      // Agregar el nuevo punto
+      const newPoint: DataPoint = {
+        x: Math.round(dataX * 10) / 10, // Redondear a 1 decimal
+        y: Math.round(dataY * 10) / 10
+      }
+      setData([...data, newPoint])
+    }
   }
 
   return (
@@ -209,6 +254,33 @@ export default function RegressionEditable() {
         </div>
 
         <div className="mt-12 space-y-8">
+          {/* Interpretación */}
+          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+              Experimenta y Observa
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-bold text-negro mb-2">Actividades Sugeridas:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li>Agrega puntos que sigan una línea perfecta y observa R² = 1</li>
+                  <li>Agrega puntos dispersos y observa cómo disminuye R²</li>
+                  <li>Prueba con diferentes pendientes (positivas y negativas)</li>
+                  <li>Observa cómo cambia la línea al agregar o eliminar puntos</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-bold text-negro mb-2">Conceptos Clave:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li>La línea de regresión minimiza la suma de cuadrados de los residuos</li>
+                  <li>R² mide qué tan bien el modelo explica la variabilidad</li>
+                  <li>La pendiente indica la dirección y magnitud de la relación</li>
+                  <li>El intercepto es el valor predicho cuando X = 0</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {/* Controles */}
           <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
@@ -218,6 +290,9 @@ export default function RegressionEditable() {
               <div>
                 <h3 className="font-bold text-negro mb-3">Agregar Punto</h3>
                 <div className="space-y-3">
+                  <p className="text-sm text-gray-600 mb-3">
+                    💡 <strong>Nuevo:</strong> También puedes hacer clic directamente en el gráfico para agregar puntos.
+                  </p>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Valor X:
@@ -287,7 +362,7 @@ export default function RegressionEditable() {
                       onClick={clearData}
                       className="w-full bg-red-500 text-blanco py-2 px-4 rounded-md hover:bg-red-600"
                     >
-                      Limpiar Todos los Datos
+                      Limpiar Datos (mantiene punto fijo)
                     </button>
                   </div>
                 </div>
@@ -304,10 +379,15 @@ export default function RegressionEditable() {
               <div>
                 <h3 className="font-bold text-negro mb-3">Gráfico de Dispersión</h3>
                 <div className="flex justify-center">
-                  <svg ref={svgRef}></svg>
+                  <svg 
+                    ref={svgRef} 
+                    onClick={handleGraphClick}
+                    style={{ cursor: 'crosshair' }}
+                    className="border border-gray-300 rounded-lg"
+                  ></svg>
                 </div>
                 <p className="text-sm text-gray-600 mt-2">
-                  Haz clic en cualquier punto para eliminarlo. Agrega nuevos puntos usando los controles.
+                  Haz clic en cualquier punto para eliminarlo (excepto el punto rojo fijo). Haz clic en el gráfico para agregar nuevos puntos.
                 </p>
               </div>
               <div>
@@ -438,33 +518,6 @@ export default function RegressionEditable() {
               ]}
               explanation="Una pendiente negativa indica una relación inversa: cuando la variable independiente (X) aumenta, la variable dependiente (Y) disminuye."
             />
-          </div>
-
-          {/* Interpretación */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Experimenta y Observa
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-bold text-negro mb-2">Actividades Sugeridas:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li>Agrega puntos que sigan una línea perfecta y observa R² = 1</li>
-                  <li>Agrega puntos dispersos y observa cómo disminuye R²</li>
-                  <li>Prueba con diferentes pendientes (positivas y negativas)</li>
-                  <li>Observa cómo cambia la línea al agregar o eliminar puntos</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold text-negro mb-2">Conceptos Clave:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li>La línea de regresión minimiza la suma de cuadrados de los residuos</li>
-                  <li>R² mide qué tan bien el modelo explica la variabilidad</li>
-                  <li>La pendiente indica la dirección y magnitud de la relación</li>
-                  <li>El intercepto es el valor predicho cuando X = 0</li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </div>

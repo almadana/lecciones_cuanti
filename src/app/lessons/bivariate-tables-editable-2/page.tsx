@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import Question from '@/app/components/Question'
+import LessonNavigation from '@/app/components/LessonNavigation'
 
 interface CellData {
   row: string
@@ -507,6 +508,15 @@ export default function BivariateTables() {
           </div>
         </div>
       </div>
+      
+      {/* Navegación */}
+      <LessonNavigation
+        currentStep={3}
+        totalSteps={3}
+        previousUrl="/lessons/bivariate-tables-editable"
+        showPrevious={true}
+        nextUrl="/lessons/descriptive-stats"
+      />
     </div>
   )
 } 

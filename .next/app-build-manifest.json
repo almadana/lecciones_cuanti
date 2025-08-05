@@ -16,6 +16,36 @@
       "static/chunks/main-app.js",
       "static/chunks/app/lessons/introduction/page.js"
     ],
+    "/lessons/univariate-tables/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/univariate-tables/page.js"
+    ],
+    "/lessons/univariate-tables-editable/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/univariate-tables-editable/page.js"
+    ],
+    "/lessons/bivariate-tables/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/bivariate-tables/page.js"
+    ],
+    "/lessons/bivariate-tables-editable/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/bivariate-tables-editable/page.js"
+    ],
+    "/lessons/mean-deviation/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/mean-deviation/page.js"
+    ],
+    "/lessons/correlation/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/correlation/page.js"
+    ],
     "/lessons/regression/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -26,30 +56,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/lessons/regression-editable/page.js"
     ],
+    "/lessons/descriptive-stats/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/descriptive-stats/page.js"
+    ],
     "/lessons/descriptive-stats-editable/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/lessons/descriptive-stats-editable/page.js"
     ],
-    "/lessons/univariate-tables/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/univariate-tables/page.js"
-    ],
     "/lessons/bivariate-tables-editable-2/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/lessons/bivariate-tables-editable-2/page.js"
-    ],
-    "/lessons/mean-deviation/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/mean-deviation/page.js"
-    ],
-    "/lessons/mean-deviation-editable/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/mean-deviation-editable/page.js"
     ]
   }
 }

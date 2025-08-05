@@ -177,6 +177,29 @@ export default function Regression() {
           </p>
         </div>
 
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              La regresión lineal extiende el concepto de correlación para permitir predicciones. 
+              En lugar de solo medir la relación entre variables, la regresión te permite predecir 
+              el valor de una variable basándote en otra, usando la ecuación de una línea recta.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Observa la línea de regresión que se ajusta a los datos</li>
+              <li>Activa/desactiva la línea de regresión para comparar</li>
+              <li>Muestra la ecuación de la línea para ver la pendiente e intercepto</li>
+              <li>Interpreta el coeficiente R² que indica qué tan bien predice el modelo</li>
+              <li>Usa la ecuación para predecir calificaciones para diferentes horas de estudio</li>
+              <li>Observa cómo la pendiente indica el cambio en Y por cada unidad de X</li>
+            </ul>
+          </div>
+        </div>
+
         <div className="mt-12 space-y-8">
           {/* Introducción */}
           <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">

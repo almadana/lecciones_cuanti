@@ -89,6 +89,29 @@ export default function ChiSquarePage() {
       <article className="max-w-4xl mx-auto p-4">
         <LessonHeader title="Chi cuadrado de independencia" />
         
+        {/* Texto introductorio y instrucciones */}
+        <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              La prueba de Chi cuadrado de independencia te permite determinar si existe una relación 
+              estadísticamente significativa entre dos variables categóricas. En esta lección aprenderás 
+              a comparar frecuencias observadas con frecuencias esperadas para evaluar la independencia.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Observa las frecuencias observadas en la primera tabla</li>
+              <li>Compara con las frecuencias esperadas en la segunda tabla</li>
+              <li>Interpreta los colores que indican desvíos de lo esperado</li>
+              <li>Analiza el valor del Chi cuadrado y su significancia</li>
+              <li>Observa cómo se calculan los grados de libertad</li>
+              <li>Interpreta el p-valor para tomar decisiones estadísticas</li>
+            </ul>
+          </div>
+        </div>
+        
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Datos de Latinobarómetro</h2>
           <p className="mb-4">

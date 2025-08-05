@@ -113,6 +113,28 @@ export default function EditableUnivariateTables() {
           </p>
         </div>
 
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              En esta lección interactiva puedes modificar los datos de la encuesta de satisfacción con la vida 
+              y observar cómo los cambios afectan los porcentajes, la visualización y las respuestas a las preguntas.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Modifica las frecuencias (número de casos) para cada categoría</li>
+              <li>Observa cómo los porcentajes se actualizan automáticamente</li>
+              <li>Ve cómo cambia la visualización del gráfico de barras</li>
+              <li>Experimenta con diferentes distribuciones de datos</li>
+              <li>Observa cómo las respuestas correctas se ajustan a los nuevos datos</li>
+              <li>Prueba crear escenarios extremos para ver el impacto</li>
+            </ul>
+          </div>
+        </div>
+
         <div className="mt-12">
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="overflow-x-auto">
@@ -193,18 +215,6 @@ export default function EditableUnivariateTables() {
               }%) no están 'Para nada satisfechas' con su vida. Esto está lejos de ser una mayoría.`}
             />
           </div>
-
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Instrucciones</h3>
-            <ul className="list-disc pl-5 space-y-2 text-gray-600">
-              <li>Los datos iniciales corresponden a la encuesta original de satisfacción con la vida</li>
-              <li>Puedes modificar las frecuencias (número de casos) para cada categoría</li>
-              <li>Los porcentajes se actualizarán automáticamente</li>
-              <li>La visualización se actualizará para reflejar los cambios</li>
-              <li>Las respuestas correctas a las preguntas se ajustarán según los nuevos datos</li>
-              <li>Experimenta con diferentes distribuciones para ver cómo afectan a los resultados</li>
-            </ul>
-          </div>
         </div>
 
         {/* Navegación */}
@@ -212,7 +222,8 @@ export default function EditableUnivariateTables() {
           currentStep={2}
           totalSteps={2}
           previousUrl="/lessons/univariate-tables"
-          showNext={false}
+          showPrevious={true}
+          nextUrl="/lessons/bivariate-tables"
         />
       </div>
     </div>

@@ -246,8 +246,9 @@ export default function BivariateTables() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
+        previousUrl="/lessons/univariate-tables"
+        showPrevious={true}
         nextUrl="/lessons/bivariate-tables-editable"
-        showPrevious={false}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -257,6 +258,29 @@ export default function BivariateTables() {
           <p className="mt-4 text-lg text-gray-600">
             Relación entre nivel educativo y satisfacción con la vida
           </p>
+        </div>
+
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              Las tablas bivariadas te permiten explorar la relación entre dos variables categóricas. 
+              En esta lección aprenderás a interpretar frecuencias absolutas, porcentajes por fila y columna, 
+              y cómo visualizar estas relaciones con gráficos de barras apiladas.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Observa las frecuencias absolutas en la primera tabla</li>
+              <li>Cambia entre porcentajes por fila y por columna</li>
+              <li>Compara las distribuciones entre diferentes niveles educativos</li>
+              <li>Analiza el gráfico de barras apiladas para visualizar las relaciones</li>
+              <li>Interpreta los porcentajes para entender las diferencias entre grupos</li>
+              <li>Observa cómo los colores representan las diferentes categorías</li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12">
@@ -390,10 +414,10 @@ export default function BivariateTables() {
               question="¿Es verdad que la mayoría de las personas no satisfechas tienen solo educación primaria?"
               type="multiple-choice"
               options={[
-                { text: 'Verdadero', value: true },
-                { text: 'Falso', value: false }
+                { text: 'Verdadero', value: false },
+                { text: 'Falso', value: true }
               ]}
-              explanation={`Esta afirmación es verdadera. De las personas no satisfechas, ${89} tienen educación primaria, ${134} tienen educación secundaria, y ${44} tienen educación universitaria. ${89} representa el ${((89 / (89 + 134 + 44)) * 100).toFixed(1)}% del total de personas no satisfechas.`}
+              explanation={`Esta afirmación es falsa. De las personas no satisfechas, ${89} tienen educación primaria, ${134} tienen educación secundaria, y ${44} tienen educación universitaria. ${89} representa el ${((89 / (89 + 134 + 44)) * 100).toFixed(1)}% del total de personas no satisfechas, lo cual no es una mayoría.`}
             />
           </div>
 
@@ -465,8 +489,9 @@ export default function BivariateTables() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
+        previousUrl="/lessons/univariate-tables"
+        showPrevious={true}
         nextUrl="/lessons/bivariate-tables-editable"
-        showPrevious={false}
       />
     </div>
   )

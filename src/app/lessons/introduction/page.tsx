@@ -75,6 +75,28 @@ export default function Introduction() {
           </p>
         </div>
 
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              En esta lección aprenderás los conceptos básicos de la estadística que te permitirán 
+              comprender cómo se organizan y analizan los datos. Estos fundamentos son esenciales 
+              para todas las técnicas estadísticas que explorarás en las siguientes lecciones.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Explora los ejemplos interactivos de variables y escalas de medición</li>
+              <li>Clasifica diferentes tipos de variables usando los selectores</li>
+              <li>Identifica las escalas de medición de cada ejemplo</li>
+              <li>Responde las preguntas de evaluación para verificar tu comprensión</li>
+              <li>Revisa el resumen de conceptos clave al final de la lección</li>
+            </ul>
+          </div>
+        </div>
+
         <div className="mt-12 space-y-8">
           {/* ¿Qué es la Estadística? */}
           <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">

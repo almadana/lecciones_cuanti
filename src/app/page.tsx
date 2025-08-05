@@ -16,8 +16,8 @@ const lessons = [
   },
   {
     title: 'Estadísticas Descriptivas',
-    description: 'Comprende la tendencia central y la dispersión de los datos',
-    href: '/lessons/mean-deviation',
+    description: 'Comprende la tendencia central, moda y cuartiles de los datos',
+    href: '/lessons/descriptive-stats',
     icon: CalculatorIcon,
   },
   {
@@ -86,9 +86,9 @@ export default function Home() {
 
           <h3 className="text-negro font-bold">Lección 2: Estadísticas Descriptivas</h3>
           <p className="text-negro">
-            Exploraremos las medidas de tendencia central (media, mediana, moda) y
-            las medidas de dispersión (desviación estándar, varianza) para resumir
-            datos numéricos de manera efectiva.
+            Exploraremos las medidas de tendencia central (media, moda) y posición (cuartiles) 
+            para resumir datos numéricos de manera efectiva. También aprenderás sobre 
+            las medidas de dispersión (desviación estándar, varianza).
           </p>
 
           <h3 className="text-negro font-bold">Lección 3: Muestreo</h3>

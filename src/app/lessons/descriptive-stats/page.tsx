@@ -100,7 +100,30 @@ export default function DescriptiveStatsPage() {
 
   return (
     <article className="max-w-4xl mx-auto p-4">
-      <LessonHeader title="Estadísticas Descriptivas (1 de 2)" />
+      <LessonHeader title="Media, Moda y Cuartiles (1 de 2)" />
+      
+      {/* Texto introductorio y instrucciones */}
+      <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="prose text-gray-700 mb-6">
+          <p className="text-lg">
+            Las medidas de tendencia central y posición te permiten resumir grandes cantidades de datos con solo 
+            unos pocos números. En esta lección aprenderás sobre la media, moda y cuartiles, 
+            y cómo interpretar la distribución de los datos.
+          </p>
+        </div>
+        
+        <div className="bg-gris-claro p-4 rounded-lg">
+          <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+          <ul className="list-disc pl-5 space-y-2 text-sm">
+            <li>Observa cómo se distribuyen los datos en el histograma</li>
+            <li>Compara los valores de media, mediana y moda</li>
+            <li>Activa los cuartiles y quintiles para ver las divisiones de los datos</li>
+            <li>Identifica si la distribución es simétrica o asimétrica</li>
+            <li>Observa los outliers (valores atípicos) en el boxplot</li>
+            <li>Genera nuevos datos para ver cómo cambian las estadísticas</li>
+          </ul>
+        </div>
+      </div>
       
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Distribución de Horas de Sueño</h2>
@@ -441,7 +464,7 @@ export default function DescriptiveStatsPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
-        nextUrl="/lessons/descriptive-stats-editable"
+        nextUrl="/lessons/mean-deviation"
         showPrevious={false}
       />
     </article>

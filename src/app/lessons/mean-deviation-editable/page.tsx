@@ -234,8 +234,9 @@ export default function MeanDeviationEditablePage() {
       <LessonNavigation
         currentStep={2}
         totalSteps={2}
-        previousUrl="/lessons/mean-deviation"
-        showNext={false}
+        previousUrl="/lessons/descriptive-stats-editable"
+        showPrevious={true}
+        nextUrl="/lessons/sampling"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -421,8 +422,9 @@ export default function MeanDeviationEditablePage() {
       <LessonNavigation
         currentStep={2}
         totalSteps={2}
-        previousUrl="/lessons/mean-deviation"
-        showNext={false}
+        previousUrl="/lessons/descriptive-stats-editable"
+        showPrevious={true}
+        nextUrl="/lessons/sampling"
       />
     </div>
   )

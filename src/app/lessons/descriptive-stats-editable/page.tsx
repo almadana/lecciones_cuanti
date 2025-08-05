@@ -138,14 +138,37 @@ export default function DescriptiveStatsEditablePage() {
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Estadísticas Descriptivas - Editable (2 de 2)
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Media, Moda y Cuartiles - Editable (2 de 2)
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Esta visualización muestra la distribución de horas de sueño en una población,
             junto con diferentes medidas de tendencia central y posición.
             Puedes ajustar la dispersión y la asimetría de la distribución usando los controles.
           </p>
+        </div>
+
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              En esta lección interactiva puedes experimentar con diferentes distribuciones de datos 
+              y observar cómo afectan a las medidas de tendencia central y dispersión. 
+              Ajusta los controles para ver cómo cambian las estadísticas en tiempo real.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Ajusta la dispersión (desvío estándar) para ver cómo cambia la forma de la distribución</li>
+              <li>Modifica la asimetría para crear distribuciones sesgadas</li>
+              <li>Observa cómo cambian la media, mediana y moda según la distribución</li>
+              <li>Activa los cuartiles y quintiles para ver las divisiones de los datos</li>
+              <li>Identifica outliers en el boxplot según la distribución</li>
+              <li>Compara cómo se comportan las diferentes medidas de tendencia central</li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12">
@@ -524,7 +547,8 @@ export default function DescriptiveStatsEditablePage() {
             currentStep={2}
             totalSteps={2}
             previousUrl="/lessons/descriptive-stats"
-            showNext={false}
+            showPrevious={true}
+            nextUrl="/lessons/mean-deviation-editable"
           />
         </div>
       </div>

@@ -482,8 +482,9 @@ export default function SamplingPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
+        previousUrl="/lessons/mean-deviation-editable"
+        showPrevious={true}
         nextUrl="/lessons/sampling-editable"
-        showPrevious={false}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -494,6 +495,29 @@ export default function SamplingPage() {
             Observa cómo se forma la distribución muestral de la media a medida que tomamos muestras repetidas.
             La línea roja muestra la media poblacional.
           </p>
+        </div>
+
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              El muestreo es fundamental en estadística porque rara vez podemos estudiar toda una población. 
+              En esta lección verás cómo las muestras nos permiten estimar características de la población 
+              y cómo la distribución de las medias muestrales se comporta según el Teorema del Límite Central.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Observa la población original y su distribución</li>
+              <li>Cambia el tamaño de muestra para ver cómo afecta la variabilidad</li>
+              <li>Ejecuta la simulación para ver cómo se forma la distribución muestral</li>
+              <li>Compara el error estándar teórico con el empírico</li>
+              <li>Observa cómo los smileys se seleccionan aleatoriamente de la población</li>
+              <li>Prueba diferentes velocidades de animación para entender mejor el proceso</li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12">
@@ -712,8 +736,9 @@ export default function SamplingPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
+        previousUrl="/lessons/mean-deviation-editable"
+        showPrevious={true}
         nextUrl="/lessons/sampling-editable"
-        showPrevious={false}
       />
     </div>
   )

@@ -163,6 +163,29 @@ export default function CorrelationEditablePage() {
     <article className="max-w-4xl mx-auto p-4">
       <LessonHeader title="Correlación - Versión Editable (2 de 2)" />
       
+      {/* Texto introductorio y instrucciones */}
+      <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="prose text-gray-700 mb-6">
+          <p className="text-lg">
+            En esta versión interactiva puedes manipular directamente los datos para experimentar 
+            con diferentes correlaciones. Arrastra los puntos, ajusta los controles y observa 
+            cómo cambian las estadísticas en tiempo real.
+          </p>
+        </div>
+        
+        <div className="bg-gris-claro p-4 rounded-lg">
+          <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+          <ul className="list-disc pl-5 space-y-2 text-sm">
+            <li>Arrastra los puntos para modificar sus valores directamente</li>
+            <li>Usa el control deslizante para cambiar la correlación de -1 a +1</li>
+            <li>Ajusta el tamaño de la muestra para ver cómo afecta la correlación</li>
+            <li>Observa cómo cambia el coeficiente R de Pearson en tiempo real</li>
+            <li>Activa el p-valor para ver la significancia estadística</li>
+            <li>Experimenta creando correlaciones perfectas, moderadas y nulas</li>
+          </ul>
+        </div>
+      </div>
+      
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Satisfacción con la vida y horas de sueño</h2>
         <p className="mb-4">

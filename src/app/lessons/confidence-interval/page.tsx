@@ -489,6 +489,29 @@ export default function ConfidenceIntervalPage() {
           </p>
         </div>
 
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              Los intervalos de confianza te permiten estimar parámetros poblacionales con un nivel 
+              de certeza específico. En esta lección verás cómo se construyen estos intervalos y 
+              cómo interpretar su cobertura real versus la teórica.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Observa la población original y su distribución</li>
+              <li>Cambia el tamaño de muestra para ver cómo afecta la precisión</li>
+              <li>Ajusta el nivel de confianza (90%, 95%, 99%)</li>
+              <li>Ejecuta la simulación para ver cómo se construyen los intervalos</li>
+              <li>Observa la cobertura real vs la teórica</li>
+              <li>Analiza qué intervalos contienen la media poblacional verdadera</li>
+            </ul>
+          </div>
+        </div>
+
         <div className="mt-12">
           {/* Panel de control */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">

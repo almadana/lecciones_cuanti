@@ -232,8 +232,9 @@ export default function MeanDeviationPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
+        previousUrl="/lessons/descriptive-stats"
+        showPrevious={true}
         nextUrl="/lessons/mean-deviation-editable"
-        showPrevious={false}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -244,6 +245,29 @@ export default function MeanDeviationPage() {
             Desde el año 2015, en el curso "Métodos y Técnicas Cuantitativas", recabamos datos sobre la satisfacción general con la vida de los estudiantes.
             La escala va de 5 a 35 puntos, con una media de 22.32 y un desvío estándar de 5.78.
           </p>
+        </div>
+
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              Las medidas de tendencia central (media, mediana, moda) y las medidas de dispersión 
+              son fundamentales para resumir y entender la distribución de los datos. En esta lección 
+              verás cómo estas medidas se comportan en datos reales de satisfacción con la vida.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Observa cómo se generan los datos de satisfacción con la vida</li>
+              <li>Cambia el tamaño de muestra para ver cómo afecta las estadísticas</li>
+              <li>Activa/desactiva la media, mediana y moda en el histograma</li>
+              <li>Compara cómo se comportan las diferentes medidas de tendencia central</li>
+              <li>Observa cómo los smileys representan los niveles de satisfacción</li>
+              <li>Prueba diferentes velocidades de animación para entender mejor el proceso</li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12">
@@ -427,8 +451,9 @@ export default function MeanDeviationPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
+        previousUrl="/lessons/descriptive-stats"
+        showPrevious={true}
         nextUrl="/lessons/mean-deviation-editable"
-        showPrevious={false}
       />
     </div>
   )

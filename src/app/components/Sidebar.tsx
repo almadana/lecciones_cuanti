@@ -49,27 +49,27 @@ const lessons = [
   {
     id: '2',
     title: 'Estadísticas Descriptivas',
-    href: '/lessons/mean-deviation',
+    href: '/lessons/descriptive-stats',
     subLessons: [
       {
         id: '2.1',
+        title: 'Media, Moda y Cuartiles',
+        href: '/lessons/descriptive-stats',
+      },
+      {
+        id: '2.2',
+        title: 'Editor de Media, Moda y Cuartiles',
+        href: '/lessons/descriptive-stats-editable',
+      },
+      {
+        id: '2.3',
         title: 'Media y Desvío',
         href: '/lessons/mean-deviation',
       },
       {
-        id: '2.2',
+        id: '2.4',
         title: 'Editor de Media y Desvío',
         href: '/lessons/mean-deviation-editable',
-      },
-      {
-        id: '2.3',
-        title: 'Estadísticas Descriptivas',
-        href: '/lessons/descriptive-stats',
-      },
-      {
-        id: '2.4',
-        title: 'Editor de Estadísticas Descriptivas',
-        href: '/lessons/descriptive-stats-editable',
       }
     ]
   },

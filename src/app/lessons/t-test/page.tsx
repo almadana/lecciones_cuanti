@@ -188,6 +188,29 @@ export default function TTestPage() {
           </p>
         </div>
 
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              La prueba t de Student es una técnica estadística fundamental para comparar las medias 
+              de dos grupos. Te permite determinar si las diferencias observadas entre grupos son 
+              estadísticamente significativas o simplemente producto del azar.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Compara las distribuciones de satisfacción entre hombres y mujeres</li>
+              <li>Observa las diferencias en las medias y desviaciones estándar</li>
+              <li>Interpreta el estadístico t y su significancia</li>
+              <li>Analiza el valor p para tomar decisiones estadísticas</li>
+              <li>Revisa los supuestos de la prueba t</li>
+              <li>Observa cómo los smileys representan los niveles de satisfacción</li>
+            </ul>
+          </div>
+        </div>
+
         <div className="mt-12">
           {/* Visualización de datos */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">

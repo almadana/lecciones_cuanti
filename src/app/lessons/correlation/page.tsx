@@ -141,6 +141,29 @@ export default function CorrelationPage() {
     <article className="max-w-4xl mx-auto p-4">
       <LessonHeader title="Correlación (1 de 2)" />
       
+      {/* Texto introductorio y instrucciones */}
+      <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="prose text-gray-700 mb-6">
+          <p className="text-lg">
+            La correlación mide la fuerza y dirección de la relación lineal entre dos variables continuas. 
+            En esta lección explorarás cómo el coeficiente de correlación de Pearson varía de -1 a +1, 
+            y cómo interpretar su significancia estadística.
+          </p>
+        </div>
+        
+        <div className="bg-gris-claro p-4 rounded-lg">
+          <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+          <ul className="list-disc pl-5 space-y-2 text-sm">
+            <li>Mueve el control deslizante para cambiar la correlación de -1 a +1</li>
+            <li>Observa cómo los puntos se dispersan o agrupan según la correlación</li>
+            <li>Activa el p-valor para ver la significancia estadística</li>
+            <li>Interpreta el coeficiente R² que indica la proporción de varianza explicada</li>
+            <li>Observa la línea de regresión que se ajusta a los datos</li>
+            <li>Nota cómo los smileys y relojes representan las dos variables</li>
+          </ul>
+        </div>
+      </div>
+      
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Satisfacción con la vida y horas de sueño</h2>
         <p className="mb-4">
@@ -382,7 +405,7 @@ export default function CorrelationPage() {
         totalSteps={2}
         nextUrl="/lessons/regression"
         showPrevious={true}
-        previousUrl="/lessons/sampling"
+        previousUrl="/lessons/confidence-interval"
       />
     </article>
   );

@@ -99,6 +99,29 @@ export default function UnivariateTables() {
           </p>
         </div>
 
+        {/* Texto introductorio y instrucciones */}
+        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              Las tablas de frecuencia son la forma más básica y fundamental de organizar datos categóricos. 
+              Te permiten ver de un vistazo cuántas observaciones hay en cada categoría y qué porcentaje 
+              representan del total. Esta lección te mostrará cómo interpretar estas tablas usando datos reales.
+            </p>
+          </div>
+          
+          <div className="bg-gris-claro p-4 rounded-lg">
+            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              <li>Observa cómo se organizan los datos en la tabla de frecuencia</li>
+              <li>Calcula mentalmente los porcentajes para verificar tu comprensión</li>
+              <li>Identifica la categoría con mayor frecuencia (la moda)</li>
+              <li>Analiza el gráfico de barras que complementa la tabla</li>
+              <li>Responde las preguntas de evaluación sobre los datos</li>
+              <li>En la siguiente lección podrás crear tus propias tablas</li>
+            </ul>
+          </div>
+        </div>
+
         <div className="mt-12">
           <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
             <div className="overflow-x-auto">

@@ -264,9 +264,10 @@ export default function EditableBivariateTables() {
     <div className="py-8">
       <LessonNavigation
         currentStep={2}
-        totalSteps={2}
+        totalSteps={3}
         previousUrl="/lessons/bivariate-tables"
-        showNext={false}
+        showPrevious={true}
+        nextUrl="/lessons/bivariate-tables-editable-2"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -449,9 +450,10 @@ export default function EditableBivariateTables() {
       </div>
       <LessonNavigation
         currentStep={2}
-        totalSteps={2}
+        totalSteps={3}
         previousUrl="/lessons/bivariate-tables"
-        showNext={false}
+        showPrevious={true}
+        nextUrl="/lessons/bivariate-tables-editable-2"
       />
     </div>
   )

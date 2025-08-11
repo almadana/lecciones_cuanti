@@ -1,3 +1,0 @@
-# Redirecciones para manejar rutas directas
-/lessons/* /lessons/*/index.html 200
-/* /index.html 200 

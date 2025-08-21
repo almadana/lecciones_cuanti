@@ -232,16 +232,16 @@ export default function MeanDeviationEditablePage() {
   return (
     <div className="py-8">
       <LessonNavigation
-        currentStep={2}
-        totalSteps={2}
-        previousUrl="/lessons/descriptive-stats-editable"
+        currentStep={4}
+        totalSteps={4}
+        previousUrl="/lessons/mean-deviation"
         showPrevious={true}
-        nextUrl="/lessons/sampling"
+        nextUrl="/lessons/univariate-tables"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Media y Desviación - Editable (2 de 2)
+            Editor de Media y Desvío
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Experimenta con diferentes valores de media y desviación estándar para ver cómo afectan la distribución de los datos.
@@ -250,7 +250,7 @@ export default function MeanDeviationEditablePage() {
 
         <div className="mt-12">
           {/* Panel de control */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Controles de Simulación</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -326,7 +326,7 @@ export default function MeanDeviationEditablePage() {
           </div>
 
           {/* Área de Smileys */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Muestra Actual</h3>
             <div className="mt-4 flex justify-center">
               <svg 
@@ -348,7 +348,7 @@ export default function MeanDeviationEditablePage() {
           </div>
 
           {/* Histograma y Controles de Distribución */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Distribución de Satisfacción con la Vida</h3>
             <div className="mt-4 flex justify-center">
               <svg ref={histogramRef}></svg>
@@ -393,7 +393,7 @@ export default function MeanDeviationEditablePage() {
           </div>
 
           {/* Explicación */}
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Explicación</h3>
             <div className="prose max-w-none">
               <h4 className="text-base font-medium text-gray-900">Media</h4>
@@ -420,11 +420,11 @@ export default function MeanDeviationEditablePage() {
         </div>
       </div>
       <LessonNavigation
-        currentStep={2}
-        totalSteps={2}
-        previousUrl="/lessons/descriptive-stats-editable"
+        currentStep={4}
+        totalSteps={4}
+        previousUrl="/lessons/mean-deviation"
         showPrevious={true}
-        nextUrl="/lessons/sampling"
+        nextUrl="/lessons/univariate-tables"
       />
     </div>
   )

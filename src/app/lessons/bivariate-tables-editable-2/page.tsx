@@ -286,10 +286,10 @@ export default function BivariateTables() {
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Editor Avanzado de Tablas Bivariadas
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Editor Avanzado de Tablas 5/5
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-600">
             Crea y modifica tablas bivariadas añadiendo o eliminando categorías
           </p>
         </div>
@@ -511,11 +511,11 @@ export default function BivariateTables() {
       
       {/* Navegación */}
       <LessonNavigation
-        currentStep={3}
-        totalSteps={3}
+        currentStep={5}
+        totalSteps={5}
         previousUrl="/lessons/bivariate-tables-editable"
         showPrevious={true}
-        nextUrl="/lessons/descriptive-stats"
+        nextUrl="/lessons/correlation"
       />
     </div>
   )

@@ -163,9 +163,9 @@ export default function Regression() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
-        nextUrl="/lessons/regression-editable"
+        previousUrl="/lessons/correlation-editable"
         showPrevious={true}
-        previousUrl="/lessons/correlation"
+        nextUrl="/lessons/regression-editable"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -178,12 +178,12 @@ export default function Regression() {
         </div>
 
         {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
-              La regresión lineal extiende el concepto de correlación para permitir predicciones. 
-              En lugar de solo medir la relación entre variables, la regresión te permite predecir 
-              el valor de una variable basándote en otra, usando la ecuación de una línea recta.
+              La regresión lineal simple te permite modelar la relación entre una variable dependiente (Y) 
+              y una variable independiente (X) usando una línea recta. En esta lección aprenderás a interpretar 
+              la ecuación de regresión y evaluar la bondad del ajuste.
             </p>
           </div>
           
@@ -202,7 +202,7 @@ export default function Regression() {
 
         <div className="mt-12 space-y-8">
           {/* Introducción */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               ¿Qué es la Regresión Lineal?
             </h2>
@@ -237,7 +237,7 @@ export default function Regression() {
           </div>
 
           {/* Datos y Visualización */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Datos y Visualización
             </h2>
@@ -293,7 +293,7 @@ export default function Regression() {
           </div>
 
           {/* Resultados del Análisis */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Resultados del Análisis
             </h2>
@@ -323,7 +323,7 @@ export default function Regression() {
           </div>
 
           {/* Predicciones */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Predicciones
             </h2>
@@ -391,7 +391,7 @@ export default function Regression() {
           </div>
 
           {/* Interpretación */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Interpretación de Resultados
             </h2>
@@ -419,7 +419,7 @@ export default function Regression() {
         </div>
 
         {/* Resumen de la Lección */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
             Resumen de Conceptos Clave
           </h2>
@@ -465,9 +465,9 @@ export default function Regression() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
-        nextUrl="/lessons/regression-editable"
+        previousUrl="/lessons/correlation-editable"
         showPrevious={true}
-        previousUrl="/lessons/correlation"
+        nextUrl="/lessons/regression-editable"
       />
     </div>
   )

@@ -103,7 +103,12 @@ export default function DescriptiveStatsPage() {
       <LessonHeader title="Media, Moda y Cuartiles (1 de 2)" />
       
       {/* Texto introductorio y instrucciones */}
-      <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+      <div className="panel-contenido">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Estadísticas Descriptivas
+          </h1>
+        </div>
         <div className="prose text-gray-700 mb-6">
           <p className="text-lg">
             Las medidas de tendencia central y posición te permiten resumir grandes cantidades de datos con solo 
@@ -463,9 +468,10 @@ export default function DescriptiveStatsPage() {
       {/* Navegación */}
       <LessonNavigation
         currentStep={1}
-        totalSteps={2}
-        nextUrl="/lessons/mean-deviation"
-        showPrevious={false}
+        totalSteps={4}
+        previousUrl="/lessons/introduction"
+        showPrevious={true}
+        nextUrl="/lessons/descriptive-stats-editable"
       />
     </article>
   );

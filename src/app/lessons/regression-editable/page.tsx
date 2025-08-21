@@ -238,12 +238,22 @@ export default function RegressionEditable() {
     <div className="py-8">
       <LessonNavigation
         currentStep={2}
-        totalSteps={2}
+        totalSteps={3}
         previousUrl="/lessons/regression"
         showPrevious={true}
-        nextUrl="/lessons/t-test"
+        nextUrl="/lessons/regression-interactive"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Texto introductorio y instrucciones */}
+        <div className="panel-contenido">
+          <div className="prose text-gray-700 mb-6">
+            <p className="text-lg">
+              En esta lección interactiva puedes modificar los datos de la encuesta de satisfacción con la vida 
+              y observar cómo los cambios afectan la regresión, la visualización y las respuestas a las preguntas.
+            </p>
+          </div>
+        </div>
+        
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
             Editor de Regresión Lineal (2 de 2)
@@ -255,7 +265,7 @@ export default function RegressionEditable() {
 
         <div className="mt-12 space-y-8">
           {/* Interpretación */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Experimenta y Observa
             </h2>
@@ -282,7 +292,7 @@ export default function RegressionEditable() {
           </div>
 
           {/* Controles */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Controles Interactivos
             </h2>
@@ -371,9 +381,9 @@ export default function RegressionEditable() {
           </div>
 
           {/* Visualización */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Visualización Interactiva
+              Gráfico de Dispersión y Línea de Regresión
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
@@ -418,68 +428,64 @@ export default function RegressionEditable() {
           </div>
 
           {/* Resultados */}
-          {data.length >= 2 && (
-            <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
-              <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-                Resultados del Análisis
-              </h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-gris-claro p-4 rounded-lg text-center">
-                  <h3 className="font-bold text-negro mb-2">Pendiente (m)</h3>
-                  <p className="text-2xl font-bold text-morado-oscuro">{regression.slope.toFixed(2)}</p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Cambio en Y por unidad de cambio en X
-                  </p>
-                </div>
-                <div className="bg-gris-claro p-4 rounded-lg text-center">
-                  <h3 className="font-bold text-negro mb-2">Intercepto (b)</h3>
-                  <p className="text-2xl font-bold text-morado-oscuro">{regression.intercept.toFixed(2)}</p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Valor de Y cuando X = 0
-                  </p>
-                </div>
-                <div className="bg-gris-claro p-4 rounded-lg text-center">
-                  <h3 className="font-bold text-negro mb-2">R²</h3>
-                  <p className="text-2xl font-bold text-morado-oscuro">{(regression.rSquared * 100).toFixed(1)}%</p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Variabilidad explicada por el modelo
-                  </p>
-                </div>
+          <div className="panel-contenido">
+            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+              Resultados del Análisis
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-gris-claro p-4 rounded-lg text-center">
+                <h3 className="font-bold text-negro mb-2">Pendiente (m)</h3>
+                <p className="text-2xl font-bold text-morado-oscuro">{regression.slope.toFixed(2)}</p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Cambio en Y por unidad de cambio en X
+                </p>
+              </div>
+              <div className="bg-gris-claro p-4 rounded-lg text-center">
+                <h3 className="font-bold text-negro mb-2">Intercepto (b)</h3>
+                <p className="text-2xl font-bold text-morado-oscuro">{regression.intercept.toFixed(2)}</p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Valor de Y cuando X = 0
+                </p>
+              </div>
+              <div className="bg-gris-claro p-4 rounded-lg text-center">
+                <h3 className="font-bold text-negro mb-2">R²</h3>
+                <p className="text-2xl font-bold text-morado-oscuro">{(regression.rSquared * 100).toFixed(1)}%</p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Variabilidad explicada por el modelo
+                </p>
               </div>
             </div>
-          )}
+          </div>
 
           {/* Predicciones */}
-          {data.length >= 2 && (
-            <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
-              <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-                Predicciones
-              </h2>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-bold text-negro mb-3">Ecuación de Predicción</h3>
-                  <div className="bg-gris-claro p-4 rounded-lg">
-                    <p className="text-lg font-mono">
-                      Y = {regression.slope.toFixed(2)} × X + {regression.intercept.toFixed(2)}
-                    </p>
-                  </div>
+          <div className="panel-contenido">
+            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+              Predicciones
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-bold text-negro mb-3">Ecuación de Predicción</h3>
+                <div className="bg-gris-claro p-4 rounded-lg">
+                  <p className="text-lg font-mono">
+                    Y = {regression.slope.toFixed(2)} × X + {regression.intercept.toFixed(2)}
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-bold text-negro mb-3">Ejemplos de Predicción</h3>
-                  <div className="space-y-2">
-                    {[1, 5, 10].map(x => (
-                      <div key={x} className="bg-gris-claro p-3 rounded-lg">
-                        <p className="text-sm">
-                          <strong>X = {x}:</strong> 
-                          Y predicha = {predictValue(x).toFixed(1)}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-negro mb-3">Ejemplos de Predicción</h3>
+                <div className="space-y-2">
+                  {[1, 5, 10].map(x => (
+                    <div key={x} className="bg-gris-claro p-3 rounded-lg">
+                      <p className="text-sm">
+                        <strong>X = {x}:</strong> 
+                        Y predicha = {predictValue(x).toFixed(1)}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          )}
+          </div>
 
           {/* Preguntas de Evaluación */}
           <div className="space-y-6">
@@ -523,10 +529,10 @@ export default function RegressionEditable() {
       </div>
       <LessonNavigation
         currentStep={2}
-        totalSteps={2}
+        totalSteps={3}
         previousUrl="/lessons/regression"
         showPrevious={true}
-        nextUrl="/lessons/t-test"
+        nextUrl="/lessons/regression-interactive"
       />
     </div>
   )

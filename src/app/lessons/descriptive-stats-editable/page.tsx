@@ -69,25 +69,28 @@ function generateTruncatedNormal(size: number, mean: number, std: number, skewne
 
 // Función para calcular la moda
 function calculateMode(data: number[]) {
-  // Redondear los datos a 2 decimales para agrupar mejor
-  const roundedData = data.map(x => Math.round(x * 100) / 100);
+  if (data.length === 0) return 0;
   
-  const counts = new Map<number, number>();
-  roundedData.forEach(value => {
-    counts.set(value, (counts.get(value) || 0) + 1);
-  });
+  // Crear histograma para encontrar la moda
+  const histogram = d3.histogram<number, number>()
+    .domain([MIN, MAX])
+    .thresholds(20)(data);
   
+  // Encontrar el bin con mayor frecuencia
   let maxCount = 0;
-  let mode = roundedData[0];
+  let modeBin = histogram[0];
   
-  counts.forEach((count, value) => {
-    if (count > maxCount) {
-      maxCount = count;
-      mode = value;
+  histogram.forEach(bin => {
+    if (bin.length > maxCount) {
+      maxCount = bin.length;
+      modeBin = bin;
     }
   });
   
-  return mode;
+  // Retornar el centro del bin con mayor frecuencia
+  return modeBin && modeBin.x0 !== undefined && modeBin.x1 !== undefined 
+    ? (modeBin.x0 + modeBin.x1) / 2 
+    : data[0];
 }
 
 export default function DescriptiveStatsEditablePage() {
@@ -139,7 +142,7 @@ export default function DescriptiveStatsEditablePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Media, Moda y Cuartiles - Editable (2 de 2)
+            Editor de Estadísticas Descriptivas
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Esta visualización muestra la distribución de horas de sueño en una población,
@@ -149,12 +152,11 @@ export default function DescriptiveStatsEditablePage() {
         </div>
 
         {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
-              En esta lección interactiva puedes experimentar con diferentes distribuciones de datos 
-              y observar cómo afectan a las medidas de tendencia central y dispersión. 
-              Ajusta los controles para ver cómo cambian las estadísticas en tiempo real.
+              En esta lección interactiva puedes modificar los datos de la encuesta de satisfacción con la vida 
+              y observar cómo los cambios afectan las estadísticas descriptivas, la visualización y las respuestas a las preguntas.
             </p>
           </div>
           
@@ -355,25 +357,60 @@ export default function DescriptiveStatsEditablePage() {
                 </text>
 
                 {/* Moda */}
-                <line
-                  x1={xScale(mode)}
-                  y1={MARGIN.top}
-                  x2={xScale(mode)}
-                  y2={HEIGHT - MARGIN.bottom}
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeDasharray="5,5"
-                />
-                <text
-                  x={xScale(mode)}
-                  y={MARGIN.top - 5}
-                  textAnchor="middle"
-                  fill="black"
-                  fontSize="12"
-                  fontFamily="Roboto"
-                >
-                  Moda
-                </text>
+                {(() => {
+                  // Encontrar la frecuencia de la moda en el histograma
+                  const modeBin = histogram.find(bin => 
+                    bin.x0 !== undefined && bin.x1 !== undefined &&
+                    mode >= bin.x0 && mode < bin.x1
+                  );
+                  const modeFrequency = modeBin ? modeBin.length : 0;
+                  
+                  return (
+                    <g>
+                      {/* Línea vertical de la moda */}
+                      <line
+                        x1={xScale(mode)}
+                        y1={MARGIN.top}
+                        x2={xScale(mode)}
+                        y2={HEIGHT - MARGIN.bottom}
+                        stroke="black"
+                        strokeWidth="2"
+                        strokeDasharray="5,5"
+                      />
+                      {/* Punto en la moda */}
+                      <circle
+                        cx={xScale(mode)}
+                        cy={yScale(modeFrequency)}
+                        r="6"
+                        fill="black"
+                        stroke="white"
+                        strokeWidth="2"
+                      />
+                      {/* Etiqueta de la moda */}
+                      <text
+                        x={xScale(mode)}
+                        y={MARGIN.top - 5}
+                        textAnchor="middle"
+                        fill="black"
+                        fontSize="12"
+                        fontFamily="Roboto"
+                      >
+                        Moda
+                      </text>
+                      {/* Valor de la moda */}
+                      <text
+                        x={xScale(mode)}
+                        y={MARGIN.top + 15}
+                        textAnchor="middle"
+                        fill="black"
+                        fontSize="10"
+                        fontFamily="Roboto"
+                      >
+                        {mode.toFixed(1)}
+                      </text>
+                    </g>
+                  );
+                })()}
 
                 {/* Cuartiles */}
                 {showQuartiles && quartiles.map((q, i) => (
@@ -545,10 +582,10 @@ export default function DescriptiveStatsEditablePage() {
           {/* Navegación */}
           <LessonNavigation
             currentStep={2}
-            totalSteps={2}
+            totalSteps={4}
             previousUrl="/lessons/descriptive-stats"
             showPrevious={true}
-            nextUrl="/lessons/mean-deviation-editable"
+            nextUrl="/lessons/mean-deviation"
           />
         </div>
       </div>

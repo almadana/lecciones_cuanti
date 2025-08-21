@@ -99,22 +99,23 @@ export default function EditableUnivariateTables() {
       .attr('width', x.bandwidth())
       .attr('height', d => height - y(d.value))
       .attr('fill', '#4F46E5')
+      .attr('stroke', 'none')
   }, [data])
 
   return (
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Editor de Tablas Univariadas (2 de 2)
+          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+            Editor de Tablas Univariadas 2/5
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-600">
             Modifica las frecuencias de la encuesta de satisfacción y observa cómo cambian los porcentajes y la visualización
           </p>
         </div>
 
         {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
               En esta lección interactiva puedes modificar los datos de la encuesta de satisfacción con la vida 
@@ -136,26 +137,26 @@ export default function EditableUnivariateTables() {
         </div>
 
         <div className="mt-12">
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="panel-contenido">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gris-borde">
                 <thead>
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <tr className="bg-morado-claro">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Nivel de Satisfacción
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Frecuencia
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
                       Porcentaje
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-blanco divide-y divide-gris-borde">
                   {data.map((item, index) => (
                     <tr key={item.category}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
                         {item.category}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -163,11 +164,11 @@ export default function EditableUnivariateTables() {
                           type="number"
                           value={item.value}
                           onChange={(e) => updateFrequency(index, parseInt(e.target.value) || 0)}
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                          className="block w-full rounded-md border-morado-claro shadow-sm focus:border-morado-oscuro focus:ring-morado-oscuro p-2"
                           min="0"
                         />
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {item.percentage.toFixed(1)}%
                       </td>
                     </tr>
@@ -177,7 +178,7 @@ export default function EditableUnivariateTables() {
             </div>
 
             <div className="mt-8">
-              <h3 className="text-lg font-medium text-gray-900">Visualización</h3>
+              <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block">Visualización</h3>
               <div className="mt-4 flex justify-center">
                 <svg ref={svgRef}></svg>
               </div>
@@ -220,7 +221,7 @@ export default function EditableUnivariateTables() {
         {/* Navegación */}
         <LessonNavigation
           currentStep={2}
-          totalSteps={2}
+          totalSteps={5}
           previousUrl="/lessons/univariate-tables"
           showPrevious={true}
           nextUrl="/lessons/bivariate-tables"

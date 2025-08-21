@@ -472,12 +472,13 @@ export default function SamplingEditablePage() {
         currentStep={2}
         totalSteps={2}
         previousUrl="/lessons/sampling"
-        showNext={false}
+        showPrevious={true}
+        nextUrl="/lessons/confidence-interval"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Muestreo - Editable (2 de 2)
+            Editor de Muestreo
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Experimenta con diferentes parámetros de la población y observa cómo afectan la distribución muestral.
@@ -486,7 +487,7 @@ export default function SamplingEditablePage() {
 
         <div className="mt-12">
           {/* Panel de control */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Controles de Simulación</h3>
             
             {/* Controles de población */}
@@ -613,7 +614,7 @@ export default function SamplingEditablePage() {
           </div>
 
           {/* Población */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Población (N={populationSize})</h3>
             <div className="mt-4 flex justify-center">
               <svg ref={populationHistogramRef}></svg>
@@ -648,7 +649,7 @@ export default function SamplingEditablePage() {
           </div>
 
           {/* Muestra Actual */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               Muestra Actual (n={sampleSize}, muestra #{sampleCount} de {numSamples})
             </h3>
@@ -658,7 +659,7 @@ export default function SamplingEditablePage() {
           </div>
 
           {/* Distribución Muestral */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               Distribución Muestral de la Media ({sampleMeans.length} muestras)
             </h3>
@@ -668,7 +669,7 @@ export default function SamplingEditablePage() {
           </div>
 
           {/* Explicación */}
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Explicación</h3>
             <div className="prose max-w-none">
               <h4 className="text-base font-medium text-gray-900">Experimento Interactivo</h4>
@@ -708,7 +709,8 @@ export default function SamplingEditablePage() {
         currentStep={2}
         totalSteps={2}
         previousUrl="/lessons/sampling"
-        showNext={false}
+        showPrevious={true}
+        nextUrl="/lessons/confidence-interval"
       />
     </div>
   )

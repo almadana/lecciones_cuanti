@@ -164,12 +164,11 @@ export default function CorrelationEditablePage() {
       <LessonHeader title="Correlación - Versión Editable (2 de 2)" />
       
       {/* Texto introductorio y instrucciones */}
-      <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+      <div className="panel-contenido">
         <div className="prose text-gray-700 mb-6">
           <p className="text-lg">
-            En esta versión interactiva puedes manipular directamente los datos para experimentar 
-            con diferentes correlaciones. Arrastra los puntos, ajusta los controles y observa 
-            cómo cambian las estadísticas en tiempo real.
+            En esta lección interactiva puedes modificar los datos de la encuesta de satisfacción con la vida 
+            y observar cómo los cambios afectan la correlación, la visualización y las respuestas a las preguntas.
           </p>
         </div>
         
@@ -460,7 +459,8 @@ export default function CorrelationEditablePage() {
         currentStep={2}
         totalSteps={2}
         previousUrl="/lessons/correlation"
-        showNext={false}
+        showPrevious={true}
+        nextUrl="/lessons/regression"
       />
     </article>
   );

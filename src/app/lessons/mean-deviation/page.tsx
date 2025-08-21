@@ -230,16 +230,16 @@ export default function MeanDeviationPage() {
   return (
     <div className="py-8">
       <LessonNavigation
-        currentStep={1}
-        totalSteps={2}
-        previousUrl="/lessons/descriptive-stats"
+        currentStep={3}
+        totalSteps={4}
+        previousUrl="/lessons/descriptive-stats-editable"
         showPrevious={true}
         nextUrl="/lessons/mean-deviation-editable"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Media y Desviación (1 de 2)
+            Media y Desvío
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             Desde el año 2015, en el curso "Métodos y Técnicas Cuantitativas", recabamos datos sobre la satisfacción general con la vida de los estudiantes.
@@ -248,12 +248,11 @@ export default function MeanDeviationPage() {
         </div>
 
         {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
-              Las medidas de tendencia central (media, mediana, moda) y las medidas de dispersión 
-              son fundamentales para resumir y entender la distribución de los datos. En esta lección 
-              verás cómo estas medidas se comportan en datos reales de satisfacción con la vida.
+              La media y la desviación estándar son las medidas más importantes de tendencia central y dispersión. 
+              En esta lección aprenderás cómo se calculan y cómo interpretarlas en diferentes contextos.
             </p>
           </div>
           
@@ -270,9 +269,37 @@ export default function MeanDeviationPage() {
           </div>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-12 space-y-8">
+          {/* Introducción */}
+          <div className="panel-contenido">
+            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+              ¿Qué son la Media y la Desviación Estándar?
+            </h2>
+            <div className="prose max-w-none">
+              <h4 className="text-base font-medium text-negro">Media</h4>
+              <p className="text-gray-600 mb-4">
+                La media es el promedio aritmético de todos los valores. Se calcula sumando todos los valores y dividiendo por el número total de observaciones.
+                En nuestra encuesta, la media de satisfacción es 22.32, lo que indica un nivel moderado-alto de satisfacción general.
+              </p>
+
+              <h4 className="text-base font-medium text-negro">Desviación Estándar</h4>
+              <p className="text-gray-600 mb-4">
+                La desviación estándar (5.78 en nuestra encuesta) mide qué tan dispersos están los valores respecto a la media.
+                Un desvío menor indica que los valores tienden a estar más cerca de la media, mientras que un desvío mayor indica mayor dispersión.
+              </p>
+
+              <h4 className="text-base font-medium text-negro">Interpretación</h4>
+              <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                <li>Aproximadamente el 68% de los estudiantes tienen un nivel de satisfacción entre 16.54 y 28.10 (media ± 1 desvío)</li>
+                <li>Cerca del 95% tienen un nivel entre 10.76 y 33.88 (media ± 2 desvíos)</li>
+                <li>La distribución tiende a ser simétrica alrededor de la media</li>
+                <li>Los valores extremos (muy alta o muy baja satisfacción) son menos frecuentes</li>
+              </ul>
+            </div>
+          </div>
+
           {/* Panel de control */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 mb-8 border border-gris-borde">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Controles de Simulación</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -348,7 +375,7 @@ export default function MeanDeviationPage() {
           </div>
 
           {/* Área de Smileys */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 mb-8 border border-gris-borde">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Muestra Actual</h3>
             <div className="mt-4 flex justify-center">
               <svg 
@@ -370,7 +397,7 @@ export default function MeanDeviationPage() {
           </div>
 
           {/* Histograma */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Distribución de Satisfacción con la Vida</h3>
             <div className="mt-4 flex justify-center">
               <svg ref={histogramRef}></svg>
@@ -378,7 +405,7 @@ export default function MeanDeviationPage() {
           </div>
 
           {/* Explicación */}
-          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Explicación</h3>
             <div className="prose max-w-none">
               <h4 className="text-base font-medium text-negro">Media</h4>
@@ -405,7 +432,7 @@ export default function MeanDeviationPage() {
         </div>
 
         {/* Resumen de la Lección */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
             Resumen de Conceptos Clave
           </h2>
@@ -449,9 +476,9 @@ export default function MeanDeviationPage() {
         </div>
       </div>
       <LessonNavigation
-        currentStep={1}
-        totalSteps={2}
-        previousUrl="/lessons/descriptive-stats"
+        currentStep={3}
+        totalSteps={4}
+        previousUrl="/lessons/descriptive-stats-editable"
         showPrevious={true}
         nextUrl="/lessons/mean-deviation-editable"
       />

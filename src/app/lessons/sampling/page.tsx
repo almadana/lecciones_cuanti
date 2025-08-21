@@ -482,14 +482,14 @@ export default function SamplingPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
-        previousUrl="/lessons/mean-deviation-editable"
+        previousUrl="/lessons/regression-interactive"
         showPrevious={true}
         nextUrl="/lessons/sampling-editable"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Muestreo (1 de 2)
+            Muestreo
           </h1>
           <p className="mt-4 text-lg text-gray-500">
             Observa cómo se forma la distribución muestral de la media a medida que tomamos muestras repetidas.
@@ -498,7 +498,7 @@ export default function SamplingPage() {
         </div>
 
         {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
               El muestreo es fundamental en estadística porque rara vez podemos estudiar toda una población. 
@@ -690,7 +690,7 @@ export default function SamplingPage() {
         </div>
 
         {/* Resumen de la Lección */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
             Resumen de Conceptos Clave
           </h2>
@@ -736,7 +736,7 @@ export default function SamplingPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
-        previousUrl="/lessons/mean-deviation-editable"
+        previousUrl="/lessons/regression-interactive"
         showPrevious={true}
         nextUrl="/lessons/sampling-editable"
       />

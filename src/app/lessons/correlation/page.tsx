@@ -142,12 +142,11 @@ export default function CorrelationPage() {
       <LessonHeader title="Correlación (1 de 2)" />
       
       {/* Texto introductorio y instrucciones */}
-      <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+      <div className="panel-contenido">
         <div className="prose text-gray-700 mb-6">
           <p className="text-lg">
-            La correlación mide la fuerza y dirección de la relación lineal entre dos variables continuas. 
-            En esta lección explorarás cómo el coeficiente de correlación de Pearson varía de -1 a +1, 
-            y cómo interpretar su significancia estadística.
+            La correlación es una medida estadística que describe la relación entre dos variables continuas. 
+            En esta lección aprenderás sobre el coeficiente de correlación de Pearson y cómo interpretarlo.
           </p>
         </div>
         
@@ -356,7 +355,7 @@ export default function CorrelationPage() {
       </section>
 
       {/* Resumen de la Lección */}
-      <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+      <div className="panel-contenido">
         <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
           Resumen de Conceptos Clave
         </h2>
@@ -403,9 +402,9 @@ export default function CorrelationPage() {
       <LessonNavigation
         currentStep={1}
         totalSteps={2}
-        nextUrl="/lessons/regression"
+        previousUrl="/lessons/bivariate-tables-editable-2"
         showPrevious={true}
-        previousUrl="/lessons/confidence-interval"
+        nextUrl="/lessons/correlation-editable"
       />
     </article>
   );

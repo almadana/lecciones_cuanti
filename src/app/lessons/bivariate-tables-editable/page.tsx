@@ -263,8 +263,8 @@ export default function EditableBivariateTables() {
   return (
     <div className="py-8">
       <LessonNavigation
-        currentStep={2}
-        totalSteps={3}
+        currentStep={4}
+        totalSteps={5}
         previousUrl="/lessons/bivariate-tables"
         showPrevious={true}
         nextUrl="/lessons/bivariate-tables-editable-2"
@@ -272,15 +272,15 @@ export default function EditableBivariateTables() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Tablas Bivariadas - Editable (2 de 2)
+            Editor de Tablas Bivariadas 4/5
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-600">
             Modifica los valores de la tabla y observa cómo cambian los porcentajes y la visualización
           </p>
         </div>
 
         <div className="mt-12">
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Frecuencias Absolutas</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
@@ -342,7 +342,7 @@ export default function EditableBivariateTables() {
             </div>
           </div>
 
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Frecuencias Porcentuales</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
@@ -382,8 +382,9 @@ export default function EditableBivariateTables() {
             </div>
           </div>
 
-          <div className="mt-8">
-            <h3 className="text-lg font-medium text-gray-900">Visualización</h3>
+          {/* Visualización */}
+          <div className="panel-contenido">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Visualización</h3>
             <div className="mt-4 flex items-center space-x-4">
               <label className="text-sm text-gray-600">Normalización:</label>
               <select
@@ -435,7 +436,7 @@ export default function EditableBivariateTables() {
             />
           </div>
 
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Instrucciones</h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-600">
               <li>Los datos iniciales corresponden a la tabla original de nivel educativo y satisfacción</li>
@@ -449,8 +450,8 @@ export default function EditableBivariateTables() {
         </div>
       </div>
       <LessonNavigation
-        currentStep={2}
-        totalSteps={3}
+        currentStep={4}
+        totalSteps={5}
         previousUrl="/lessons/bivariate-tables"
         showPrevious={true}
         nextUrl="/lessons/bivariate-tables-editable-2"

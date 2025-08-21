@@ -150,6 +150,7 @@ export default function BivariateTables() {
         .attr('x', d => x(d[0]))
         .attr('width', d => x(d[1]) - x(d[0]))
         .attr('height', y.bandwidth())
+        .attr('stroke', 'none')
 
       // Add legend
       const legend = svg.append('g')
@@ -166,6 +167,7 @@ export default function BivariateTables() {
         .attr('width', 15)
         .attr('height', 15)
         .attr('fill', d => color(d))
+        .attr('stroke', 'none')
 
       legend.append('text')
         .attr('x', 20)
@@ -215,6 +217,7 @@ export default function BivariateTables() {
         .attr('y', d => y(d[1]))
         .attr('height', d => y(d[0]) - y(d[1]))
         .attr('width', x.bandwidth())
+        .attr('stroke', 'none')
 
       // Add legend
       const legend = svg.append('g')
@@ -231,6 +234,7 @@ export default function BivariateTables() {
         .attr('width', 15)
         .attr('height', 15)
         .attr('fill', d => color(d))
+        .attr('stroke', 'none')
 
       legend.append('text')
         .attr('x', 20)
@@ -244,16 +248,16 @@ export default function BivariateTables() {
   return (
     <div className="py-8">
       <LessonNavigation
-        currentStep={1}
-        totalSteps={2}
-        previousUrl="/lessons/univariate-tables"
+        currentStep={3}
+        totalSteps={5}
+        previousUrl="/lessons/univariate-tables-editable"
         showPrevious={true}
         nextUrl="/lessons/bivariate-tables-editable"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Tablas Bivariadas (1 de 2)
+            Tablas Bivariadas 3/5
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             Relación entre nivel educativo y satisfacción con la vida
@@ -261,7 +265,7 @@ export default function BivariateTables() {
         </div>
 
         {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
               Las tablas bivariadas te permiten explorar la relación entre dos variables categóricas. 
@@ -284,7 +288,7 @@ export default function BivariateTables() {
         </div>
 
         <div className="mt-12">
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Frecuencias Absolutas</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gris-borde">
@@ -340,7 +344,7 @@ export default function BivariateTables() {
             </div>
           </div>
 
-          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Frecuencias Porcentuales</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gris-borde">
@@ -421,7 +425,7 @@ export default function BivariateTables() {
             />
           </div>
 
-          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block mb-4">Interpretación</h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-600">
               <li>La tabla muestra la relación entre el nivel educativo y la satisfacción con la vida</li>
@@ -442,7 +446,7 @@ export default function BivariateTables() {
           </div>
 
           {/* Resumen de la Lección */}
-          <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Resumen de Conceptos Clave
             </h2>
@@ -487,9 +491,9 @@ export default function BivariateTables() {
         </div>
       </div>
       <LessonNavigation
-        currentStep={1}
-        totalSteps={2}
-        previousUrl="/lessons/univariate-tables"
+        currentStep={3}
+        totalSteps={5}
+        previousUrl="/lessons/univariate-tables-editable"
         showPrevious={true}
         nextUrl="/lessons/bivariate-tables-editable"
       />

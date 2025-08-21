@@ -60,9 +60,9 @@ export default function Introduction() {
   return (
     <div className="py-8">
       <LessonNavigation
-        currentStep={0}
+        currentStep={1}
         totalSteps={1}
-        nextUrl="/lessons/univariate-tables"
+        nextUrl="/lessons/descriptive-stats"
         showPrevious={false}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,7 +76,7 @@ export default function Introduction() {
         </div>
 
         {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+        <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
               En esta lección aprenderás los conceptos básicos de la estadística que te permitirán 
@@ -88,9 +88,9 @@ export default function Introduction() {
           <div className="bg-gris-claro p-4 rounded-lg">
             <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
             <ul className="list-disc pl-5 space-y-2 text-sm">
-              <li>Explora los ejemplos interactivos de variables y escalas de medición</li>
+              <li>Explora los ejemplos interactivos de variables y niveles de medida</li>
               <li>Clasifica diferentes tipos de variables usando los selectores</li>
-              <li>Identifica las escalas de medición de cada ejemplo</li>
+              <li>Identifica los niveles de medida de cada ejemplo</li>
               <li>Responde las preguntas de evaluación para verificar tu comprensión</li>
               <li>Revisa el resumen de conceptos clave al final de la lección</li>
             </ul>
@@ -99,7 +99,7 @@ export default function Introduction() {
 
         <div className="mt-12 space-y-8">
           {/* ¿Qué es la Estadística? */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               ¿Qué es la Estadística?
             </h2>
@@ -128,7 +128,7 @@ export default function Introduction() {
           </div>
 
           {/* Tipos de Variables */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Tipos de Variables
             </h2>
@@ -156,10 +156,10 @@ export default function Introduction() {
             </div>
           </div>
 
-          {/* Escalas de Medición */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          {/* Niveles de Medida */}
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Escalas de Medición
+              Niveles de Medida
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-gris-claro p-4 rounded-lg">
@@ -190,7 +190,7 @@ export default function Introduction() {
           </div>
 
           {/* Ejemplos Interactivos */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Ejemplos Interactivos
             </h2>
@@ -200,7 +200,7 @@ export default function Introduction() {
                 <select
                   value={selectedVariableType}
                   onChange={(e) => setSelectedVariableType(e.target.value)}
-                  className="w-full p-2 border border-gris-borde rounded-md mb-4"
+                  className="w-full p-2 border border-morado-claro rounded-md mb-4"
                 >
                   <option value="">Selecciona una variable...</option>
                   {variableExamples.map(v => (
@@ -212,15 +212,18 @@ export default function Introduction() {
                     <p className="text-sm">
                       <strong>{selectedVariableType}</strong>: {variableExamples.find(v => v.name === selectedVariableType)?.description}
                     </p>
+                    <p className="text-sm mt-2">
+                      <strong>Tipo:</strong> {variableExamples.find(v => v.name === selectedVariableType)?.type}
+                    </p>
                   </div>
                 )}
               </div>
               <div>
-                <h3 className="font-bold text-negro mb-3">Identifica la escala de medición:</h3>
+                <h3 className="font-bold text-negro mb-3">Identifica el nivel de medida:</h3>
                 <select
                   value={selectedScale}
                   onChange={(e) => setSelectedScale(e.target.value)}
-                  className="w-full p-2 border border-gris-borde rounded-md mb-4"
+                  className="w-full p-2 border border-morado-claro rounded-md mb-4"
                 >
                   <option value="">Selecciona una variable...</option>
                   {variableExamples.map(v => (
@@ -230,7 +233,10 @@ export default function Introduction() {
                 {selectedScale && (
                   <div className="bg-gris-claro p-3 rounded-lg">
                     <p className="text-sm">
-                      <strong>Escala {variableExamples.find(v => v.name === selectedScale)?.scale}</strong>: {variableExamples.find(v => v.name === selectedScale)?.description}
+                      <strong>{selectedScale}</strong>: {variableExamples.find(v => v.name === selectedScale)?.description}
+                    </p>
+                    <p className="text-sm mt-2">
+                      <strong>Nivel de medida:</strong> {variableExamples.find(v => v.name === selectedScale)?.scale}
                     </p>
                   </div>
                 )}
@@ -253,7 +259,7 @@ export default function Introduction() {
             />
 
             <Question
-              question="¿Qué escala de medición tiene la variable 'Temperatura en grados Celsius'?"
+              question="¿Qué nivel de medida tiene la variable 'Temperatura en grados Celsius'?"
               type="multiple-choice"
               options={[
                 { text: 'Nominal', value: false },
@@ -278,7 +284,7 @@ export default function Introduction() {
           </div>
 
           {/* Resumen */}
-          <div className="bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
+          <div className="panel-contenido">
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Resumen de Conceptos Clave
             </h2>
@@ -306,9 +312,9 @@ export default function Introduction() {
         </div>
       </div>
       <LessonNavigation
-        currentStep={0}
+        currentStep={1}
         totalSteps={1}
-        nextUrl="/lessons/univariate-tables"
+        nextUrl="/lessons/descriptive-stats"
         showPrevious={false}
       />
     </div>

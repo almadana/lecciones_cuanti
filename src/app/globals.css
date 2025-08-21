@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -7,10 +8,12 @@
   --color-morado-claro: #b4a5fa;
   --color-morado-oscuro: #8c7ddc;
   --color-verde-claro: #9bfa82;
+  --color-verde-seleccion: #c8fab4;
   --color-gris-claro: #ededed;
-  --color-gris-borde: #cbcbcb;
+  --color-gris-borde: #b4a5fa;
   --color-negro: #000000;
   --color-blanco: #ffffff;
+  --color-violeta: #6C3BF6;
 }
 
 @theme inline {
@@ -31,6 +34,44 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+/* Estilos globales para títulos principales */
+h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+
+h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+/* Clase específica para bordes morados */
+.border-morado-claro {
+  border-color: #b4a5fa !important;
+}
+
+/* Clase para paneles principales con bordes morados */
+.panel-morado {
+  border: 1px solid #b4a5fa !important;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Clase global para todos los paneles principales de contenido */
+.panel-contenido {
+  background-color: #ffffff !important;
+  border: 1px solid #b4a5fa !important;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  margin-top: 2rem;
 }
 
 /* Estilos globales para sliders */

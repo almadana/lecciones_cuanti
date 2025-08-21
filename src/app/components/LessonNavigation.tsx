@@ -42,7 +42,7 @@ export default function LessonNavigation({
   };
 
   return (
-    <section className="flex justify-between items-center py-8 border-t border-gris-borde">
+    <section className="flex justify-between items-center py-8 border-t border-morado-claro">
       {showPrevious ? (
         <button
           onClick={handlePrevious}

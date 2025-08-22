@@ -1,7 +1,6 @@
 {
-  "/lessons/mean-deviation-editable/page": "app/lessons/mean-deviation-editable/page.js",
-  "/lessons/descriptive-stats-editable/page": "app/lessons/descriptive-stats-editable/page.js",
-  "/lessons/univariate-tables/page": "app/lessons/univariate-tables/page.js",
-  "/lessons/correlation/page": "app/lessons/correlation/page.js",
-  "/lessons/correlation-editable/page": "app/lessons/correlation-editable/page.js"
+  "/page": "app/page.js",
+  "/lessons/regression/page": "app/lessons/regression/page.js",
+  "/lessons/regression-editable/page": "app/lessons/regression-editable/page.js",
+  "/lessons/regression-interactive/page": "app/lessons/regression-interactive/page.js"
 }

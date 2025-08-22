@@ -163,11 +163,11 @@ export default function RegressionInteractive() {
       { x: 0, y: userLine.intercept, type: 'intercept' }
     ]
 
-    // Manija del intercepto (en el eje Y)
+    // Manija del intercepto (en el eje Y) - hacer más grande
     svg.append('circle')
       .attr('cx', xScale(0))
       .attr('cy', yScale(userLine.intercept))
-      .attr('r', 8)
+      .attr('r', 15) // Aumentar el radio para hit box más grande
       .attr('fill', '#f59e0b')
       .attr('stroke', '#d97706')
       .attr('stroke-width', 2)
@@ -176,7 +176,7 @@ export default function RegressionInteractive() {
 
     // Agregar etiquetas a las manijas
     svg.append('text')
-      .attr('x', xScale(0) + 15)
+      .attr('x', xScale(0) + 20)
       .attr('y', yScale(userLine.intercept))
       .attr('text-anchor', 'start')
       .attr('dominant-baseline', 'middle')
@@ -185,11 +185,14 @@ export default function RegressionInteractive() {
       .attr('font-weight', 'bold')
       .text('Intercepto')
 
-    // Agregar línea invisible más gruesa para facilitar el arrastre
-    const lineWidth = 20 // Hacer la línea más gruesa para facilitar el clic
+    // Agregar línea invisible más gruesa para facilitar el arrastre de la pendiente
+    // Pero solo en el área central, no cerca del intercepto
+    const lineWidth = 20
+    const interceptBuffer = 30 // Área alrededor del intercepto donde no se activa la línea
+    
     svg.append('line')
-      .attr('x1', xScale(0))
-      .attr('y1', yScale(userLine.intercept))
+      .attr('x1', xScale(5)) // Empezar después del intercepto
+      .attr('y1', yScale(userLine.slope * 5 + userLine.intercept))
       .attr('x2', xScale(20))
       .attr('y2', yScale(userLine.slope * 20 + userLine.intercept))
       .attr('stroke', 'transparent')
@@ -234,11 +237,12 @@ export default function RegressionInteractive() {
 
     // Calcular el movimiento relativo
     const deltaX = x - lastMousePos.x
-    const deltaY = y - lastMousePos.y
+    const deltaY = lastMousePos.y - y // Invertir la dirección
 
     if (draggedHandle === 'intercept') {
       // Ajustar intercepto basado en movimiento vertical relativo
-      const deltaYValue = yScale.invert(lastMousePos.y) - yScale.invert(y)
+      // Corregir la dirección: cuando el mouse sube, el intercepto debe subir
+      const deltaYValue = yScale.invert(y) - yScale.invert(lastMousePos.y)
       const sensitivity = 0.5 // Factor de sensibilidad
       
       setUserLine(prev => ({
@@ -246,19 +250,17 @@ export default function RegressionInteractive() {
         intercept: Math.max(-5, Math.min(15, prev.intercept + deltaYValue * sensitivity))
       }))
     } else if (draggedHandle === 'line') {
-      // Ajustar pendiente basado en movimiento relativo
-      const deltaXValue = xScale.invert(x) - xScale.invert(lastMousePos.x)
-      const deltaYValue = yScale.invert(lastMousePos.y) - yScale.invert(y)
-      const sensitivity = 0.05 // Factor de sensibilidad muy bajo para pendiente
+      // Simplificar el cálculo de la pendiente usando únicamente deltaY
+      const deltaY = y - lastMousePos.y
+      const sensitivity = 0.01 // Sensibilidad para el movimiento
       
-      if (Math.abs(deltaXValue) > 0.01) { // Solo si hay movimiento horizontal significativo
-        const deltaSlope = (deltaYValue / deltaXValue) * sensitivity
-        
-        setUserLine(prev => ({
-          ...prev,
-          slope: Math.max(-2, Math.min(2, prev.slope + deltaSlope))
-        }))
-      }
+      // Calcular el cambio en pendiente basado únicamente en el movimiento vertical
+      const deltaSlope = deltaY * sensitivity
+      
+      setUserLine(prev => ({
+        ...prev,
+        slope: Math.max(-2, Math.min(2, prev.slope + deltaSlope))
+      }))
     }
 
     // Actualizar la posición del mouse

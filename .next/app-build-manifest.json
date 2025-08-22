@@ -11,95 +11,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/lessons/introduction/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/introduction/page.js"
-    ],
-    "/lessons/univariate-tables/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/univariate-tables/page.js"
-    ],
-    "/lessons/univariate-tables-editable/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/univariate-tables-editable/page.js"
-    ],
-    "/lessons/bivariate-tables/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/bivariate-tables/page.js"
-    ],
-    "/lessons/descriptive-stats/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/descriptive-stats/page.js"
-    ],
-    "/lessons/mean-deviation/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/mean-deviation/page.js"
-    ],
-    "/lessons/mean-deviation-editable/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/mean-deviation-editable/page.js"
-    ],
-    "/lessons/sampling/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/sampling/page.js"
-    ],
-    "/lessons/bivariate-tables-editable-2/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/bivariate-tables-editable-2/page.js"
-    ],
-    "/lessons/correlation/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/correlation/page.js"
-    ],
-    "/lessons/t-test/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/t-test/page.js"
-    ],
     "/lessons/regression/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/lessons/regression/page.js"
-    ],
-    "/lessons/descriptive-stats-editable/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/descriptive-stats-editable/page.js"
-    ],
-    "/lessons/bivariate-tables-editable/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/bivariate-tables-editable/page.js"
-    ],
-    "/lessons/sampling-editable/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/sampling-editable/page.js"
-    ],
-    "/lessons/confidence-interval/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/confidence-interval/page.js"
     ],
     "/lessons/regression-editable/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/lessons/regression-editable/page.js"
     ],
-    "/lessons/correlation-editable/page": [
+    "/lessons/regression-interactive/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/lessons/correlation-editable/page.js"
+      "static/chunks/app/lessons/regression-interactive/page.js"
     ]
   }
 }

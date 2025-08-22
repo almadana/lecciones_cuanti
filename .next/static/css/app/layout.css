@@ -630,11 +630,8 @@
   .bg-\[\#4b00f9\] {
     background-color: #4b00f9;
   }
-  .bg-\[\#6C3BF6\] {
-    background-color: #6C3BF6;
-  }
-  .bg-\[\#8c7ddc\] {
-    background-color: #8c7ddc;
+  .bg-\[\#9bfa82\] {
+    background-color: #9bfa82;
   }
   .bg-\[\#c8fab4\] {
     background-color: #c8fab4;
@@ -815,9 +812,6 @@
   .text-\[\#4b00f9\] {
     color: #4b00f9;
   }
-  .text-\[\#6C3BF6\] {
-    color: #6C3BF6;
-  }
   .text-blue-500 {
     color: var(--color-blue-500);
   }
@@ -954,6 +948,13 @@
       }
     }
   }
+  .hover\:bg-\[\#9bfa82\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #9bfa82;
+      }
+    }
+  }
   .hover\:bg-gray-50 {
     &:hover {
       @media (hover: hover) {
@@ -994,13 +995,6 @@
     &:hover {
       @media (hover: hover) {
         color: #4b00f9;
-      }
-    }
-  }
-  .hover\:text-\[\#6C3BF6\] {
-    &:hover {
-      @media (hover: hover) {
-        color: #6C3BF6;
       }
     }
   }

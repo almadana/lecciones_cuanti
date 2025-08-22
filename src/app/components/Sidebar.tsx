@@ -188,8 +188,8 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                 href={lesson.href}
                 className={`${
                   pathname === lesson.href
-                    ? 'bg-white text-[#4b00f9] font-bold'
-                    : 'text-white hover:bg-white hover:text-[#4b00f9] hover:font-bold'
+                    ? 'bg-[#9bfa82] text-[#4b00f9] font-bold'
+                    : 'text-white hover:bg-[#9bfa82] hover:text-[#4b00f9] hover:font-bold'
                 } group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
               >
                 <span className="truncate">{lesson.title}</span>
@@ -200,8 +200,8 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                   href={subLesson.href}
                   className={`${
                     pathname === subLesson.href
-                      ? 'bg-white text-[#4b00f9] font-bold'
-                      : 'text-white hover:bg-white hover:text-[#4b00f9] hover:font-bold'
+                      ? 'bg-[#9bfa82] text-[#4b00f9] font-bold'
+                      : 'text-white hover:bg-[#9bfa82] hover:text-[#4b00f9] hover:font-bold'
                   } group flex items-center pl-8 pr-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
                 >
                   <span className="truncate">{subLesson.title}</span>

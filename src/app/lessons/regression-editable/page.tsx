@@ -14,11 +14,12 @@ interface RegressionLine {
   slope: number
   intercept: number
   rSquared: number
+  correlation: number
 }
 
 const calculateRegression = (data: DataPoint[]): RegressionLine => {
   if (data.length < 2) {
-    return { slope: 0, intercept: 0, rSquared: 0 }
+    return { slope: 0, intercept: 0, rSquared: 0, correlation: 0 }
   }
 
   const n = data.length
@@ -42,7 +43,12 @@ const calculateRegression = (data: DataPoint[]): RegressionLine => {
   }, 0)
   const rSquared = ssTot === 0 ? 0 : 1 - (ssRes / ssTot)
 
-  return { slope, intercept, rSquared }
+  // Calculate Pearson correlation coefficient (R)
+  const numerator = n * sumXY - sumX * sumY
+  const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY))
+  const correlation = denominator === 0 ? 0 : numerator / denominator
+
+  return { slope, intercept, rSquared, correlation }
 }
 
 // Datos iniciales
@@ -487,7 +493,7 @@ export default function RegressionEditable() {
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Resultados del Análisis
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-gris-claro p-4 rounded-lg text-center">
                 <h3 className="font-bold text-negro mb-2">Pendiente (m)</h3>
                 <p className="text-2xl font-bold text-morado-oscuro">{regression.slope.toFixed(2)}</p>
@@ -500,6 +506,13 @@ export default function RegressionEditable() {
                 <p className="text-2xl font-bold text-morado-oscuro">{regression.intercept.toFixed(2)}</p>
                 <p className="text-sm text-gray-600 mt-2">
                   Valor de Y cuando X = 0
+                </p>
+              </div>
+              <div className="bg-gris-claro p-4 rounded-lg text-center">
+                <h3 className="font-bold text-negro mb-2">R (Pearson)</h3>
+                <p className="text-2xl font-bold text-morado-oscuro">{regression.correlation.toFixed(3)}</p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Correlación lineal entre X e Y
                 </p>
               </div>
               <div className="bg-gris-claro p-4 rounded-lg text-center">

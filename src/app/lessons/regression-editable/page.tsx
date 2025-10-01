@@ -53,14 +53,11 @@ const initialData: DataPoint[] = [
   { x: 8, y: 92 }
 ]
 
-// Punto fijo que siempre estará presente
-const fixedPoint: DataPoint = { x: 5, y: 80 }
-
 export default function RegressionEditable() {
-  const [data, setData] = useState<DataPoint[]>([fixedPoint, ...initialData])
+  const [data, setData] = useState<DataPoint[]>([...initialData])
   const [newX, setNewX] = useState<string>('')
   const [newY, setNewY] = useState<string>('')
-  const [regression, setRegression] = useState<RegressionLine>(calculateRegression([fixedPoint, ...initialData]))
+  const [regression, setRegression] = useState<RegressionLine>(calculateRegression([...initialData]))
   const [showLine, setShowLine] = useState(true)
   const [showEquation, setShowEquation] = useState(true)
   const svgRef = useRef<SVGSVGElement>(null)
@@ -87,14 +84,38 @@ export default function RegressionEditable() {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
 
-    // Create scales with fixed domain
+    // Create scales with dynamic domain
+    let xMin, xMax, yMin, yMax
+    
+    if (data.length === 0) {
+      // Sin datos, usar rango por defecto
+      xMin = 0
+      xMax = 15
+      yMin = 0
+      yMax = 120
+    } else {
+      // Con datos, calcular rango dinámico con margen
+      const dataXMin = d3.min(data, d => d.x) || 0
+      const dataXMax = d3.max(data, d => d.x) || 15
+      const dataYMin = d3.min(data, d => d.y) || 0
+      const dataYMax = d3.max(data, d => d.y) || 120
+      
+      const xRange = dataXMax - dataXMin
+      const yRange = dataYMax - dataYMin
+      
+      xMin = Math.min(0, dataXMin - xRange * 0.1)
+      xMax = Math.max(15, dataXMax + xRange * 0.1)
+      yMin = Math.min(0, dataYMin - yRange * 0.1)
+      yMax = Math.max(120, dataYMax + yRange * 0.1)
+    }
+
     const x = d3.scaleLinear()
       .range([0, width])
-      .domain([0, 15]) // Dominio fijo de 0 a 15
+      .domain([xMin, xMax])
 
     const y = d3.scaleLinear()
       .range([height, 0])
-      .domain([0, 120]) // Dominio fijo de 0 a 120
+      .domain([yMin, yMax])
 
     // Add X axis
     svg.append('g')
@@ -138,17 +159,14 @@ export default function RegressionEditable() {
       .attr('cx', d => x(d.x))
       .attr('cy', d => y(d.y))
       .attr('r', 6)
-      .attr('fill', d => d === fixedPoint ? '#ff6b6b' : '#8c7ddc') // Punto fijo en rojo
-      .attr('stroke', d => d === fixedPoint ? '#cc0000' : '#6b5b95')
+      .attr('fill', '#8c7ddc')
+      .attr('stroke', '#6b5b95')
       .attr('stroke-width', 2)
       .on('click', (event, d) => {
-        // Solo permitir eliminar puntos que no sean el fijo
-        if (d !== fixedPoint) {
-          setData(data.filter(point => point !== d))
-        }
+        setData(data.filter(point => point !== d))
       })
       .append('title')
-      .text(d => d === fixedPoint ? `(${d.x}, ${d.y}) - Punto fijo` : `(${d.x}, ${d.y}) - Click para eliminar`)
+      .text(d => `(${d.x}, ${d.y}) - Click para eliminar`)
 
     // Add equation text
     if (showEquation && data.length >= 2) {
@@ -181,11 +199,11 @@ export default function RegressionEditable() {
   }
 
   const resetData = () => {
-    setData([fixedPoint, ...initialData])
+    setData([...initialData])
   }
 
   const clearData = () => {
-    setData([fixedPoint]) // Siempre mantener el punto fijo
+    setData([]) // Permitir eliminar todos los puntos
   }
 
   const predictValue = (x: number) => {
@@ -201,19 +219,41 @@ export default function RegressionEditable() {
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
 
-    // Obtener las escalas fijas
+    // Obtener las escalas dinámicas
     const margin = { top: 40, right: 40, bottom: 60, left: 60 }
     const width = 600 - margin.left - margin.right
     const height = 400 - margin.top - margin.bottom
 
-    // Convertir coordenadas del clic a valores de datos usando escalas fijas
+    // Convertir coordenadas del clic a valores de datos usando escalas dinámicas
+    let xMin, xMax, yMin, yMax
+    
+    if (data.length === 0) {
+      xMin = 0
+      xMax = 15
+      yMin = 0
+      yMax = 120
+    } else {
+      const dataXMin = d3.min(data, d => d.x) || 0
+      const dataXMax = d3.max(data, d => d.x) || 15
+      const dataYMin = d3.min(data, d => d.y) || 0
+      const dataYMax = d3.max(data, d => d.y) || 120
+      
+      const xRange = dataXMax - dataXMin
+      const yRange = dataYMax - dataYMin
+      
+      xMin = Math.min(0, dataXMin - xRange * 0.1)
+      xMax = Math.max(15, dataXMax + xRange * 0.1)
+      yMin = Math.min(0, dataYMin - yRange * 0.1)
+      yMax = Math.max(120, dataYMax + yRange * 0.1)
+    }
+
     const xScale = d3.scaleLinear()
       .range([0, width])
-      .domain([0, 15])
+      .domain([xMin, xMax])
 
     const yScale = d3.scaleLinear()
       .range([height, 0])
-      .domain([0, 120])
+      .domain([yMin, yMax])
 
     // Ajustar por el margen
     const adjustedX = x - margin.left
@@ -335,7 +375,21 @@ export default function RegressionEditable() {
                   <button
                     onClick={addPoint}
                     disabled={!newX || !newY}
-                    className="w-full bg-morado-oscuro text-blanco py-2 px-4 rounded-md hover:bg-morado-claro disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ 
+                      color: 'var(--color-negro)',
+                      backgroundColor: 'var(--color-morado-oscuro)'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!e.currentTarget.disabled) {
+                        e.currentTarget.style.backgroundColor = 'var(--color-verde-claro)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!e.currentTarget.disabled) {
+                        e.currentTarget.style.backgroundColor = 'var(--color-morado-oscuro)';
+                      }
+                    }}
                   >
                     Agregar Punto
                   </button>
@@ -373,7 +427,7 @@ export default function RegressionEditable() {
                       onClick={clearData}
                       className="w-full bg-red-500 text-blanco py-2 px-4 rounded-md hover:bg-red-600"
                     >
-                      Limpiar Datos (mantiene punto fijo)
+                      Limpiar Todos los Datos
                     </button>
                   </div>
                 </div>
@@ -386,8 +440,8 @@ export default function RegressionEditable() {
             <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
               Gráfico de Dispersión y Línea de Regresión
             </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
+            <div className="flex flex-col lg:flex-row gap-6">
+              <div className="flex-1">
                 <h3 className="font-bold text-negro mb-3">Gráfico de Dispersión</h3>
                 <div className="flex justify-center">
                   <svg 
@@ -398,24 +452,24 @@ export default function RegressionEditable() {
                   ></svg>
                 </div>
                 <p className="text-sm text-gray-600 mt-2">
-                  Haz clic en cualquier punto para eliminarlo (excepto el punto rojo fijo). Haz clic en el gráfico para agregar nuevos puntos.
+                  Haz clic en cualquier punto para eliminarlo. Haz clic en el gráfico para agregar nuevos puntos.
                 </p>
               </div>
-              <div>
+              <div className="lg:w-80">
                 <h3 className="font-bold text-negro mb-3">Datos Actuales</h3>
                 <div className="overflow-x-auto max-h-60">
-                  <table className="min-w-full divide-y divide-gris-borde">
+                  <table className="w-full divide-y divide-gris-borde">
                     <thead>
                       <tr className="bg-morado-claro">
-                        <th className="px-4 py-2 text-left text-xs font-medium text-negro">X</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-negro">Y</th>
+                        <th className="px-2 py-2 text-left text-xs font-medium text-negro">X</th>
+                        <th className="px-2 py-2 text-left text-xs font-medium text-negro">Y</th>
                       </tr>
                     </thead>
                     <tbody className="bg-blanco divide-y divide-gris-borde">
                       {data.map((point, index) => (
                         <tr key={index}>
-                          <td className="px-4 py-2 text-sm text-gray-600">{point.x}</td>
-                          <td className="px-4 py-2 text-sm text-gray-600">{point.y}</td>
+                          <td className="px-2 py-2 text-sm text-gray-600">{point.x}</td>
+                          <td className="px-2 py-2 text-sm text-gray-600">{point.y}</td>
                         </tr>
                       ))}
                     </tbody>

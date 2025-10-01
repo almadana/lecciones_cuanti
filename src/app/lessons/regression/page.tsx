@@ -372,9 +372,9 @@ export default function Regression() {
             <Question
               question="¿Cuál sería la calificación predicha para alguien que estudia 6 horas?"
               type="numeric"
-              hint={`Usa la ecuación: Calificación = ${regression.slope.toFixed(1)} × Horas + ${regression.intercept.toFixed(1)}`}
+              hint={`Usa la ecuación: Calificación = 3.68 × Horas + ${regression.intercept.toFixed(1)}`}
               correctAnswer={predictValue(6)}
-              explanation={`Para 6 horas de estudio: Calificación = ${regression.slope.toFixed(1)} × 6 + ${regression.intercept.toFixed(1)} = ${predictValue(6).toFixed(1)}`}
+              explanation={`Para 6 horas de estudio: Calificación = 3.68 × 6 + 60.5 = 82.58`}
             />
 
             <Question
@@ -383,10 +383,10 @@ export default function Regression() {
               options={[
                 { text: 'Muy mal (R² < 0.3)', value: false },
                 { text: 'Regular (R² entre 0.3 y 0.7)', value: false },
-                { text: 'Bien (R² entre 0.7 y 0.9)', value: true },
-                { text: 'Excelente (R² > 0.9)', value: false }
+                { text: 'Bien (R² entre 0.7 y 0.9)', value: false },
+                { text: 'Excelente (R² > 0.9)', value: true }
               ]}
-              explanation={`Con un R² de ${(regression.rSquared * 100).toFixed(1)}%, el modelo explica bien la relación entre horas de estudio y calificaciones.`}
+              explanation={`Con un R² de ${(regression.rSquared * 100).toFixed(1)}%, el modelo explica excelentemente la relación entre horas de estudio y calificaciones.`}
             />
           </div>
 

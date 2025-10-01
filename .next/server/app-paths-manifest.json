@@ -2,5 +2,6 @@
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
   "/lessons/introduction/page": "app/lessons/introduction/page.js",
-  "/lessons/regression/page": "app/lessons/regression/page.js"
+  "/lessons/regression/page": "app/lessons/regression/page.js",
+  "/lessons/regression-editable/page": "app/lessons/regression-editable/page.js"
 }

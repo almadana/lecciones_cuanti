@@ -34,11 +34,11 @@ export default function Question({
   }
 
   return (
-    <div className="bg-blanco rounded-lg p-6 shadow-lg border border-morado-claro">
+    <div className="rounded-lg p-6 shadow-lg" style={{ backgroundColor: 'var(--color-blanco)', border: '1px solid var(--color-morado-claro)' }}>
       <div className="mb-4">
-        <h3 className="text-lg font-medium text-negro mb-2">{question}</h3>
+        <h3 className="text-lg font-medium mb-2" style={{ color: 'var(--color-negro)' }}>{question}</h3>
         {hint && (
-          <p className="text-sm text-gray-600 mb-4">💡 {hint}</p>
+          <p className="text-sm mb-4" style={{ color: 'var(--color-negro)' }}>💡 {hint}</p>
         )}
       </div>
 
@@ -47,11 +47,24 @@ export default function Question({
           {options.map((option, index) => (
             <label
               key={index}
-              className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors border ${
-                answer === option.text
-                  ? 'bg-[#c8fab4] text-negro border-morado-oscuro'
-                  : 'border-morado-claro hover:border-morado-oscuro hover:bg-morado-claro bg-white'
-              }`}
+              className="flex items-center p-3 rounded-lg cursor-pointer transition-colors border"
+              style={{
+                backgroundColor: answer === option.text ? 'var(--color-verde-seleccion)' : 'var(--color-blanco)',
+                color: 'var(--color-negro)',
+                borderColor: answer === option.text ? 'var(--color-morado-oscuro)' : 'var(--color-morado-claro)'
+              }}
+              onMouseEnter={(e) => {
+                if (answer !== option.text) {
+                  e.currentTarget.style.borderColor = 'var(--color-morado-oscuro)';
+                  e.currentTarget.style.backgroundColor = 'var(--color-morado-claro)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (answer !== option.text) {
+                  e.currentTarget.style.borderColor = 'var(--color-morado-claro)';
+                  e.currentTarget.style.backgroundColor = 'var(--color-blanco)';
+                }
+              }}
             >
               <input
                 type="radio"
@@ -75,25 +88,59 @@ export default function Question({
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Ingresa tu respuesta"
-            className="block w-full rounded-md border-morado-claro shadow-sm focus:border-morado-oscuro focus:ring-morado-oscuro p-2"
+            className="block w-full rounded-md shadow-sm p-2"
+            style={{ 
+              border: '1px solid var(--color-morado-claro)',
+              backgroundColor: 'var(--color-blanco)',
+              color: 'var(--color-negro)'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = 'var(--color-morado-oscuro)';
+              e.target.style.outline = 'none';
+              e.target.style.boxShadow = '0 0 0 2px var(--color-morado-oscuro)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'var(--color-morado-claro)';
+              e.target.style.boxShadow = 'none';
+            }}
           />
         </div>
       )}
 
       <button
         onClick={checkAnswer}
-        className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-negro bg-morado-oscuro hover:bg-verde-claro transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-morado-oscuro"
+        className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm transition-colors duration-200 focus:outline-none"
+        style={{ 
+          color: 'var(--color-negro)',
+          backgroundColor: 'var(--color-morado-oscuro)'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--color-verde-claro)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--color-morado-oscuro)';
+        }}
       >
         Verificar Respuesta
       </button>
 
       {isCorrect !== null && (
-        <div className={`mt-4 p-4 rounded-md ${isCorrect ? 'bg-verde-claro' : 'bg-red-100'}`}>
-          <p className={`text-sm font-bold ${isCorrect ? 'text-negro' : 'text-red-800'}`}>
+        <div 
+          className="mt-4 p-4 rounded-md"
+          style={{ 
+            backgroundColor: isCorrect ? 'var(--color-verde-claro)' : '#fecaca'
+          }}
+        >
+          <p 
+            className="text-sm font-bold"
+            style={{ 
+              color: isCorrect ? 'var(--color-negro)' : '#dc2626'
+            }}
+          >
             {isCorrect ? '¡Correcto!' : '¡Inténtalo de nuevo!'}
           </p>
           {showExplanation && (
-            <p className="mt-2 text-sm text-negro">{explanation}</p>
+            <p className="mt-2 text-sm" style={{ color: isCorrect ? 'var(--color-negro)' : '#7f1d1d' }}>{explanation}</p>
           )}
         </div>
       )}

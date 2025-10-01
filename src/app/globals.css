@@ -3,7 +3,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #fff;
   --foreground: #171717;
   --color-morado-claro: #b4a5fa;
   --color-morado-oscuro: #8c7ddc;
@@ -11,9 +11,9 @@
   --color-verde-seleccion: #c8fab4;
   --color-gris-claro: #ededed;
   --color-gris-borde: #b4a5fa;
-  --color-negro: #000000;
-  --color-blanco: #ffffff;
-  --color-violeta: #6C3BF6;
+  --color-negro: #000;
+  --color-blanco: #fff;
+  --color-violeta: #4b00f9;
 }
 
 @theme inline {
@@ -27,6 +27,15 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --color-morado-claro: #6b46c1;
+    --color-morado-oscuro: #553c9a;
+    --color-verde-claro: #10b981;
+    --color-verde-seleccion: #059669;
+    --color-gris-claro: #1f2937;
+    --color-gris-borde: #374151;
+    --color-negro: #f9fafb;
+    --color-blanco: #111827;
+    --color-violeta: #7c3aed;
   }
 }
 
@@ -66,8 +75,8 @@ h3 {
 
 /* Clase global para todos los paneles principales de contenido */
 .panel-contenido {
-  background-color: #ffffff !important;
-  border: 1px solid #b4a5fa !important;
+  background-color: var(--color-blanco) !important;
+  border: 1px solid var(--color-morado-claro) !important;
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;

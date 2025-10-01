@@ -11,20 +11,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/lessons/regression/page": [
+    "/lessons/introduction/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/lessons/regression/page.js"
+      "static/chunks/app/lessons/introduction/page.js"
     ],
     "/lessons/regression-editable/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/lessons/regression-editable/page.js"
     ],
-    "/lessons/regression-interactive/page": [
+    "/lessons/regression/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/lessons/regression-interactive/page.js"
+      "static/chunks/app/lessons/regression/page.js"
     ]
   }
 }

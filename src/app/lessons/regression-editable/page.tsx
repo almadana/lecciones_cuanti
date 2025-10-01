@@ -248,7 +248,7 @@ export default function RegressionEditable() {
         <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
-              En esta lección interactiva puedes modificar los datos de la encuesta de satisfacción con la vida 
+              En esta lección interactiva puedes modificar los datos de la relación entre variables X e Y 
               y observar cómo los cambios afectan la regresión, la visualización y las respuestas a las preguntas.
             </p>
           </div>
@@ -256,7 +256,7 @@ export default function RegressionEditable() {
         
         <div className="text-center">
           <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Editor de Regresión Lineal (2 de 2)
+            Editor de Regresión Lineal (2 de 3)
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             Agrega tus propios datos y observa cómo cambia la línea de regresión
@@ -277,6 +277,7 @@ export default function RegressionEditable() {
                   <li>Agrega puntos dispersos y observa cómo disminuye R²</li>
                   <li>Prueba con diferentes pendientes (positivas y negativas)</li>
                   <li>Observa cómo cambia la línea al agregar o eliminar puntos</li>
+                  <li>Haz clic directamente en el gráfico para agregar puntos rápidamente</li>
                 </ul>
               </div>
               <div>

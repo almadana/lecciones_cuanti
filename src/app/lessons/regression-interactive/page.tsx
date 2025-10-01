@@ -309,6 +309,7 @@ export default function RegressionInteractive() {
               <li>Observa cómo cambia la suma de cuadrados en tiempo real</li>
               <li>Compara tu resultado con el valor mínimo posible</li>
               <li>Haz clic en "Mostrar Recta Óptima" para ver la mejor recta de regresión</li>
+              <li>Intenta minimizar la diferencia entre tu recta y la óptima</li>
             </ul>
           </div>
 
@@ -411,12 +412,15 @@ export default function RegressionInteractive() {
           </div>
 
           <div className="mt-8 bg-morado-claro p-4 rounded-lg">
-            <h3 className="font-bold text-negro mb-2">Explicación</h3>
-            <p className="text-negro text-sm">
+            <h3 className="font-bold text-negro mb-2">Explicación del Método de Mínimos Cuadrados</h3>
+            <p className="text-negro text-sm mb-3">
               La recta de regresión óptima es aquella que minimiza la suma de los cuadrados de las diferencias 
               entre los valores observados y los valores predichos. Cuanto menor sea la suma de cuadrados, 
               mejor será el ajuste de la recta a los datos. Tu objetivo es trazar una recta que se acerque 
               lo más posible al valor mínimo.
+            </p>
+            <p className="text-negro text-sm">
+              <strong>Fórmula:</strong> Suma de cuadrados = Σ(y - ŷ)², donde ŷ es el valor predicho por la recta.
             </p>
           </div>
         </div>

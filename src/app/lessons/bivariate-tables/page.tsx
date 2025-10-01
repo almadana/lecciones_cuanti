@@ -78,7 +78,7 @@ export default function BivariateTables() {
     d3.select(svgRef.current).selectAll('*').remove()
 
     // Set up dimensions
-    const margin = { top: 40, right: 120, bottom: 60, left: 150 }
+    const margin = { top: 40, right: 120, bottom: 110, left: 150 }
     const width = 800 - margin.left - margin.right
     const height = 400 - margin.top - margin.bottom
 
@@ -198,6 +198,7 @@ export default function BivariateTables() {
         .selectAll('text')
         .attr('transform', 'rotate(-45)')
         .style('text-anchor', 'end')
+        .style('font-size', '14px')
 
       // Add Y axis
       svg.append('g')

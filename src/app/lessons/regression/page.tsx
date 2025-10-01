@@ -162,7 +162,7 @@ export default function Regression() {
     <div className="py-8">
       <LessonNavigation
         currentStep={1}
-        totalSteps={2}
+        totalSteps={3}
         previousUrl="/lessons/correlation-editable"
         showPrevious={true}
         nextUrl="/lessons/regression-editable"
@@ -183,7 +183,7 @@ export default function Regression() {
             <p className="text-lg">
               La regresión lineal simple te permite modelar la relación entre una variable dependiente (Y) 
               y una variable independiente (X) usando una línea recta. En esta lección aprenderás a interpretar 
-              la ecuación de regresión y evaluar la bondad del ajuste.
+              la ecuación de regresión y evaluar la bondad del ajuste usando datos reales de horas de estudio y calificaciones.
             </p>
           </div>
           
@@ -302,14 +302,14 @@ export default function Regression() {
                 <h3 className="font-bold text-negro mb-2">Pendiente (m)</h3>
                 <p className="text-2xl font-bold text-morado-oscuro">{regression.slope.toFixed(2)}</p>
                 <p className="text-sm text-gray-600 mt-2">
-                  Por cada hora adicional de estudio, la calificación aumenta en {regression.slope.toFixed(2)} puntos.
+                  Por cada hora adicional de estudio, la calificación aumenta en {regression.slope.toFixed(2)} puntos en promedio.
                 </p>
               </div>
               <div className="bg-gris-claro p-4 rounded-lg text-center">
                 <h3 className="font-bold text-negro mb-2">Intercepto (b)</h3>
                 <p className="text-2xl font-bold text-morado-oscuro">{regression.intercept.toFixed(2)}</p>
                 <p className="text-sm text-gray-600 mt-2">
-                  Calificación esperada cuando no se estudia (0 horas).
+                  Calificación esperada cuando no se estudia (0 horas). Nota: este valor puede no tener sentido práctico.
                 </p>
               </div>
               <div className="bg-gris-claro p-4 rounded-lg text-center">
@@ -358,21 +358,21 @@ export default function Regression() {
           {/* Preguntas de Evaluación */}
           <div className="space-y-6">
             <Question
-              question="¿Qué significa la pendiente de 3.5 en este contexto?"
+              question={`¿Qué significa la pendiente de ${regression.slope.toFixed(1)} en este contexto?`}
               type="multiple-choice"
               options={[
                 { text: 'La calificación máxima posible es 3.5', value: false },
-                { text: 'Por cada hora de estudio, la calificación aumenta 3.5 puntos', value: true },
+                { text: `Por cada hora de estudio, la calificación aumenta ${regression.slope.toFixed(1)} puntos`, value: true },
                 { text: 'El 3.5% de la variabilidad es explicada por el modelo', value: false },
                 { text: 'La calificación mínima es 3.5', value: false }
               ]}
-              explanation="La pendiente de 3.5 significa que por cada hora adicional de estudio, la calificación aumenta en 3.5 puntos en promedio."
+              explanation={`La pendiente de ${regression.slope.toFixed(1)} significa que por cada hora adicional de estudio, la calificación aumenta en ${regression.slope.toFixed(1)} puntos en promedio.`}
             />
 
             <Question
               question="¿Cuál sería la calificación predicha para alguien que estudia 6 horas?"
               type="numeric"
-              hint="Usa la ecuación: Calificación = 3.5 × Horas + 58.5"
+              hint={`Usa la ecuación: Calificación = ${regression.slope.toFixed(1)} × Horas + ${regression.intercept.toFixed(1)}`}
               correctAnswer={predictValue(6)}
               explanation={`Para 6 horas de estudio: Calificación = ${regression.slope.toFixed(1)} × 6 + ${regression.intercept.toFixed(1)} = ${predictValue(6).toFixed(1)}`}
             />
@@ -464,7 +464,7 @@ export default function Regression() {
       </div>
       <LessonNavigation
         currentStep={1}
-        totalSteps={2}
+        totalSteps={3}
         previousUrl="/lessons/correlation-editable"
         showPrevious={true}
         nextUrl="/lessons/regression-editable"

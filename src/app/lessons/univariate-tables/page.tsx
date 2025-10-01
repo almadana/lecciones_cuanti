@@ -41,7 +41,7 @@ export default function UnivariateTables() {
     d3.select(svgRef.current).selectAll('*').remove()
 
     // Set up dimensions
-    const margin = { top: 20, right: 20, bottom: 40, left: 40 }
+    const margin = { top: 20, right: 20, bottom: 110, left: 40 }
     const width = 600 - margin.left - margin.right
     const height = 400 - margin.top - margin.bottom
 
@@ -69,6 +69,7 @@ export default function UnivariateTables() {
       .selectAll('text')
       .attr('transform', 'rotate(-45)')
       .style('text-anchor', 'end')
+      .style('font-size', '14px')
 
     // Add Y axis
     svg.append('g')
@@ -90,10 +91,10 @@ export default function UnivariateTables() {
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+          <h1 className="text-3xl font-bold p-4 rounded-lg inline-block" style={{ color: 'var(--color-negro)', backgroundColor: 'var(--color-morado-claro)' }}>
             Tablas Univariadas 1/5
           </h1>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg" style={{ color: 'var(--color-negro)' }}>
             La encuesta Latinobarómetro de 2017 preguntó a las personas sobre su grado de satisfacción con la vida.
             Estos son los resultados para Uruguay.
           </p>
@@ -101,7 +102,7 @@ export default function UnivariateTables() {
 
         {/* Texto introductorio y instrucciones */}
         <div className="panel-contenido">
-          <div className="prose text-gray-700 mb-6">
+          <div className="prose mb-6" style={{ color: 'var(--color-negro)' }}>
             <p className="text-lg">
               Las tablas de frecuencia son la forma más básica y fundamental de organizar datos categóricos. 
               Te permiten ver de un vistazo cuántas observaciones hay en cada categoría y qué porcentaje 
@@ -109,9 +110,9 @@ export default function UnivariateTables() {
             </p>
           </div>
           
-          <div className="bg-gris-claro p-4 rounded-lg">
-            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
-            <ul className="list-disc pl-5 space-y-2 text-sm">
+          <div className="p-4 rounded-lg" style={{ backgroundColor: 'var(--color-gris-claro)' }}>
+            <h3 className="font-bold mb-3" style={{ color: 'var(--color-negro)' }}>💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm" style={{ color: 'var(--color-negro)' }}>
               <li>Observa cómo se organizan los datos en la tabla de frecuencia</li>
               <li>Calcula mentalmente los porcentajes para verificar tu comprensión</li>
               <li>Identifica la categoría con mayor frecuencia (la moda)</li>
@@ -125,30 +126,30 @@ export default function UnivariateTables() {
         <div className="mt-12">
           <div className="panel-contenido">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gris-borde">
+              <table className="min-w-full divide-y" style={{ borderColor: 'var(--color-gris-borde)' }}>
                 <thead>
-                  <tr className="bg-morado-claro">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
+                  <tr style={{ backgroundColor: 'var(--color-morado-claro)' }}>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-negro)' }}>
                       Nivel de Satisfacción
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-negro)' }}>
                       Frecuencia
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-negro uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-negro)' }}>
                       Porcentaje
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-blanco divide-y divide-gris-borde">
+                <tbody className="divide-y" style={{ backgroundColor: 'var(--color-blanco)', borderColor: 'var(--color-gris-borde)' }}>
                   {data.map((item) => (
                     <tr key={item.category}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-negro">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ color: 'var(--color-negro)' }}>
                         {item.category}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--color-negro)' }}>
                         {item.value}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--color-negro)' }}>
                         {item.percentage.toFixed(1)}%
                       </td>
                     </tr>
@@ -158,7 +159,7 @@ export default function UnivariateTables() {
             </div>
 
             <div className="mt-8">
-              <h3 className="text-lg font-medium text-negro bg-morado-claro p-2 rounded-lg inline-block">Visualización</h3>
+              <h3 className="text-lg font-medium p-2 rounded-lg inline-block" style={{ color: 'var(--color-negro)', backgroundColor: 'var(--color-morado-claro)' }}>Visualización</h3>
               <div className="mt-4 flex justify-center">
                 <svg ref={svgRef}></svg>
               </div>
@@ -187,13 +188,13 @@ export default function UnivariateTables() {
 
           {/* Resumen de la Lección */}
           <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
+            <h2 className="text-xl font-bold p-3 rounded-lg inline-block mb-4" style={{ color: 'var(--color-negro)', backgroundColor: 'var(--color-morado-claro)' }}>
               Resumen de Conceptos Clave
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-bold text-negro mb-2">Tablas de Frecuencia:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
+                <h3 className="font-bold mb-2" style={{ color: 'var(--color-negro)' }}>Tablas de Frecuencia:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm" style={{ color: 'var(--color-negro)' }}>
                   <li><strong>Frecuencia absoluta:</strong> Número de casos en cada categoría</li>
                   <li><strong>Frecuencia relativa:</strong> Proporción o porcentaje del total</li>
                   <li><strong>Frecuencia acumulada:</strong> Suma de frecuencias hasta esa categoría</li>
@@ -201,8 +202,8 @@ export default function UnivariateTables() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
+                <h3 className="font-bold mb-2" style={{ color: 'var(--color-negro)' }}>Interpretación:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm" style={{ color: 'var(--color-negro)' }}>
                   <li>Las tablas organizan datos categóricos de manera clara</li>
                   <li>Los porcentajes facilitan la comparación entre categorías</li>
                   <li>Los gráficos de barras complementan la información numérica</li>
@@ -210,9 +211,9 @@ export default function UnivariateTables() {
                 </ul>
               </div>
             </div>
-            <div className="mt-4 p-4 bg-gris-claro rounded-lg">
-              <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
-              <div className="grid md:grid-cols-3 gap-4 text-sm">
+            <div className="mt-4 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-gris-claro)' }}>
+              <h3 className="font-bold mb-2" style={{ color: 'var(--color-negro)' }}>Fórmulas Importantes:</h3>
+              <div className="grid md:grid-cols-3 gap-4 text-sm" style={{ color: 'var(--color-negro)' }}>
                 <div>
                   <strong>Frecuencia relativa:</strong><br/>
                   <code>fr = f / N × 100%</code>

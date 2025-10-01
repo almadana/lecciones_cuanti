@@ -56,7 +56,7 @@ export default function EditableUnivariateTables() {
     d3.select(svgRef.current).selectAll('*').remove()
 
     // Set up dimensions
-    const margin = { top: 20, right: 20, bottom: 60, left: 40 }
+    const margin = { top: 20, right: 20, bottom: 110, left: 40 }
     const width = 600 - margin.left - margin.right
     const height = 400 - margin.top - margin.bottom
 
@@ -84,6 +84,7 @@ export default function EditableUnivariateTables() {
       .selectAll('text')
       .attr('transform', 'rotate(-45)')
       .style('text-anchor', 'end')
+      .style('font-size', '14px')
 
     // Add Y axis
     svg.append('g')
@@ -106,26 +107,26 @@ export default function EditableUnivariateTables() {
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
+          <h1 className="text-3xl font-bold p-4 rounded-lg inline-block" style={{ color: 'var(--color-negro)', backgroundColor: 'var(--color-morado-claro)' }}>
             Editor de Tablas Univariadas 2/5
           </h1>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg" style={{ color: 'var(--color-negro)' }}>
             Modifica las frecuencias de la encuesta de satisfacción y observa cómo cambian los porcentajes y la visualización
           </p>
         </div>
 
         {/* Texto introductorio y instrucciones */}
         <div className="panel-contenido">
-          <div className="prose text-gray-700 mb-6">
+          <div className="prose mb-6" style={{ color: 'var(--color-negro)' }}>
             <p className="text-lg">
               En esta lección interactiva puedes modificar los datos de la encuesta de satisfacción con la vida 
               y observar cómo los cambios afectan los porcentajes, la visualización y las respuestas a las preguntas.
             </p>
           </div>
           
-          <div className="bg-gris-claro p-4 rounded-lg">
-            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
-            <ul className="list-disc pl-5 space-y-2 text-sm">
+          <div className="p-4 rounded-lg" style={{ backgroundColor: 'var(--color-gris-claro)' }}>
+            <h3 className="font-bold mb-3" style={{ color: 'var(--color-negro)' }}>💡 Cosas que puedes probar:</h3>
+            <ul className="list-disc pl-5 space-y-2 text-sm" style={{ color: 'var(--color-negro)' }}>
               <li>Modifica las frecuencias (número de casos) para cada categoría</li>
               <li>Observa cómo los porcentajes se actualizan automáticamente</li>
               <li>Ve cómo cambia la visualización del gráfico de barras</li>

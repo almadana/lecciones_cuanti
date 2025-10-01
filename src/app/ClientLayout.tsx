@@ -16,7 +16,7 @@ export default function ClientLayout({
   };
 
   return (
-    <div className="font-sans bg-gris-claro min-h-screen">
+    <div className="font-sans min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
       <div className="min-h-screen flex">
         <Sidebar isOpen={sidebarOpen} />
         <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
@@ -24,7 +24,17 @@ export default function ClientLayout({
             {/* Botón para mostrar/ocultar sidebar */}
             <button
               onClick={toggleSidebar}
-              className={`fixed top-4 z-50 p-2 bg-morado-oscuro hover:bg-verde-claro text-negro rounded-lg shadow-lg transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-4'}`}
+              className={`fixed top-4 z-50 p-2 rounded-lg shadow-lg transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-4'}`}
+              style={{ 
+                backgroundColor: 'var(--color-morado-oscuro)', 
+                color: 'var(--color-negro)' 
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--color-verde-claro)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--color-morado-oscuro)';
+              }}
               aria-label={sidebarOpen ? 'Ocultar menú' : 'Mostrar menú'}
             >
               {sidebarOpen ? (

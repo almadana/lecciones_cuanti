@@ -174,8 +174,14 @@ export default function Sidebar({ isOpen }: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <aside className={`fixed left-0 top-0 h-full w-64 bg-[#4b00f9] shadow-lg border-r border-morado-claro overflow-y-auto transition-transform duration-300 z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-      <div className="bg-black/30 p-3 rounded-none">
+    <aside 
+      className={`fixed left-0 top-0 h-full w-64 shadow-lg border-r overflow-y-auto transition-transform duration-300 z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      style={{ 
+        backgroundColor: 'var(--color-violeta)', 
+        borderColor: 'var(--color-morado-claro)' 
+      }}
+    >
+      <div className="p-3 rounded-none" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
         <h2 className="text-lg font-bold text-white text-center">
           Lecciones Cuanti
         </h2>
@@ -186,11 +192,23 @@ export default function Sidebar({ isOpen }: SidebarProps) {
             <div key={lesson.id}>
               <Link
                 href={lesson.href}
-                className={`${
-                  pathname === lesson.href
-                    ? 'bg-[#9bfa82] text-[#4b00f9] font-bold'
-                    : 'text-white hover:bg-[#9bfa82] hover:text-[#4b00f9] hover:font-bold'
-                } group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
+                className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
+                style={{
+                  backgroundColor: pathname === lesson.href ? 'var(--color-verde-claro)' : 'transparent',
+                  color: pathname === lesson.href ? 'var(--color-violeta)' : 'white'
+                }}
+                onMouseEnter={(e) => {
+                  if (pathname !== lesson.href) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-verde-claro)';
+                    e.currentTarget.style.color = 'var(--color-violeta)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (pathname !== lesson.href) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'white';
+                  }
+                }}
               >
                 <span className="truncate">{lesson.title}</span>
               </Link>
@@ -198,11 +216,23 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                 <Link
                   key={subLesson.id}
                   href={subLesson.href}
-                  className={`${
-                    pathname === subLesson.href
-                      ? 'bg-[#9bfa82] text-[#4b00f9] font-bold'
-                      : 'text-white hover:bg-[#9bfa82] hover:text-[#4b00f9] hover:font-bold'
-                  } group flex items-center pl-8 pr-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
+                  className={`group flex items-center pl-8 pr-3 py-2 text-sm font-medium rounded-md transition-colors duration-200`}
+                  style={{
+                    backgroundColor: pathname === subLesson.href ? 'var(--color-verde-claro)' : 'transparent',
+                    color: pathname === subLesson.href ? 'var(--color-violeta)' : 'white'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (pathname !== subLesson.href) {
+                      e.currentTarget.style.backgroundColor = 'var(--color-verde-claro)';
+                      e.currentTarget.style.color = 'var(--color-violeta)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (pathname !== subLesson.href) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
                 >
                   <span className="truncate">{subLesson.title}</span>
                 </Link>

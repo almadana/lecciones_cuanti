@@ -504,7 +504,7 @@ export default function ConfidenceIntervalPage() {
             <ul className="list-disc pl-5 space-y-2 text-sm">
               <li>Observa la población original y su distribución</li>
               <li>Cambia el tamaño de muestra para ver cómo afecta la precisión</li>
-              <li>Ajusta el nivel de confianza (90%, 95%, 99%)</li>
+              <li>Ajusta el nivel de confianza (68%, 90%, 95%, 99%)</li>
               <li>Ejecuta la simulación para ver cómo se construyen los intervalos</li>
               <li>Observa la cobertura real vs la teórica</li>
               <li>Analiza qué intervalos contienen la media poblacional verdadera</li>
@@ -561,6 +561,7 @@ export default function ConfidenceIntervalPage() {
                   disabled={isAnimating}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 >
+                  <option value={0.68}>68%</option>
                   <option value={0.90}>90%</option>
                   <option value={0.95}>95%</option>
                   <option value={0.99}>99%</option>
@@ -703,6 +704,9 @@ export default function ConfidenceIntervalPage() {
                 <li>Si repitiéramos el muestreo muchas veces, aproximadamente el 95% de los intervalos contendrían la media poblacional</li>
                 <li>La cobertura empírica debería acercarse al nivel de confianza a medida que aumenta el número de muestras</li>
                 <li>Intervalos más anchos (mayor nivel de confianza) tienen más probabilidad de contener la media poblacional</li>
+                <li><strong>68%:</strong> Intervalos más estrechos, menor confianza pero mayor precisión</li>
+                <li><strong>95%:</strong> Nivel estándar, balance entre confianza y precisión</li>
+                <li><strong>99%:</strong> Intervalos más anchos, mayor confianza pero menor precisión</li>
               </ul>
 
               <h4 className="text-base font-medium text-gray-900 mt-4">Factores que Afectan la Precisión</h4>

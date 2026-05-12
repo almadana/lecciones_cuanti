@@ -121,11 +121,32 @@ export default function Home() {
             entre variables categóricas y la bondad de ajuste.
           </p>
 
-          <div className="mt-8 p-4 rounded-lg" >
-            <p className="font-bold" >
-              Utiliza el menú de navegación a la izquierda para acceder a las diferentes
-              lecciones y sus componentes interactivos.
+          <div className="mt-10 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm not-prose">
+            <p className="text-sm font-medium text-[var(--text)]">
+              Abre el botón <strong>Índice</strong> arriba a la derecha para saltar a cualquier lección o
+              subsección interactiva.
             </p>
+          </div>
+
+          <h2 className="mt-14 not-prose text-2xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+            Saltos rápidos
+          </h2>
+          <div className="not-prose mt-6 grid gap-4 sm:grid-cols-2">
+            {lessons.map(({ title, description, href, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="group flex gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-soft)]"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--surface-muted)] text-[var(--accent-strong)] group-hover:bg-[var(--surface)]">
+                  <Icon className="h-6 w-6" aria-hidden />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-[var(--text)]">{title}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-[var(--text-muted)]">{description}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

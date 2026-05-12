@@ -1,52 +1,33 @@
 'use client'
 
-import Sidebar from "./components/Sidebar";
-import { useState } from "react";
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import AppHeader from '@/app/components/AppHeader'
+import NavDrawer from '@/app/components/NavDrawer'
+import ReadingProgress from '@/app/components/ReadingProgress'
 
 export default function ClientLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [navOpen, setNavOpen] = useState(false)
+  const pathname = usePathname()
+  const isLesson = pathname?.startsWith('/lessons')
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  useEffect(() => {
+    document.body.style.overflow = navOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [navOpen])
 
   return (
-    <div className="font-sans min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
-      <div className="min-h-screen flex">
-        <Sidebar isOpen={sidebarOpen} />
-        <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
-          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            {/* Botón para mostrar/ocultar sidebar */}
-            <button
-              onClick={toggleSidebar}
-              className={`fixed top-4 z-50 p-2 rounded-lg shadow-lg transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-4'}`}
-              style={{ 
-                backgroundColor: 'var(--color-morado-oscuro)', 
-                color: 'var(--color-negro)' 
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--color-verde-claro)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--color-morado-oscuro)';
-              }}
-              aria-label={sidebarOpen ? 'Ocultar menú' : 'Mostrar menú'}
-            >
-              {sidebarOpen ? (
-                <XMarkIcon className="h-6 w-6" />
-              ) : (
-                <Bars3Icon className="h-6 w-6" />
-              )}
-            </button>
-            {children}
-          </div>
-        </main>
-      </div>
+    <div className="font-sans min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+      <AppHeader navOpen={navOpen} onOpenNav={() => setNavOpen(true)} />
+      {isLesson ? <ReadingProgress /> : null}
+      <NavDrawer open={navOpen} onClose={() => setNavOpen(false)} />
+      <main className="mx-auto max-w-[1200px] px-4 pb-16 pt-20 sm:px-6">{children}</main>
     </div>
-  );
-} 
+  )
+}

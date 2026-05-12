@@ -3,320 +3,277 @@
 import { useState } from 'react'
 import Question from '@/app/components/Question'
 import LessonNavigation from '@/app/components/LessonNavigation'
+import NarrativeSection from '@/app/components/narrative/NarrativeSection'
+
+const card =
+  'rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_1px_4px_rgba(0,0,0,.05)]'
 
 export default function Introduction() {
-  const [selectedVariableType, setSelectedVariableType] = useState<string>('')
-  const [selectedScale, setSelectedScale] = useState<string>('')
+  const [selectedExample, setSelectedExample] = useState<string>('')
 
   const variableExamples = [
     {
       name: 'Edad',
       type: 'cuantitativa',
       scale: 'razón',
-      description: 'Se puede medir en años, meses, días. Tiene un cero absoluto.'
+      description: 'Se puede medir en años, meses, días. Tiene un cero absoluto.',
     },
     {
       name: 'Temperatura (Celsius)',
       type: 'cuantitativa',
       scale: 'intervalo',
-      description: 'Se mide en grados. El cero no es absoluto (0°C no significa ausencia de temperatura).'
+      description:
+        'Se mide en grados. El cero no es absoluto (0°C no significa ausencia de temperatura).',
     },
     {
       name: 'Nivel de satisfacción',
       type: 'cualitativa',
       scale: 'ordinal',
-      description: 'Se puede ordenar: Muy insatisfecho < Insatisfecho < Neutral < Satisfecho < Muy satisfecho'
+      description:
+        'Se puede ordenar: Muy insatisfecho < Insatisfecho < Neutral < Satisfecho < Muy satisfecho',
     },
     {
       name: 'Color de ojos',
       type: 'cualitativa',
       scale: 'nominal',
-      description: 'No se puede ordenar: Azul, Verde, Marrón, Negro'
+      description: 'No se puede ordenar: Azul, Verde, Marrón, Negro',
     },
     {
       name: 'Número de hijos',
       type: 'cuantitativa',
       scale: 'razón',
-      description: 'Se puede contar. El cero significa ausencia de hijos.'
+      description: 'Se puede contar. El cero significa ausencia de hijos.',
     },
     {
       name: 'Género',
       type: 'cualitativa',
       scale: 'nominal',
-      description: 'Categorías sin orden: Masculino, Femenino, No binario'
-    }
+      description: 'Categorías sin orden: Masculino, Femenino, No binario',
+    },
   ]
 
-  const checkVariableType = (variableName: string) => {
-    const variable = variableExamples.find(v => v.name === variableName)
-    return variable?.type === selectedVariableType
-  }
-
-  const checkScale = (variableName: string) => {
-    const variable = variableExamples.find(v => v.name === variableName)
-    return variable?.scale === selectedScale
-  }
+  const active = variableExamples.find((v) => v.name === selectedExample)
 
   return (
-    <div className="py-8">
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={1}
-        nextUrl="/lessons/descriptive-stats"
-        showPrevious={false}
-      />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Introducción a la Estadística
-          </h1>
-          <p className="mt-4 text-lg text-gray-600">
-            Conceptos fundamentales para el análisis de datos
+    <article className="lesson-scroll">
+      <header className="narrative-beat pb-12 text-center">
+        <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-[var(--text-muted)]">
+          Lección 0 · mapa inicial
+        </p>
+        <h1 className="text-balance text-3xl font-bold text-[var(--text)] sm:text-4xl" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+          Introducción a la estadística
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-pretty text-lg text-[var(--text-muted)]">
+          Vas a ir descubriendo ideas de una en una. Sin prisa: cada bloque prepara el siguiente.
+        </p>
+        <p className="mt-6 text-sm text-[var(--accent-strong)]">
+          Desplázate hacia abajo para comenzar
+        </p>
+      </header>
+
+      <div className="mx-auto flex max-w-3xl flex-col gap-20 sm:gap-24">
+        <NarrativeSection className="narrative-beat">
+          <p className="mb-4 text-sm font-semibold text-[var(--accent-strong)]">Primero · el big picture</p>
+          <h2 className="text-2xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+            ¿Qué es la estadística?
+          </h2>
+          <p className="mt-4 text-pretty text-[var(--foreground)] leading-relaxed">
+            La estadística organiza datos para que puedas responder preguntas con evidencia en lugar de
+            intuiciones sueltas.
           </p>
-        </div>
+        </NarrativeSection>
 
-        {/* Texto introductorio y instrucciones */}
-        <div className="panel-contenido">
-          <div className="prose text-gray-700 mb-6">
-            <p className="text-lg">
-              En esta lección aprenderás los conceptos básicos de la estadística que te permitirán 
-              comprender cómo se organizan y analizan los datos. Estos fundamentos son esenciales 
-              para todas las técnicas estadísticas que explorarás en las siguientes lecciones.
-            </p>
-          </div>
-          
-          <div className="bg-gris-claro p-4 rounded-lg">
-            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
-            <ul className="list-disc pl-5 space-y-2 text-sm">
-              <li>Explora los ejemplos interactivos de variables y niveles de medida</li>
-              <li>Clasifica diferentes tipos de variables usando los selectores</li>
-              <li>Identifica los niveles de medida de cada ejemplo</li>
-              <li>Responde las preguntas de evaluación para verificar tu comprensión</li>
-              <li>Revisa el resumen de conceptos clave al final de la lección</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 space-y-8">
-          {/* ¿Qué es la Estadística? */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              ¿Qué es la Estadística?
-            </h2>
-            <div className="prose text-gray-700">
-              <p className="mb-4">
-                La <strong>estadística</strong> es la ciencia que se encarga de recolectar, organizar, 
-                analizar, interpretar y presentar datos para tomar decisiones informadas.
+        <NarrativeSection className="narrative-beat">
+          <p className="mb-4 text-sm font-semibold text-[var(--accent-strong)]">
+            Dos formas de usar los datos
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className={card}>
+              <h3 className="text-lg font-semibold text-[var(--text)]">Descriptiva</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
+                Resume lo que ya tienes entre manos: gráficos, medias, dispersión. No extrapola más allá
+                del conjunto observado.
               </p>
-              <div className="grid md:grid-cols-2 gap-6 mt-6">
-                <div className="bg-gris-claro p-4 rounded-lg">
-                  <h3 className="font-bold text-negro mb-2">Estadística Descriptiva</h3>
-                  <p className="text-sm">
-                    Se encarga de resumir y describir las características principales de un conjunto de datos.
-                    Incluye medidas de tendencia central, dispersión y visualizaciones.
-                  </p>
-                </div>
-                <div className="bg-gris-claro p-4 rounded-lg">
-                  <h3 className="font-bold text-negro mb-2">Estadística Inferencial</h3>
-                  <p className="text-sm">
-                    Permite hacer conclusiones sobre una población basándose en muestras de datos.
-                    Incluye pruebas de hipótesis, intervalos de confianza y correlaciones.
-                  </p>
-                </div>
-              </div>
+            </div>
+            <div className={card}>
+              <h3 className="text-lg font-semibold text-[var(--text)]">Inferencial</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
+                Pregunta qué hay detrás de la muestra: hipótesis, intervalos y significación. Habla del
+                mundo más amplio que no viste completo.
+              </p>
             </div>
           </div>
+        </NarrativeSection>
 
-          {/* Tipos de Variables */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Tipos de Variables
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gris-claro p-4 rounded-lg">
-                <h3 className="font-bold text-negro mb-3">Variables Cualitativas (Categóricas)</h3>
-                <ul className="text-sm space-y-2">
-                  <li>• <strong>Nominales:</strong> No tienen orden (género, color de ojos)</li>
-                  <li>• <strong>Ordinales:</strong> Tienen orden pero no distancia fija (nivel educativo, satisfacción)</li>
-                </ul>
-                <p className="mt-3 text-sm text-gray-600">
-                  Se miden en categorías o etiquetas.
-                </p>
-              </div>
-              <div className="bg-gris-claro p-4 rounded-lg">
-                <h3 className="font-bold text-negro mb-3">Variables Cuantitativas (Numéricas)</h3>
-                <ul className="text-sm space-y-2">
-                  <li>• <strong>Discretas:</strong> Valores enteros (número de hijos, calificaciones)</li>
-                  <li>• <strong>Continuas:</strong> Valores decimales (altura, peso, tiempo)</li>
-                </ul>
-                <p className="mt-3 text-sm text-gray-600">
-                  Se miden en números con unidades específicas.
-                </p>
-              </div>
+        <NarrativeSection className="narrative-beat">
+          <p className="mb-4 text-sm font-semibold text-[var(--accent-strong)]">Variables · ¿cómo se miran?</p>
+          <h2 className="text-xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+            Tipos de variables
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className={`${card} !p-5`}>
+              <h3 className="font-semibold text-[var(--text)]">Cualitativas (categóricas)</h3>
+              <ul className="mt-3 space-y-2 text-sm text-[var(--text-muted)]">
+                <li><span className="text-[var(--text)]">Nominales</span> sin orden natural.</li>
+                <li><span className="text-[var(--text)]">Ordinales</span> con orden, sin distancia fija.</li>
+              </ul>
+            </div>
+            <div className={`${card} !p-5`}>
+              <h3 className="font-semibold text-[var(--text)]">Cuantitativas (numéricas)</h3>
+              <ul className="mt-3 space-y-2 text-sm text-[var(--text-muted)]">
+                <li><span className="text-[var(--text)]">Discretas</span> cuentas en enteros.</li>
+                <li><span className="text-[var(--text)]">Continuas</span> pueden tomar valores decimales.</li>
+              </ul>
             </div>
           </div>
+        </NarrativeSection>
 
-          {/* Niveles de Medida */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Niveles de Medida
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-gris-claro p-4 rounded-lg">
-                <h3 className="font-bold text-negro mb-2">Nominal</h3>
-                <p className="text-sm">
-                  Solo clasificación sin orden. Ejemplo: Color de ojos, Género
+        <NarrativeSection className="narrative-beat">
+          <p className="mb-4 text-sm font-semibold text-[var(--accent-strong)]">Un paso más fino</p>
+          <h2 className="text-xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+            Niveles de medida
+          </h2>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { t: 'Nominal', d: 'Solo etiqueta. Ej.: color de ojos.' },
+              { t: 'Ordinal', d: 'Orden claro. Ej.: satisfacción.' },
+              { t: 'Intervalo', d: 'Distancias fijas sin cero absoluto. Ej.: °C.' },
+              { t: 'Razón', d: 'Cero verdadero + proporciones. Ej.: edad.' },
+            ].map((x) => (
+              <div key={x.t} className={`${card} !p-4`}>
+                <h3 className="font-semibold text-[var(--text)]">{x.t}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-[var(--text-muted)]">{x.d}</p>
+              </div>
+            ))}
+          </div>
+        </NarrativeSection>
+
+        <NarrativeSection className="narrative-beat">
+          <p className="mb-4 text-sm font-semibold text-[var(--accent-strong)]">Interactividad sencilla</p>
+          <h2 className="text-xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+            Pon nombres a ejemplos reales
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-[var(--text-muted)]">
+            Elige un caso. Observa cómo etiquetamos tipo y nivel sin mezclar ambas ideas todavía: primero ves
+            el mapa verbal, después lo automatizamos en tus ejercicios.
+          </p>
+          <div className={`mt-8 ${card}`}>
+            <label htmlFor="var-pick" className="block text-sm font-medium text-[var(--text)]">
+              Elige una variable
+            </label>
+            <select
+              id="var-pick"
+              value={selectedExample}
+              onChange={(e) => setSelectedExample(e.target.value)}
+              className="mt-3 w-full max-w-md rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm text-[var(--text)] outline-none transition-shadow focus:ring-2 focus:ring-[var(--accent)]"
+            >
+              <option value="">Selecciona…</option>
+              {variableExamples.map((v) => (
+                <option key={v.name} value={v.name}>
+                  {v.name}
+                </option>
+              ))}
+            </select>
+            {active && (
+              <div className="mt-6 space-y-3 rounded-xl bg-[var(--surface-muted)] p-4 text-sm">
+                <p className="text-[var(--text)]">{active.description}</p>
+                <p>
+                  <span className="font-medium text-[var(--text)]">Tipo </span>
+                  <span className="text-[var(--text-muted)]">{active.type}</span>
+                </p>
+                <p>
+                  <span className="font-medium text-[var(--text)]">Nivel de medida </span>
+                  <span className="text-[var(--text-muted)]">{active.scale}</span>
                 </p>
               </div>
-              <div className="bg-gris-claro p-4 rounded-lg">
-                <h3 className="font-bold text-negro mb-2">Ordinal</h3>
-                <p className="text-sm">
-                  Clasificación con orden. Ejemplo: Nivel educativo, Satisfacción
-                </p>
-              </div>
-              <div className="bg-gris-claro p-4 rounded-lg">
-                <h3 className="font-bold text-negro mb-2">Intervalo</h3>
-                <p className="text-sm">
-                  Orden y distancia fija, sin cero absoluto. Ejemplo: Temperatura Celsius
-                </p>
-              </div>
-              <div className="bg-gris-claro p-4 rounded-lg">
-                <h3 className="font-bold text-negro mb-2">Razón</h3>
-                <p className="text-sm">
-                  Orden, distancia fija y cero absoluto. Ejemplo: Edad, Peso, Altura
-                </p>
-              </div>
+            )}
+          </div>
+        </NarrativeSection>
+
+        <NarrativeSection className="narrative-beat">
+          <p className="mb-4 text-sm font-semibold text-[var(--accent-strong)]">
+            ¿Lo tienes presente?
+          </p>
+          <h2 className="text-xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+            Tres comprobaciones rápidas
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
+            Una pregunta por bloque para no saturar la lectura.
+          </p>
+        </NarrativeSection>
+
+        <NarrativeSection className="narrative-beat">
+          <Question
+            question="¿Cuál de las siguientes variables es cuantitativa continua?"
+            type="multiple-choice"
+            options={[
+              { text: 'Número de hermanos', value: false },
+              { text: 'Altura en centímetros', value: true },
+              { text: 'Color de cabello', value: false },
+              { text: 'Nivel educativo', value: false },
+            ]}
+            explanation="La altura en centímetros es cuantitativa continua porque puede tomar valores decimales dentro de un rango y tiene unidades en escala de razón."
+          />
+        </NarrativeSection>
+
+        <NarrativeSection className="narrative-beat">
+          <Question
+            question="¿Qué nivel de medida tiene la variable 'Temperatura en grados Celsius'?"
+            type="multiple-choice"
+            options={[
+              { text: 'Nominal', value: false },
+              { text: 'Ordinal', value: false },
+              { text: 'Intervalo', value: true },
+              { text: 'Razón', value: false },
+            ]}
+            explanation="Celsius tiene escala de intervalo: hay orden y distancias interpretables, pero 0 °C no significa ausencia total de temperatura."
+          />
+        </NarrativeSection>
+
+        <NarrativeSection className="narrative-beat">
+          <Question
+            question="¿Cuál es la diferencia principal entre variables cualitativas y cuantitativas?"
+            type="multiple-choice"
+            options={[
+              { text: 'Las cualitativas siempre tienen más categorías', value: false },
+              { text: 'Las cuantitativas se miden con números útiles como magnitud; las cualitativas, con categorías', value: true },
+              { text: 'Las cualitativas son menos importantes en estadística', value: false },
+              { text: 'Las cuantitativas siempre son continuas', value: false },
+            ]}
+            explanation="La distinción clave está en cómo registras cada observación: categorías versus magnitudes numéricas con interpretación consistente."
+          />
+        </NarrativeSection>
+
+        <NarrativeSection className="narrative-beat">
+          <h2 className="text-xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
+            Para cerrar esta parada
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className={`${card} !p-5`}>
+              <h3 className="font-semibold text-[var(--text)]">Memoriza el mapa mental</h3>
+              <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-[var(--text-muted)]">
+                <li>Diferencias entre descripción e inferencia</li>
+                <li>Tipos cualitativos vs cuantitativos</li>
+                <li>Niveles de medida ordenados de menor a mayor riqueza</li>
+              </ul>
+            </div>
+            <div className={`${card} !p-5`}>
+              <h3 className="font-semibold text-[var(--text)]">¿Qué sigue?</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
+                Tablas para organizar información, después medidas de tendencia central y dispersión. Cada tema
+                reutiliza el vocabulario que acabas de montar aquí.
+              </p>
             </div>
           </div>
-
-          {/* Ejemplos Interactivos */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Ejemplos Interactivos
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-bold text-negro mb-3">Clasifica el tipo de variable:</h3>
-                <select
-                  value={selectedVariableType}
-                  onChange={(e) => setSelectedVariableType(e.target.value)}
-                  className="w-full p-2 border border-morado-claro rounded-md mb-4"
-                >
-                  <option value="">Selecciona una variable...</option>
-                  {variableExamples.map(v => (
-                    <option key={v.name} value={v.name}>{v.name}</option>
-                  ))}
-                </select>
-                {selectedVariableType && (
-                  <div className="bg-gris-claro p-3 rounded-lg">
-                    <p className="text-sm">
-                      <strong>{selectedVariableType}</strong>: {variableExamples.find(v => v.name === selectedVariableType)?.description}
-                    </p>
-                    <p className="text-sm mt-2">
-                      <strong>Tipo:</strong> {variableExamples.find(v => v.name === selectedVariableType)?.type}
-                    </p>
-                  </div>
-                )}
-              </div>
-              <div>
-                <h3 className="font-bold text-negro mb-3">Identifica el nivel de medida:</h3>
-                <select
-                  value={selectedScale}
-                  onChange={(e) => setSelectedScale(e.target.value)}
-                  className="w-full p-2 border border-morado-claro rounded-md mb-4"
-                >
-                  <option value="">Selecciona una variable...</option>
-                  {variableExamples.map(v => (
-                    <option key={v.name} value={v.name}>{v.name}</option>
-                  ))}
-                </select>
-                {selectedScale && (
-                  <div className="bg-gris-claro p-3 rounded-lg">
-                    <p className="text-sm">
-                      <strong>{selectedScale}</strong>: {variableExamples.find(v => v.name === selectedScale)?.description}
-                    </p>
-                    <p className="text-sm mt-2">
-                      <strong>Nivel de medida:</strong> {variableExamples.find(v => v.name === selectedScale)?.scale}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Preguntas de Evaluación */}
-          <div className="space-y-6">
-            <Question
-              question="¿Cuál de las siguientes variables es cuantitativa continua?"
-              type="multiple-choice"
-              options={[
-                { text: 'Número de hermanos', value: false },
-                { text: 'Altura en centímetros', value: true },
-                { text: 'Color de cabello', value: false },
-                { text: 'Nivel educativo', value: false }
-              ]}
-              explanation="La altura en centímetros es una variable cuantitativa continua porque puede tomar cualquier valor decimal dentro de un rango y se mide en una escala de razón."
-            />
-
-            <Question
-              question="¿Qué nivel de medida tiene la variable 'Temperatura en grados Celsius'?"
-              type="multiple-choice"
-              options={[
-                { text: 'Nominal', value: false },
-                { text: 'Ordinal', value: false },
-                { text: 'Intervalo', value: true },
-                { text: 'Razón', value: false }
-              ]}
-              explanation="La temperatura en Celsius tiene escala de intervalo porque tiene orden y distancia fija entre valores, pero no tiene un cero absoluto (0°C no significa ausencia de temperatura)."
-            />
-
-            <Question
-              question="¿Cuál es la diferencia principal entre variables cualitativas y cuantitativas?"
-              type="multiple-choice"
-              options={[
-                { text: 'Las cualitativas siempre tienen más categorías', value: false },
-                { text: 'Las cuantitativas se pueden medir con números, las cualitativas no', value: true },
-                { text: 'Las cualitativas son más importantes en estadística', value: false },
-                { text: 'Las cuantitativas siempre son continuas', value: false }
-              ]}
-              explanation="La diferencia principal es que las variables cuantitativas se pueden medir con números y tienen unidades específicas, mientras que las cualitativas se miden en categorías o etiquetas."
-            />
-          </div>
-
-          {/* Resumen */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Resumen de Conceptos Clave
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-bold text-negro mb-2">Para recordar:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li>La estadística ayuda a tomar decisiones basadas en datos</li>
-                  <li>Las variables cualitativas se miden en categorías</li>
-                  <li>Las variables cuantitativas se miden en números</li>
-                  <li>La escala de medición determina qué análisis usar</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold text-negro mb-2">Próximos pasos:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li>Aprenderás a organizar datos en tablas de frecuencia</li>
-                  <li>Explorarás medidas de tendencia central</li>
-                  <li>Analizarás relaciones entre variables</li>
-                  <li>Realizarás pruebas estadísticas</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        </NarrativeSection>
       </div>
+
       <LessonNavigation
         currentStep={1}
         totalSteps={1}
         nextUrl="/lessons/descriptive-stats"
         showPrevious={false}
       />
-    </div>
+    </article>
   )
-} 
+}

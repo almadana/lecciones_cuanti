@@ -3,16 +3,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fff;
-  --foreground: #171717;
-  --color-morado-claro: #b4a5fa;
-  --color-morado-oscuro: #8c7ddc;
-  --color-verde-claro: #9bfa82;
+  --background: #f6f4fb;
+  --foreground: #14121c;
+  --surface: #ffffff;
+  --surface-muted: #ece8f4;
+  --border: rgba(105, 80, 200, 0.18);
+  --header-bg: rgba(255, 255, 255, 0.82);
+  --accent: #5b38f5;
+  --accent-soft: rgba(91, 56, 245, 0.1);
+  --accent-strong: #4320d6;
+  --text: #14121c;
+  --text-muted: #5c566b;
+  --color-morado-claro: #c4b5fc;
+  --color-morado-oscuro: #9078e8;
+  --color-verde-claro: #7ddf6a;
   --color-verde-seleccion: #c8fab4;
-  --color-gris-claro: #ededed;
-  --color-gris-borde: #b4a5fa;
-  --color-negro: #000;
-  --color-blanco: #fff;
+  --color-gris-claro: #ece8f4;
+  --color-gris-borde: #c4b5fc;
+  --color-negro: #14121c;
+  --color-blanco: #ffffff;
   --color-violeta: #4b00f9;
 }
 
@@ -25,17 +34,26 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0c0a12;
+    --foreground: #f0ecf8;
+    --surface: #15121f;
+    --surface-muted: #1f1b2e;
+    --border: rgba(166, 150, 255, 0.12);
+    --header-bg: rgba(21, 18, 31, 0.88);
+    --accent: #a78bfa;
+    --accent-soft: rgba(167, 139, 250, 0.12);
+    --accent-strong: #c4b5fd;
+    --text: #f0ecf8;
+    --text-muted: #a19ab8;
     --color-morado-claro: #6b46c1;
-    --color-morado-oscuro: #553c9a;
-    --color-verde-claro: #10b981;
-    --color-verde-seleccion: #059669;
-    --color-gris-claro: #1f2937;
-    --color-gris-borde: #374151;
+    --color-morado-oscuro: #8b7dcf;
+    --color-verde-claro: #34d399;
+    --color-verde-seleccion: rgba(52, 211, 153, 0.2);
+    --color-gris-claro: #1f1b2e;
+    --color-gris-borde: #363048;
     --color-negro: #f9fafb;
-    --color-blanco: #111827;
-    --color-violeta: #7c3aed;
+    --color-blanco: #15121f;
+    --color-violeta: #a78bfa;
   }
 }
 
@@ -43,6 +61,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.lesson-scroll {
+  scroll-padding-top: 5.5rem;
+  scroll-snap-type: y proximity;
+}
+
+.narrative-beat {
+  scroll-snap-align: start;
+  scroll-margin-top: 5rem;
 }
 
 /* Estilos globales para títulos principales */

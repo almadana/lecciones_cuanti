@@ -88,4 +88,16 @@ export const curriculum: LessonModule[] = [
       { id: '7.2', title: 'Editor chi cuadrado', href: '/lessons/chi-square-editable' },
     ],
   },
+  {
+    id: '8',
+    title: 'Inferencia (randomización)',
+    href: '/lessons/randomization-inference',
+    subLessons: [
+      {
+        id: '8.1',
+        title: 'Fundamentos e inferencia por randomización',
+        href: '/lessons/randomization-inference',
+      },
+    ],
+  },
 ]

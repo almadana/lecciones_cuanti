@@ -50,6 +50,12 @@ const lessons = [
     href: '/lessons/chi-square',
     icon: ChartBarIcon,
   },
+  {
+    title: 'Inferencia por randomización',
+    description: 'Hipótesis nula, permutaciones y valor p con satisfacción y grupos',
+    href: '/lessons/randomization-inference',
+    icon: BookOpenIcon,
+  },
 ]
 
 export default function Home() {

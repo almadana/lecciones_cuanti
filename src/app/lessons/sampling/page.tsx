@@ -23,6 +23,17 @@ interface SampleMean {
   mean: number
 }
 
+/** Detalle de la última muestra tomada (para lectura explícita antes de las abstracciones gráficas). */
+interface LastSampleDetail {
+  index: number
+  /** Índices en la población (0..N-1) en el orden en que se extrajeron conceptualmente (Set iteration order). */
+  populationIndices: number[]
+  values: number[]
+  mean: number
+  /** Desviación típica muestral (n−1 en el denominador), como en d3.deviation. */
+  std: number
+}
+
 // Función para generar un valor de la distribución normal
 const generateNormalValue = (mean: number, std: number): number => {
   let u = 0, v = 0
@@ -43,12 +54,18 @@ export default function SamplingPage() {
   // Estados para las muestras
   const [currentSampleData, setCurrentSampleData] = useState<DataPoint[]>([])
   const [sampleMeans, setSampleMeans] = useState<SampleMean[]>([])
+  const [lastSample, setLastSample] = useState<LastSampleDetail | null>(null)
   const [sampleSize, setSampleSize] = useState<number>(10)
   const [numSamples, setNumSamples] = useState<number>(100)
   const [showMean, setShowMean] = useState<boolean>(true)
   const [isAnimating, setIsAnimating] = useState<boolean>(false)
   const [animationSpeed, setAnimationSpeed] = useState<number>(800)
   const [sampleCount, setSampleCount] = useState<number>(0)
+
+  const latestPopulationSmileysRef = useRef<SmileyPoint[]>([])
+  useEffect(() => {
+    latestPopulationSmileysRef.current = populationSmileys
+  }, [populationSmileys])
 
   // Referencias para los gráficos
   const populationHistogramRef = useRef<SVGSVGElement>(null)
@@ -92,13 +109,6 @@ export default function SamplingPage() {
     // Agregar el último valor
     values.push(lastValue)
 
-    // Verificar la media resultante
-    const actualMean = d3.mean(values) || 0
-    console.log('Media poblacional objetivo:', populationMean)
-    console.log('Media poblacional actual:', actualMean)
-    console.log('Último valor calculado:', lastValue)
-    console.log('Valores:', values)
-
     // Crear los datos para el histograma y los smileys
     values.forEach((value, i) => {
       const binIndex = Math.floor((value - 5) / 5)
@@ -127,13 +137,15 @@ export default function SamplingPage() {
     generatePopulation()
   }, [generatePopulation])
 
-  // Función para generar una nueva muestra
+  // Función para generar una nueva muestra (usa ref para no recrear el callback en cada resaltado de smileys).
   const generateSample = useCallback(() => {
     if (sampleCount >= numSamples) {
       setIsAnimating(false)
-      setSampleCount(0)
       return
     }
+
+    const smileys = latestPopulationSmileysRef.current
+    if (smileys.length !== populationSize) return
 
     // Seleccionar índices aleatorios sin reemplazo
     const selectedIndices = new Set<number>()
@@ -141,37 +153,44 @@ export default function SamplingPage() {
       selectedIndices.add(Math.floor(Math.random() * populationSize))
     }
 
-    // Actualizar las caritas seleccionadas
-    const updatedSmileys = populationSmileys.map(smiley => ({
-      ...smiley,
-      isSelected: selectedIndices.has(smiley.id)
-    }))
-    setPopulationSmileys(updatedSmileys)
-
-    // Calcular estadísticas de la muestra
-    const sampleValues = Array.from(selectedIndices).map(i => populationSmileys[i].value)
+    const populationIndices = Array.from(selectedIndices)
+    const sampleValues = populationIndices.map((i) => smileys[i].value)
     const sampleMean = d3.mean(sampleValues) || 0
+    const sampleStd = d3.deviation(sampleValues) ?? 0
 
-    // Actualizar el histograma de la muestra actual
+    // Actualizar las caritas seleccionadas
+    setPopulationSmileys(
+      smileys.map((smiley) => ({
+        ...smiley,
+        isSelected: selectedIndices.has(smiley.id),
+      }))
+    )
+
+    // Actualizar el histograma de la muestra actual (distribución de los valores en esta muestra)
     const sampleData: { [key: number]: number } = {}
-    sampleValues.forEach(value => {
+    sampleValues.forEach((value) => {
       const binIndex = Math.floor((value - 5) / 5)
       sampleData[binIndex] = (sampleData[binIndex] || 0) + 1
     })
 
     const currentSampleDataArray = Object.entries(sampleData).map(([bin, freq]) => ({
       value: 5 + Number(bin) * 5,
-      frequency: freq
+      frequency: freq,
     }))
     setCurrentSampleData(currentSampleDataArray)
 
-    // Agregar la media a la distribución muestral
-    setSampleMeans(prev => {
-      const newMeans = [...prev, { id: sampleCount, mean: sampleMean }]
-      return newMeans
+    const nextIndex = sampleCount + 1
+    setLastSample({
+      index: nextIndex,
+      populationIndices,
+      values: [...sampleValues],
+      mean: sampleMean,
+      std: sampleStd,
     })
-    setSampleCount(prev => prev + 1)
-  }, [sampleCount, numSamples, sampleSize, populationSmileys])
+
+    setSampleMeans((prev) => [...prev, { id: sampleCount, mean: sampleMean }])
+    setSampleCount((prev) => prev + 1)
+  }, [sampleCount, numSamples, sampleSize, populationSize])
 
   // Efecto para manejar la animación del muestreo
   useEffect(() => {
@@ -193,7 +212,9 @@ export default function SamplingPage() {
   ) => {
     if (!ref.current) return
 
-    const margin = { top: 40, right: 40, bottom: 60, left: 60 }
+    const margin = showSampleMean
+      ? { top: 44, right: 40, bottom: 88, left: 60 }
+      : { top: 40, right: 40, bottom: 60, left: 60 }
     const innerWidth = width - margin.left - margin.right
     const innerHeight = height - margin.top - margin.bottom
 
@@ -284,6 +305,7 @@ export default function SamplingPage() {
         }
       })
       const currentMean = d3.mean(expandedValues) || 0
+      const currentStd = d3.deviation(expandedValues) ?? 0
       
       svg.append('line')
         .attr('x1', x(currentMean))
@@ -298,13 +320,38 @@ export default function SamplingPage() {
         .attr('y', -25)
         .attr('text-anchor', 'middle')
         .attr('fill', '#2563EB')
-        .text(`Media muestral: ${currentMean.toFixed(2)}`)
+        .text(`Media muestral x̄: ${currentMean.toFixed(2)}`)
+
+      if (currentStd > 0 && expandedValues.length > 1) {
+        const lo = Math.max(xDomain[0], currentMean - currentStd)
+        const hi = Math.min(xDomain[1], currentMean + currentStd)
+        svg.append('line')
+          .attr('x1', x(lo))
+          .attr('x2', x(hi))
+          .attr('y1', innerHeight + 4)
+          .attr('y2', innerHeight + 4)
+          .attr('stroke', '#2563EB')
+          .attr('stroke-width', 3)
+          .attr('opacity', 0.85)
+        svg.append('text')
+          .attr('x', x(currentMean))
+          .attr('y', innerHeight + 22)
+          .attr('text-anchor', 'middle')
+          .attr('fill', '#2563EB')
+          .style('font-size', '11px')
+          .text(`±1 desv. típica muestral (s=${currentStd.toFixed(2)})`)
+      }
     }
   }, [populationMean])
 
   // Función para actualizar la distribución muestral
   const updateSamplingDistribution = useCallback(() => {
-    if (!samplingDistributionRef.current || sampleMeans.length === 0) return
+    if (!samplingDistributionRef.current) return
+
+    if (sampleMeans.length === 0) {
+      d3.select(samplingDistributionRef.current).selectAll('*').remove()
+      return
+    }
 
     const margin = { top: 40, right: 40, bottom: 80, left: 60 } // Aumentar el margen inferior
     const width = 800
@@ -469,6 +516,7 @@ export default function SamplingPage() {
   const startAnimation = () => {
     setSampleMeans([])
     setCurrentSampleData([])
+    setLastSample(null)
     setSampleCount(0)
     setIsAnimating(true)
   }
@@ -492,8 +540,9 @@ export default function SamplingPage() {
             Muestreo
           </h1>
           <p className="mt-4 text-lg text-gray-500">
-            Observa cómo se forma la distribución muestral de la media a medida que tomamos muestras repetidas.
-            La línea roja muestra la media poblacional.
+            Primero lee cada muestra como lista de casos con su media (x̄) y su desviación típica muestral (s).
+            Después mira el histograma de esa muestra (cómo se reparten los valores en el eje de satisfacción) y,
+            al repetir, la distribución muestral de las medias.
           </p>
         </div>
 
@@ -501,21 +550,22 @@ export default function SamplingPage() {
         <div className="panel-contenido">
           <div className="prose text-gray-700 mb-6">
             <p className="text-lg">
-              El muestreo es fundamental en estadística porque rara vez podemos estudiar toda una población. 
-              En esta lección verás cómo las muestras nos permiten estimar características de la población 
-              y cómo la distribución de las medias muestrales se comporta según el Teorema del Límite Central.
+              El muestreo es fundamental en estadística porque rara vez podemos estudiar toda una población.
+              Aquí cada paso de la simulación toma <strong>n</strong> personas al azar (sin reemplazo dentro de la
+              muestra), anota sus puntuaciones de satisfacción y calcula la media y la dispersión de ese grupo.
+              Solo cuando ya viste varias muestras así tiene sentido mirar el histograma de todas las medias
+              (la distribución muestral).
             </p>
           </div>
           
           <div className="bg-gris-claro p-4 rounded-lg">
             <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
             <ul className="list-disc pl-5 space-y-2 text-sm">
-              <li>Observa la población original y su distribución</li>
-              <li>Cambia el tamaño de muestra para ver cómo afecta la variabilidad</li>
-              <li>Ejecuta la simulación para ver cómo se forma la distribución muestral</li>
-              <li>Compara el error estándar teórico con el empírico</li>
-              <li>Observa cómo los smileys se seleccionan aleatoriamente de la población</li>
-              <li>Prueba diferentes velocidades de animación para entender mejor el proceso</li>
+              <li>Observa la población (N=50) y la línea roja de la media poblacional μ</li>
+              <li>Lee los valores de la muestra actual y compara x̄ y s con μ y σ</li>
+              <li>Cambia n y el número de muestras; usa velocidad lenta para seguir muestra a muestra</li>
+              <li>El histograma de abajo en el bloque de muestra resume solo esa muestra; el de distribución muestral acumula x̄</li>
+              <li>Compara el error estándar teórico σ/√n con el empírico entre medias</li>
             </ul>
           </div>
         </div>
@@ -630,22 +680,139 @@ export default function SamplingPage() {
             </div>
           </div>
 
-          {/* Muestra Actual */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Muestra Actual (n={sampleSize}, muestra #{sampleCount} de {numSamples})
+          {/* Paso 1: muestra explícita + histograma de esa muestra */}
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-l-4 border-indigo-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-indigo-600 mb-1">
+              Paso 1 · Una muestra a la vez
+            </p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Casos incluidos en la muestra y sus estadísticos
             </h3>
-            <div className="mt-4 flex justify-center">
+            <p className="text-sm text-gray-600 mb-6 max-w-3xl">
+              Cada animación elige <strong>{sampleSize}</strong> personas distintas de la población. Los valores
+              que ves son sus puntuaciones de satisfacción (escala aproximada 5–35). La media muestral se denota
+              x̄; la desviación típica muestral <strong>s</strong> usa denominador <strong>n−1</strong> (como en la
+              fórmula habitual de la muestra). La dispersión poblacional fija del modelo es σ ≈{' '}
+              {populationStd.toFixed(2)} (referencia, no se recalcula de los 50 valores mostrados).
+            </p>
+
+            {lastSample ? (
+              <div className="mb-8 rounded-xl border border-gray-200 bg-slate-50 p-5">
+                <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-gray-200 pb-3 mb-4">
+                  <span className="text-base font-semibold text-gray-900">
+                    Muestra {lastSample.index} de {numSamples}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    Progreso: {sampleMeans.length} / {numSamples}
+                  </span>
+                </div>
+
+                <div className="grid gap-6 lg:grid-cols-2">
+                  <div>
+                    <p className="text-xs font-semibold uppercase text-gray-500 mb-2">
+                      Valores observados (n = {lastSample.values.length})
+                    </p>
+                    <p className="text-xs text-gray-500 mb-2">
+                      Ordenados de menor a mayor para leerlos; los índices # son posiciones en la grilla de población.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {lastSample.populationIndices
+                        .map((popIdx, j) => ({ popIdx, v: lastSample.values[j] }))
+                        .sort((a, b) => a.v - b.v)
+                        .map(({ popIdx, v }) => (
+                          <span
+                            key={`${lastSample.index}-${popIdx}`}
+                            className="inline-flex min-w-[4.5rem] flex-col rounded-lg bg-white px-2 py-1 text-center shadow-sm ring-1 ring-gray-200"
+                          >
+                            <span className="text-[10px] text-gray-400">#{popIdx}</span>
+                            <span className="font-mono text-sm font-medium text-gray-900">{v.toFixed(2)}</span>
+                          </span>
+                        ))}
+                    </div>
+                    <p className="mt-3 font-mono text-xs text-gray-600 break-all">
+                      Índices en la población (orden de extracción): [
+                      {lastSample.populationIndices.join(', ')}]
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="rounded-lg bg-white p-4 ring-1 ring-gray-200">
+                      <p className="text-xs font-semibold uppercase text-gray-500">Media muestral</p>
+                      <p className="mt-1 font-mono text-2xl font-bold text-indigo-700">
+                        x̄ = {lastSample.mean.toFixed(3)}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        Media poblacional (referencia del modelo) μ = {populationMean.toFixed(2)} — diferencia
+                        x̄ − μ = {(lastSample.mean - populationMean).toFixed(3)}
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-white p-4 ring-1 ring-gray-200">
+                      <p className="text-xs font-semibold uppercase text-gray-500">
+                        Desviación típica muestral (n−1)
+                      </p>
+                      <p className="mt-1 font-mono text-2xl font-bold text-indigo-700">
+                        s ={' '}
+                        {lastSample.values.length < 2
+                          ? '—'
+                          : lastSample.std.toFixed(3)}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        {lastSample.values.length < 2
+                          ? 'Con un solo caso no tiene sentido hablar de dispersión dentro de la muestra.'
+                          : 'Mide cuán dispersos están los n valores entre sí; no confundir con el error estándar de x̄ (eso viene después).'}
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-indigo-50/80 p-3 text-xs text-indigo-900">
+                      <strong>Suma de valores:</strong>{' '}
+                      <span className="font-mono">
+                        Σx = {d3.sum(lastSample.values).toFixed(3)}
+                      </span>
+                      {' — '}
+                      comprobación: x̄ = Σx / n ={' '}
+                      <span className="font-mono">
+                        {(d3.sum(lastSample.values) / lastSample.values.length).toFixed(3)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="mb-8 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-500">
+                <p className="font-medium text-gray-700">Aún no hay muestra en esta sesión</p>
+                <p className="mt-2 text-sm">
+                  Pulsa <strong>Comenzar simulación</strong> para ver aquí la primera muestra con todos los
+                  detalles.
+                </p>
+              </div>
+            )}
+
+            <h4 className="text-base font-medium text-gray-900 mb-2">
+              Distribución de los valores dentro de esta muestra
+            </h4>
+            <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+              Este histograma solo describe los <strong>n</strong> valores de la última muestra (frecuencias por
+              tramo del eje). La línea azul es x̄; debajo, un segmento de ancho 2s ayuda a visualizar la dispersión
+              interna. La línea roja punteada sigue siendo μ poblacional para orientarte.
+            </p>
+            <div className="mt-4 flex justify-center overflow-x-auto">
               <svg ref={currentSampleHistogramRef}></svg>
             </div>
           </div>
 
-          {/* Distribución Muestral */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Distribución Muestral de la Media ({sampleMeans.length} muestras)
+          {/* Paso 2: distribución muestral */}
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-l-4 border-violet-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 mb-1">
+              Paso 2 · Abstracción: muchas medias
+            </p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Distribución muestral de la media ({sampleMeans.length} medias acumuladas)
             </h3>
-            <div className="mt-4 flex justify-center">
+            <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+              Cada barra cuenta cuántas veces obtuvimos una media x̄ en un intervalo del eje. Ya no miras los{' '}
+              <strong>n</strong> valores crudos, sino la colección de resúmenes x̄ — de ahí la dispersión suele ser
+              menor que la de la población (pero mide otra cosa: variación entre muestras, no dentro de una).
+            </p>
+            <div className="mt-4 flex justify-center overflow-x-auto">
               <svg ref={samplingDistributionRef}></svg>
             </div>
           </div>
@@ -656,14 +823,15 @@ export default function SamplingPage() {
             <div className="prose max-w-none">
               <h4 className="text-base font-medium text-gray-900">Distribución Muestral</h4>
               <p className="text-gray-600 mb-4">
-                La distribución muestral de la media es la distribución de todas las posibles medias muestrales
-                para un tamaño de muestra dado. En esta simulación:
+                La distribución muestral de la media es la distribución de las medias x̄ obtenidas al repetir el
+                muestreo. Cada barra del gráfico del paso 2 cuenta cuántas veces cayó x̄ en un intervalo; no es el
+                histograma de los valores individuales de una sola muestra.
               </p>
               <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                <li>Las caritas resaltadas en rojo son los elementos seleccionados en la muestra actual</li>
-                <li>Cada punto en la distribución muestral representa la media de una muestra</li>
-                <li>La dispersión de las medias muestrales es menor que la dispersión de la población</li>
-                <li>La distribución muestral se centra alrededor de la media poblacional</li>
+                <li>En el paso 1 ves los n valores, x̄ y s de la última muestra; en el paso 2 solo acumulas x̄</li>
+                <li>Las caritas resaltadas en rojo son los elementos de la última muestra extraída</li>
+                <li>La dispersión entre medias (paso 2) suele ser menor que la dispersión dentro de la población</li>
+                <li>La distribución muestral tiende a centrarse en μ cuando el muestreo es aleatorio simple</li>
               </ul>
 
               <h4 className="text-base font-medium text-gray-900 mt-4">Teorema del Límite Central</h4>

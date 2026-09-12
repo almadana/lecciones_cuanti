@@ -1,478 +1,276 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import * as d3 from 'd3';
-import jStat from 'jstat';
-import LessonHeader from '@/app/components/LessonHeader';
-import LessonNavigation from '@/app/components/LessonNavigation';
-import Question from '@/app/components/Question';
+import { useMemo, useState } from 'react'
+import * as d3 from 'd3'
+import LessonNavigation from '@/app/components/LessonNavigation'
+import {
+  DataAttribution,
+  LessonStory,
+  PredictionPrompt,
+  StoryBeat,
+  StoryConclusion,
+  TransferTask,
+} from '@/app/components/narrative/LessonStory'
 
-// Configuración de la población
-const POPULATION_SIZE = 1000;
-const MEAN = 7.23;
-const STD = 1.17;
-const MIN = 4;
-const MAX = 9;
+const SYMMETRIC_SHAPE = [
+  -2, -1.7, -1.45, -1.25, -1.05, -0.88, -0.72, -0.57, -0.43, -0.3, -0.18, -0.06,
+  0.06, 0.18, 0.3, 0.43, 0.57, 0.72, 0.88, 1.05, 1.25, 1.45, 1.7, 2,
+]
+const SHAPE_STD = d3.deviation(SYMMETRIC_SHAPE) ?? 1
+const BASE_DATA = SYMMETRIC_SHAPE.map((value) => 7.2 + (value / SHAPE_STD) * 0.85)
+const ATYPICAL_VALUES = [12, 12]
+const WIDTH = 800
+const HEIGHT = 410
+const MARGIN = { top: 46, right: 24, bottom: 56, left: 48 }
+const DOMAIN: [number, number] = [3, 12.5]
 
-// Dimensiones del gráfico
-const WIDTH = 800;
-const HEIGHT = 400;
-const BOXPLOT_HEIGHT = 100;
-const MARGIN = { top: 40, right: 40, bottom: 60, left: 60 };
+function DistributionPlot({
+  data,
+  showQuartiles,
+}: {
+  data: number[]
+  showQuartiles: boolean
+}) {
+  const mean = d3.mean(data) ?? 0
+  const median = d3.median(data) ?? 0
+  const q1 = d3.quantile(data, 0.25) ?? 0
+  const q3 = d3.quantile(data, 0.75) ?? 0
+  const bins = d3.bin().domain(DOMAIN).thresholds(12)(data)
+  const innerWidth = WIDTH - MARGIN.left - MARGIN.right
+  const histogramHeight = 235
+  const x = d3.scaleLinear().domain(DOMAIN).range([MARGIN.left, WIDTH - MARGIN.right])
+  const y = d3
+    .scaleLinear()
+    .domain([0, d3.max(bins, (bin) => bin.length) ?? 1])
+    .nice()
+    .range([MARGIN.top + histogramHeight, MARGIN.top])
+  const ticks = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+  const boxY = 344
 
-// Función para generar datos normales truncados
-function generateTruncatedNormal(size: number, mean: number, std: number, min: number, max: number) {
-  const data = [];
-  while (data.length < size) {
-    const value = (jStat as any).normal.sample(mean, std);
-    if (value >= min && value <= max) {
-      data.push(value);
-    }
-  }
-  return data;
-}
+  return (
+    <svg
+      viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+      className="h-auto w-full"
+      role="img"
+      aria-label="Distribución sintética de horas de sueño con media, mediana y cuartiles"
+    >
+      {showQuartiles ? (
+        <rect
+          x={x(q1)}
+          y={MARGIN.top}
+          width={x(q3) - x(q1)}
+          height={histogramHeight}
+          fill="var(--color-verde-seleccion)"
+          opacity={0.35}
+        />
+      ) : null}
 
-// Función para calcular la moda
-function calculateMode(data: number[]) {
-  // Redondear los datos a 2 decimales para agrupar mejor
-  const roundedData = data.map(x => Math.round(x * 100) / 100);
-  
-  const counts = new Map<number, number>();
-  roundedData.forEach(value => {
-    counts.set(value, (counts.get(value) || 0) + 1);
-  });
-  
-  let maxCount = 0;
-  let mode = roundedData[0];
-  
-  counts.forEach((count, value) => {
-    if (count > maxCount) {
-      maxCount = count;
-      mode = value;
-    }
-  });
-  
-  return mode;
+      {bins.map((bin, index) => (
+        <rect
+          key={`${bin.x0}-${index}`}
+          x={x(bin.x0 ?? DOMAIN[0]) + 1}
+          y={y(bin.length)}
+          width={Math.max(0, x(bin.x1 ?? DOMAIN[0]) - x(bin.x0 ?? DOMAIN[0]) - 2)}
+          height={MARGIN.top + histogramHeight - y(bin.length)}
+          rx={3}
+          fill="var(--accent)"
+          opacity={0.72}
+        />
+      ))}
+
+      <line
+        x1={MARGIN.left}
+        x2={WIDTH - MARGIN.right}
+        y1={MARGIN.top + histogramHeight}
+        y2={MARGIN.top + histogramHeight}
+        stroke="var(--text)"
+      />
+      {ticks.map((tick) => (
+        <g key={tick} transform={`translate(${x(tick)},${MARGIN.top + histogramHeight})`}>
+          <line y2={6} stroke="var(--text)" />
+          <text y={22} textAnchor="middle" fontSize={11} fill="var(--text-muted)">{tick}</text>
+        </g>
+      ))}
+      <text x={MARGIN.left + innerWidth / 2} y={MARGIN.top + histogramHeight + 43} textAnchor="middle" fontSize={12} fill="var(--text-muted)">
+        Horas de sueño
+      </text>
+
+      {[
+        { value: mean, label: `Media ${mean.toFixed(2)}`, color: '#b42348', y: 18 },
+        { value: median, label: `Mediana ${median.toFixed(2)}`, color: '#2f7d4b', y: 34 },
+      ].map((marker) => (
+        <g key={marker.label}>
+          <line
+            x1={x(marker.value)}
+            x2={x(marker.value)}
+            y1={MARGIN.top}
+            y2={MARGIN.top + histogramHeight}
+            stroke={marker.color}
+            strokeWidth={2.5}
+            strokeDasharray="6 4"
+          />
+          <text x={x(marker.value)} y={marker.y} textAnchor="middle" fontSize={11} fontWeight={700} fill={marker.color}>
+            {marker.label}
+          </text>
+        </g>
+      ))}
+
+      {showQuartiles ? (
+        <g>
+          <line x1={x(d3.min(data) ?? 0)} x2={x(q1)} y1={boxY} y2={boxY} stroke="var(--accent)" />
+          <rect x={x(q1)} y={boxY - 18} width={x(q3) - x(q1)} height={36} fill="var(--color-verde-seleccion)" stroke="var(--accent)" />
+          <line x1={x(median)} x2={x(median)} y1={boxY - 18} y2={boxY + 18} stroke="var(--accent)" strokeWidth={3} />
+          <line x1={x(q3)} x2={x(d3.max(data) ?? 0)} y1={boxY} y2={boxY} stroke="var(--accent)" />
+          {[d3.min(data) ?? 0, d3.max(data) ?? 0].map((value) => (
+            <line key={value} x1={x(value)} x2={x(value)} y1={boxY - 10} y2={boxY + 10} stroke="var(--accent)" />
+          ))}
+          <text x={MARGIN.left} y={boxY + 42} fontSize={11} fill="var(--text-muted)">50% central entre Q1 y Q3</text>
+        </g>
+      ) : null}
+    </svg>
+  )
 }
 
 export default function DescriptiveStatsPage() {
-  const [data, setData] = useState<number[]>([]);
-  const [showQuartiles, setShowQuartiles] = useState(false);
-  const [showQuintiles, setShowQuintiles] = useState(false);
-  const [dataVersion, setDataVersion] = useState(0);
-
-  // Generar datos iniciales
-  useEffect(() => {
-    const newData = generateTruncatedNormal(POPULATION_SIZE, MEAN, STD, MIN, MAX);
-    setData(newData);
-  }, []);
-
-  // Calcular estadísticas
-  const mean = d3.mean(data) ?? 0;
-  const std = d3.deviation(data) ?? 0;
-  const median = d3.median(data) ?? 0;
-  const mode = calculateMode(data) ?? 0;
-  const quartiles = [0.25, 0.5, 0.75].map(q => d3.quantile(data, q) ?? 0);
-  const quintiles = [0.2, 0.4, 0.6, 0.8].map(q => d3.quantile(data, q) ?? 0);
-
-  // Calcular bigotes y outliers usando criterio estándar (1.5 * IQR)
-  const q1 = quartiles[0];
-  const q3 = quartiles[2];
-  const iqr = q3 - q1;
-  const lowerWhisker = Math.max(MIN, q1 - 1.5 * iqr);
-  const upperWhisker = Math.min(MAX, q3 + 1.5 * iqr);
-  
-  // Identificar outliers
-  const outliers = data.filter(d => d < lowerWhisker || d > upperWhisker);
-
-  // Escalas
-  const xScale = d3.scaleLinear()
-    .domain([MIN, MAX])
-    .range([MARGIN.left, WIDTH - MARGIN.right]);
-
-  const histogram = d3.histogram<number, number>()
-    .domain([MIN, MAX])
-    .thresholds(20)(data);
-
-  const yScale = d3.scaleLinear()
-    .domain([0, d3.max(histogram, d => d.length) || 0])
-    .range([HEIGHT - MARGIN.bottom, MARGIN.top]);
+  const [showAtypical, setShowAtypical] = useState(false)
+  const [showQuartiles, setShowQuartiles] = useState(false)
+  const data = useMemo(
+    () => (showAtypical ? [...BASE_DATA, ...ATYPICAL_VALUES] : BASE_DATA),
+    [showAtypical],
+  )
+  const mean = d3.mean(data) ?? 0
+  const median = d3.median(data) ?? 0
+  const std = d3.deviation(data) ?? 0
+  const baseMean = d3.mean(BASE_DATA) ?? 0
+  const baseMedian = d3.median(BASE_DATA) ?? 0
 
   return (
-    <article className="max-w-4xl mx-auto p-4">
-      <LessonHeader title="Media, Moda y Cuartiles (1 de 2)" />
-      
-      {/* Texto introductorio y instrucciones */}
-      <div className="panel-contenido">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Estadísticas Descriptivas
-          </h1>
-        </div>
-        <div className="prose text-gray-700 mb-6">
-          <p className="text-lg">
-            Las medidas de tendencia central y posición te permiten resumir grandes cantidades de datos con solo 
-            unos pocos números. En esta lección aprenderás sobre la media, moda y cuartiles, 
-            y cómo interpretar la distribución de los datos.
-          </p>
-        </div>
-        
-        <div className="bg-gris-claro p-4 rounded-lg">
-          <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
-          <ul className="list-disc pl-5 space-y-2 text-sm">
-            <li>Observa cómo se distribuyen los datos en el histograma</li>
-            <li>Compara los valores de media, mediana y moda</li>
-            <li>Activa los cuartiles y quintiles para ver las divisiones de los datos</li>
-            <li>Identifica si la distribución es simétrica o asimétrica</li>
-            <li>Observa los outliers (valores atípicos) en el boxplot</li>
-            <li>Genera nuevos datos para ver cómo cambian las estadísticas</li>
-          </ul>
-        </div>
-      </div>
-      
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Distribución de Horas de Sueño</h2>
-        <p className="mb-4">
-          Esta visualización muestra la distribución de horas de sueño en una población,
-          junto con diferentes medidas de tendencia central y posición.
-        </p>
-      </section>
+    <LessonStory
+      eyebrow="Lección 1 · estadísticas descriptivas"
+      title="¿Cómo resumimos una distribución sin borrar su forma?"
+      lead="Un único número puede orientar, pero también esconder. Vamos a mirar primero los datos y elegir el resumen después."
+    >
+      <StoryBeat
+        layout="stacked"
+        number="01"
+        label="Predicción"
+        title="¿Dónde está el centro de una noche típica?"
+        visual={
+          <PredictionPrompt
+            question="Si la mayoría duerme cerca de 7 horas, pero aparecen algunas noches de 12 horas, ¿qué medida cambiará más?"
+            options={['La media', 'La mediana', 'Cambiarán exactamente igual']}
+            reveal="La media incorpora la distancia de cada valor y se desplaza hacia los extremos. La mediana depende sobre todo del orden, por lo que suele moverse menos."
+          />
+        }
+      >
+        <p>Centro no significa siempre lo mismo. Podemos buscar el punto de equilibrio de los valores o la observación que deja la mitad a cada lado.</p>
+        <p>La forma de la distribución decidirá cuánto se parecen esas respuestas.</p>
+      </StoryBeat>
 
-      <section className="mb-8">
-        <div className="mb-4">
-          <h3 className="text-xl font-bold">
-            Media = {mean?.toFixed(2) ?? '0.00'} | Desvío = {std?.toFixed(2) ?? '0.00'} | Mediana = {median?.toFixed(2) ?? '0.00'} | Moda = {mode?.toFixed(2) ?? '0.00'}
-          </h3>
-        </div>
-
-        <div className="mb-4 flex gap-4">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={showQuartiles}
-              onChange={(e) => setShowQuartiles(e.target.checked)}
-              className="mr-2"
-            />
-            Mostrar Cuartiles
-          </label>
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={showQuintiles}
-              onChange={(e) => setShowQuintiles(e.target.checked)}
-              className="mr-2"
-            />
-            Mostrar Quintiles
-          </label>
-        </div>
-
-        <div className="border rounded p-4">
-          <svg width={WIDTH} height={HEIGHT + BOXPLOT_HEIGHT}>
-            {/* Ejes */}
-            <g>
-              {/* Eje X */}
-              <line
-                x1={MARGIN.left}
-                y1={HEIGHT - MARGIN.bottom}
-                x2={WIDTH - MARGIN.right}
-                y2={HEIGHT - MARGIN.bottom}
-                stroke="black"
-              />
-              {/* Etiquetas X */}
-              {d3.range(MIN, MAX + 1).map(tick => (
-                <g key={tick} transform={`translate(${xScale(tick)},${HEIGHT - MARGIN.bottom})`}>
-                  <line y2="6" stroke="black" />
-                  <text
-                    y="20"
-                    textAnchor="middle"
-                    fontSize="12"
-                  >
-                    {tick}
-                  </text>
-                </g>
-              ))}
-              {/* Título X */}
-              <text
-                x={WIDTH / 2}
-                y={HEIGHT - 10}
-                textAnchor="middle"
-                fontSize="14"
+      <StoryBeat
+        layout="stacked"
+        number="02"
+        label="Datos"
+        title="Primero mirá la distribución"
+        visual={
+          <div>
+            <div className="overflow-x-auto">
+              <DistributionPlot data={data} showQuartiles={showQuartiles} />
+            </div>
+            <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--border)] pt-4">
+              <button
+                type="button"
+                aria-pressed={showAtypical}
+                onClick={() => setShowAtypical((value) => !value)}
+                className={`rounded-full px-4 py-2 text-sm font-medium ${
+                  showAtypical
+                    ? 'bg-[var(--danger)] text-white'
+                    : 'border border-[var(--border-strong)] text-[var(--text)] hover:bg-[var(--accent-soft)]'
+                }`}
               >
-                Horas de sueño
-              </text>
-
-              {/* Eje Y */}
-              <line
-                x1={MARGIN.left}
-                y1={MARGIN.top}
-                x2={MARGIN.left}
-                y2={HEIGHT - MARGIN.bottom}
-                stroke="black"
-              />
-              {/* Título Y */}
-              <text
-                transform={`translate(20,${HEIGHT / 2}) rotate(-90)`}
-                textAnchor="middle"
-                fontSize="14"
+                {showAtypical ? 'Quitar noches atípicas' : 'Agregar dos noches de 12 h'}
+              </button>
+              <button
+                type="button"
+                aria-pressed={showQuartiles}
+                onClick={() => setShowQuartiles((value) => !value)}
+                className="rounded-full border border-[var(--border-strong)] px-4 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--accent-soft)]"
               >
-                Frecuencia
-              </text>
-            </g>
+                {showQuartiles ? 'Ocultar cuartiles' : 'Mostrar cuartiles'}
+              </button>
+            </div>
+          </div>
+        }
+      >
+        <p>Los datos sintéticos representan horas de sueño. La distribución inicial es aproximadamente simétrica alrededor de 7,2 horas.</p>
+        <p>Agregá los valores atípicos y observá las líneas de media y mediana antes de mirar sus números.</p>
+      </StoryBeat>
 
-            {/* Histograma */}
-            {histogram.map((d, i) => (
-              <rect
-                key={i}
-                x={xScale(d.x0 || 0)}
-                y={yScale(d.length)}
-                width={xScale(d.x1 || 0) - xScale(d.x0 || 0)}
-                height={HEIGHT - MARGIN.bottom - yScale(d.length)}
-                fill="#6446fa"
-                opacity="0.7"
-              />
-            ))}
+      <StoryBeat
+        layout="stacked"
+        number="03"
+        label="Conflicto"
+        title="La media escucha la distancia; la mediana, el orden"
+        visual={
+          <div className="grid gap-3 sm:grid-cols-2">
+            <article className="rounded-2xl border border-[var(--border)] p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#b42348]">Media</p>
+              <p className="mt-2 font-mono text-2xl font-bold text-[var(--text)]">{mean.toFixed(2)} h</p>
+              <p className="mt-2 text-sm text-[var(--text-muted)]">Cambio: {(mean - baseMean).toFixed(2)} h</p>
+            </article>
+            <article className="rounded-2xl border border-[var(--border)] p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#2f7d4b]">Mediana</p>
+              <p className="mt-2 font-mono text-2xl font-bold text-[var(--text)]">{median.toFixed(2)} h</p>
+              <p className="mt-2 text-sm text-[var(--text-muted)]">Cambio: {(median - baseMedian).toFixed(2)} h</p>
+            </article>
+          </div>
+        }
+      >
+        <p>En una distribución simétrica, media y mediana suelen quedar cerca. Con asimetría o valores extremos pueden contar historias distintas.</p>
+        <p>La moda responde otra pregunta: cuál es el valor o categoría más frecuente. En mediciones continuas depende mucho de cómo agrupemos los datos.</p>
+      </StoryBeat>
 
-            {/* Media */}
-            <line
-              x1={xScale(mean)}
-              y1={MARGIN.top}
-              x2={xScale(mean)}
-              y2={HEIGHT - MARGIN.bottom}
-              stroke="red"
-              strokeWidth="2"
-              strokeDasharray="5,5"
-            />
-            <text
-              x={xScale(mean)}
-              y={MARGIN.top - 15}
-              textAnchor="middle"
-              fill="red"
-              fontSize="12"
-              fontFamily="Roboto"
-            >
-              Media
-            </text>
+      <StoryBeat
+        layout="stacked"
+        number="04"
+        label="Herramienta"
+        title="El centro no alcanza: también necesitamos dispersión"
+        visual={
+          <div className="space-y-4">
+            <div className="rounded-2xl bg-[var(--text)] p-5 text-white">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-verde-claro)]">Desvío estándar</p>
+              <p className="mt-2 font-mono text-3xl font-bold">s = {std.toFixed(2)} h</p>
+              <p className="mt-2 text-sm text-white/70">Distancia típica de los valores respecto de la media.</p>
+            </div>
+            <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+              Los cuartiles dividen los datos ordenados en cuatro partes. El tramo Q1–Q3 contiene el 50% central y es menos sensible a valores extremos.
+            </p>
+          </div>
+        }
+      >
+        <p>Dos grupos pueden compartir la misma media y, sin embargo, tener distribuciones muy distintas. Por eso centro y dispersión deben leerse juntos.</p>
+        <p>Activá los cuartiles para relacionar el histograma con el diagrama de caja.</p>
+      </StoryBeat>
 
-            {/* Mediana */}
-            <line
-              x1={xScale(median)}
-              y1={MARGIN.top}
-              x2={xScale(median)}
-              y2={HEIGHT - MARGIN.bottom}
-              stroke="green"
-              strokeWidth="2"
-              strokeDasharray="5,5"
-            />
-            <text
-              x={xScale(median)}
-              y={MARGIN.top - 30}
-              textAnchor="middle"
-              fill="green"
-              fontSize="12"
-              fontFamily="Roboto"
-            >
-              Mediana
-            </text>
-
-            {/* Moda */}
-            <line
-              x1={xScale(mode)}
-              y1={MARGIN.top}
-              x2={xScale(mode)}
-              y2={HEIGHT - MARGIN.bottom}
-              stroke="black"
-              strokeWidth="2"
-              strokeDasharray="5,5"
-            />
-            <text
-              x={xScale(mode)}
-              y={MARGIN.top - 5}
-              textAnchor="middle"
-              fill="black"
-              fontSize="12"
-              fontFamily="Roboto"
-            >
-              Moda
-            </text>
-
-            {/* Cuartiles */}
-            {showQuartiles && quartiles.map((q, i) => (
-              <g key={`q${i}`}>
-                <line
-                  x1={xScale(q)}
-                  y1={MARGIN.top}
-                  x2={xScale(q)}
-                  y2={HEIGHT - MARGIN.bottom}
-                  stroke="#9bfa82"
-                  strokeWidth="1"
-                  strokeDasharray="3,3"
-                />
-                <text
-                  x={xScale(q)}
-                  y={MARGIN.top - 5}
-                  textAnchor="middle"
-                  fill="#9bfa82"
-                  fontSize="12"
-                  fontFamily="Roboto"
-                  transform={`translate(0,${20 + i * 15})`}
-                >
-                  {i === 0 ? 'C1' : i === 1 ? 'C2' : 'C3'}
-                </text>
-              </g>
-            ))}
-
-            {/* Quintiles */}
-            {showQuintiles && quintiles.map((q, i) => (
-              <g key={`quint${i}`}>
-                <line
-                  x1={xScale(q)}
-                  y1={MARGIN.top}
-                  x2={xScale(q)}
-                  y2={HEIGHT - MARGIN.bottom}
-                  stroke="#8c7ddc"
-                  strokeWidth="1"
-                  strokeDasharray="3,3"
-                />
-                <text
-                  x={xScale(q)}
-                  y={MARGIN.top - 5}
-                  textAnchor="middle"
-                  fill="#8c7ddc"
-                  fontSize="12"
-                  fontFamily="Roboto"
-                  transform={`translate(0,${35 + i * 15})`}
-                >
-                  {`Q${i + 1}`}
-                </text>
-              </g>
-            ))}
-
-            {/* Diagrama de caja */}
-            <g transform={`translate(0,${HEIGHT})`}>
-              {/* Caja */}
-              <rect
-                x={xScale(quartiles[0])}
-                y={BOXPLOT_HEIGHT / 4}
-                width={xScale(quartiles[2]) - xScale(quartiles[0])}
-                height={BOXPLOT_HEIGHT / 2}
-                fill="#9bfa82"
-                stroke="#8c7ddc"
-                strokeWidth="1"
-              />
-              
-              {/* Línea mediana */}
-              <line
-                x1={xScale(median)}
-                y1={BOXPLOT_HEIGHT / 4}
-                x2={xScale(median)}
-                y2={BOXPLOT_HEIGHT * 3/4}
-                stroke="#8c7ddc"
-                strokeWidth="2"
-              />
-              
-              {/* Bigotes */}
-              <line
-                x1={xScale(lowerWhisker)}
-                y1={BOXPLOT_HEIGHT / 2}
-                x2={xScale(q1)}
-                y2={BOXPLOT_HEIGHT / 2}
-                stroke="#8c7ddc"
-                strokeWidth="1"
-              />
-              <line
-                x1={xScale(q3)}
-                y1={BOXPLOT_HEIGHT / 2}
-                x2={xScale(upperWhisker)}
-                y2={BOXPLOT_HEIGHT / 2}
-                stroke="#8c7ddc"
-                strokeWidth="1"
-              />
-              
-              {/* Líneas verticales de los bigotes */}
-              <line
-                x1={xScale(lowerWhisker)}
-                y1={BOXPLOT_HEIGHT / 4}
-                x2={xScale(lowerWhisker)}
-                y2={BOXPLOT_HEIGHT * 3/4}
-                stroke="#8c7ddc"
-                strokeWidth="1"
-              />
-              <line
-                x1={xScale(upperWhisker)}
-                y1={BOXPLOT_HEIGHT / 4}
-                x2={xScale(upperWhisker)}
-                y2={BOXPLOT_HEIGHT * 3/4}
-                stroke="#8c7ddc"
-                strokeWidth="1"
-              />
-              
-              {/* Outliers */}
-              {outliers.map((outlier, i) => (
-                <circle
-                  key={i}
-                  cx={xScale(outlier)}
-                  cy={BOXPLOT_HEIGHT / 2}
-                  r="3"
-                  fill="#ff6b6b"
-                  stroke="#8c7ddc"
-                  strokeWidth="1"
-                />
-              ))}
-            </g>
-          </svg>
-        </div>
-      </section>
-
-      {/* Preguntas */}
-      <section className="space-y-8">
-        <Question
-          key={`q1-${dataVersion}`}
-          type="multiple-choice"
-          question="¿Qué medida de tendencia central es más sensible a valores extremos?"
-          options={[
-            { text: "La media", value: true },
-            { text: "La mediana", value: false },
-            { text: "La moda", value: false },
-            { text: "Ninguna de las anteriores", value: false }
-          ]}
-          explanation="La media es la medida más sensible a valores extremos porque considera todos los valores en su cálculo. La mediana y la moda son más robustas a valores atípicos."
-        />
-
-        <Question
-          key={`q2-${dataVersion}`}
-          type="multiple-choice"
-          question="¿Qué representa el segundo cuartil (Q2)?"
-          options={[
-            { text: "La media", value: false },
-            { text: "La mediana", value: true },
-            { text: "La moda", value: false },
-            { text: "El valor más frecuente", value: false }
-          ]}
-          explanation="El segundo cuartil (Q2) es igual a la mediana, ya que divide los datos en dos partes iguales."
-        />
-
-        <Question
-          key={`q3-${dataVersion}`}
-          type="multiple-choice"
-          question="¿Qué porcentaje de los datos se encuentra entre el primer y tercer cuartil?"
-          options={[
-            { text: "25%", value: false },
-            { text: "50%", value: true },
-            { text: "75%", value: false },
-            { text: "100%", value: false }
-          ]}
-          explanation="El 50% de los datos se encuentra entre el primer cuartil (Q1) y el tercer cuartil (Q3). Esto se conoce como el rango intercuartílico."
+      <section className="space-y-8 py-16 sm:py-24">
+        <StoryConclusion>
+          No existe un resumen universalmente mejor. La media y el desvío aprovechan las distancias entre valores;
+          la mediana y el rango intercuartílico resisten mejor la asimetría y los extremos.
+        </StoryConclusion>
+        <TransferTask question="¿Cómo resumirías los ingresos de un grupo donde unas pocas personas ganan muchísimo más que el resto?">
+          <p>Elegí una medida de centro y otra de dispersión. Justificá la elección mirando la forma esperable de la distribución.</p>
+        </TransferTask>
+        <DataAttribution>
+          Datos sintéticos construidos con cuantiles de una distribución normal de media 7,2 y desvío 0,85.
+          Las dos noches de 12 horas son casos didácticos agregados, no observaciones reales.
+        </DataAttribution>
+        <LessonNavigation
+          currentStep={2}
+          totalSteps={9}
+          previousUrl="/lessons/introduction"
+          nextUrl="/lessons/descriptive-stats-editable"
         />
       </section>
-
-      {/* Navegación */}
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={4}
-        previousUrl="/lessons/introduction"
-        showPrevious={true}
-        nextUrl="/lessons/descriptive-stats-editable"
-      />
-    </article>
-  );
-} 
+    </LessonStory>
+  )
+}

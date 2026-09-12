@@ -1,231 +1,243 @@
 {
   "pages": {
     "/_not-found/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
+      "static/chunks/webpack-28b69f5048d73f90.js",
       "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
       "static/chunks/684-4c459c08e2287833.js",
       "static/chunks/main-app-799a831d72e17f7d.js",
       "static/chunks/app/_not-found/page-699e3a9c20a220b0.js"
     ],
     "/layout": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
+      "static/chunks/webpack-28b69f5048d73f90.js",
       "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
       "static/chunks/684-4c459c08e2287833.js",
       "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/css/333e1c1f24d2fb60.css",
+      "static/css/ec9be2bdeaa379a7.css",
       "static/chunks/874-1898ca31fe9a7d9f.js",
-      "static/chunks/app/layout-da98ac0ef3609162.js"
-    ],
-    "/lessons/chi-square-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/759-283bc43e6745d906.js",
-      "static/chunks/app/lessons/chi-square-editable/page-a0c4399ccd1ae4d5.js"
-    ],
-    "/lessons/mean-deviation/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/mean-deviation/page-61dba79a4bb443e7.js"
-    ],
-    "/lessons/descriptive-stats-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/descriptive-stats-editable/page-2358cc351203ed98.js"
-    ],
-    "/lessons/univariate-tables-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/univariate-tables-editable/page-8bd8a0c90c961aa3.js"
-    ],
-    "/lessons/confidence-interval/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/app/lessons/confidence-interval/page-88ded039fe6405af.js"
-    ],
-    "/lessons/t-test/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/app/lessons/t-test/page-089656fd9d47d27c.js"
-    ],
-    "/lessons/bivariate-tables-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/bivariate-tables-editable/page-8dafff88d1fe7409.js"
-    ],
-    "/lessons/bivariate-tables/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/bivariate-tables/page-c6e99e4d7ea1a5e0.js"
-    ],
-    "/lessons/correlation/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/931-812a57f2b85ed33d.js",
-      "static/chunks/app/lessons/correlation/page-4fb39b184625cfed.js"
-    ],
-    "/lessons/correlation-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/931-812a57f2b85ed33d.js",
-      "static/chunks/app/lessons/correlation-editable/page-54b494a12a983e5f.js"
-    ],
-    "/lessons/chi-square/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/app/lessons/chi-square/page-953a1b413ad4471a.js"
-    ],
-    "/lessons/introduction/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/759-283bc43e6745d906.js",
-      "static/chunks/app/lessons/introduction/page-1db01d9178950ee0.js"
-    ],
-    "/lessons/sampling-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/sampling-editable/page-86eb1377f1b6d4bb.js"
-    ],
-    "/lessons/descriptive-stats/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/app/lessons/descriptive-stats/page-112e5ac220b6aaea.js"
-    ],
-    "/lessons/mean-deviation-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/mean-deviation-editable/page-41a6eecd71f2189a.js"
-    ],
-    "/lessons/sampling/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/sampling/page-9a92c96bca8d35f1.js"
-    ],
-    "/lessons/randomization-inference/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/759-283bc43e6745d906.js",
-      "static/chunks/app/lessons/randomization-inference/page-1f649e9f4263849a.js"
+      "static/chunks/app/layout-9746d9301d826e4c.js"
     ],
     "/lessons/bivariate-tables-editable-2/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
+      "static/chunks/webpack-28b69f5048d73f90.js",
       "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
       "static/chunks/684-4c459c08e2287833.js",
       "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/bivariate-tables-editable-2/page-a012e02c1e5d74ed.js"
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/406-d72fab54753563bf.js",
+      "static/chunks/app/lessons/bivariate-tables-editable-2/page-dc14e5d9102b36ed.js"
     ],
-    "/lessons/univariate-tables/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
+    "/lessons/chi-square-editable/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
       "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
       "static/chunks/684-4c459c08e2287833.js",
       "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/univariate-tables/page-bd34924e80dc170f.js"
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/461-d2323bbc9161602d.js",
+      "static/chunks/766-4ff95e13dea02163.js",
+      "static/chunks/app/lessons/chi-square-editable/page-ab07dc54ee7a11f2.js"
+    ],
+    "/lessons/bivariate-tables-editable/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/406-d72fab54753563bf.js",
+      "static/chunks/app/lessons/bivariate-tables-editable/page-7972ad1c42b9e69b.js"
+    ],
+    "/lessons/bivariate-tables/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/406-d72fab54753563bf.js",
+      "static/chunks/app/lessons/bivariate-tables/page-c8ac81c3087a7254.js"
+    ],
+    "/lessons/chi-square/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/461-d2323bbc9161602d.js",
+      "static/chunks/766-4ff95e13dea02163.js",
+      "static/chunks/app/lessons/chi-square/page-e164b69dd9e90b2b.js"
+    ],
+    "/lessons/correlation-editable/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/314-6d7ef736e15f482a.js",
+      "static/chunks/app/lessons/correlation-editable/page-8a218a98d03abf88.js"
+    ],
+    "/lessons/correlation/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/314-6d7ef736e15f482a.js",
+      "static/chunks/app/lessons/correlation/page-1b95dff8f8b74d9d.js"
+    ],
+    "/lessons/confidence-interval/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/461-d2323bbc9161602d.js",
+      "static/chunks/app/lessons/confidence-interval/page-f044b47e721415a6.js"
+    ],
+    "/lessons/descriptive-stats-editable/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/app/lessons/descriptive-stats-editable/page-26cef8e8a01e8bda.js"
+    ],
+    "/lessons/descriptive-stats/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/app/lessons/descriptive-stats/page-0316333aad0a08bf.js"
+    ],
+    "/lessons/mean-deviation-editable/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/app/lessons/mean-deviation-editable/page-b8b969212f95fead.js"
+    ],
+    "/lessons/introduction/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/app/lessons/introduction/page-ac49a88880933779.js"
+    ],
+    "/lessons/mean-deviation/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/app/lessons/mean-deviation/page-1644bde7ffcfa74f.js"
     ],
     "/lessons/regression-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
+      "static/chunks/webpack-28b69f5048d73f90.js",
       "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
       "static/chunks/684-4c459c08e2287833.js",
       "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/regression-editable/page-31cf8eeec53bfe35.js"
-    ],
-    "/lessons/regression/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/regression/page-c21c364b632c769f.js"
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/314-6d7ef736e15f482a.js",
+      "static/chunks/app/lessons/regression-editable/page-7af0488773f115fd.js"
     ],
     "/lessons/regression-interactive/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
+      "static/chunks/webpack-28b69f5048d73f90.js",
       "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
       "static/chunks/684-4c459c08e2287833.js",
       "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/app/lessons/regression-interactive/page-0445fe7b822bb618.js"
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/314-6d7ef736e15f482a.js",
+      "static/chunks/app/lessons/regression-interactive/page-29b64a0ff9b9f782.js"
+    ],
+    "/lessons/regression/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/314-6d7ef736e15f482a.js",
+      "static/chunks/app/lessons/regression/page-f3cf1e36eaa60df7.js"
+    ],
+    "/lessons/randomization-inference/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/app/lessons/randomization-inference/page-66d48269d08c9847.js"
+    ],
+    "/lessons/sampling/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/app/lessons/sampling/page-812389ad98bc8ada.js"
+    ],
+    "/lessons/t-test-editable-2/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/461-d2323bbc9161602d.js",
+      "static/chunks/427-a572972dea95e0bd.js",
+      "static/chunks/app/lessons/t-test-editable-2/page-a0b2d6fac5d8afc9.js"
+    ],
+    "/lessons/univariate-tables-editable/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/406-d72fab54753563bf.js",
+      "static/chunks/app/lessons/univariate-tables-editable/page-c06ee5e0bb74a951.js"
+    ],
+    "/lessons/t-test-editable/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/461-d2323bbc9161602d.js",
+      "static/chunks/427-a572972dea95e0bd.js",
+      "static/chunks/app/lessons/t-test-editable/page-3954b26bfab434a7.js"
+    ],
+    "/lessons/t-test/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/39-010b0abbae69e5f0.js",
+      "static/chunks/461-d2323bbc9161602d.js",
+      "static/chunks/427-a572972dea95e0bd.js",
+      "static/chunks/app/lessons/t-test/page-af8ad5d713ba166e.js"
+    ],
+    "/lessons/univariate-tables/page": [
+      "static/chunks/webpack-28b69f5048d73f90.js",
+      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
+      "static/chunks/684-4c459c08e2287833.js",
+      "static/chunks/main-app-799a831d72e17f7d.js",
+      "static/chunks/25-baea5ce7bebaeea1.js",
+      "static/chunks/406-d72fab54753563bf.js",
+      "static/chunks/app/lessons/univariate-tables/page-685cd4fb3466c464.js"
     ],
     "/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
+      "static/chunks/webpack-28b69f5048d73f90.js",
       "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
       "static/chunks/684-4c459c08e2287833.js",
       "static/chunks/main-app-799a831d72e17f7d.js",
       "static/chunks/874-1898ca31fe9a7d9f.js",
       "static/chunks/app/page-faf1ad0ec87549ca.js"
-    ],
-    "/lessons/t-test-editable-2/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/app/lessons/t-test-editable-2/page-48f5163dfa51dc66.js"
-    ],
-    "/lessons/t-test-editable/page": [
-      "static/chunks/webpack-266e0526811a1cf3.js",
-      "static/chunks/4bd1b696-af13aabefaaf4fb8.js",
-      "static/chunks/684-4c459c08e2287833.js",
-      "static/chunks/main-app-799a831d72e17f7d.js",
-      "static/chunks/464-952b76575ce6fafd.js",
-      "static/chunks/461-d2323bbc9161602d.js",
-      "static/chunks/app/lessons/t-test-editable/page-4df7478bc0c23c78.js"
     ]
   }
 }

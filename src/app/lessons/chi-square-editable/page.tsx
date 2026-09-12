@@ -1,403 +1,142 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import Question from '@/app/components/Question';
-import jStat from 'jstat';
-import LessonHeader from '@/app/components/LessonHeader';
-import LessonNavigation from '@/app/components/LessonNavigation';
+import { useState } from 'react'
+import jStat from 'jstat'
+import LessonNavigation from '@/app/components/LessonNavigation'
+import ChiSquareTable, {
+  calculateChiSquare,
+  type ChiCell,
+} from '@/app/components/chi-square/ChiSquareTable'
+import {
+  DataAttribution,
+  LessonStory,
+  StoryBeat,
+  StoryConclusion,
+  TransferTask,
+} from '@/app/components/narrative/LessonStory'
 
-export default function ChiSquareEditablePage() {
-  const initialData = [
-    [52, 183, 226, 80],  // Hombres
-    [114, 280, 194, 58], // Mujeres
-  ];
+const INITIAL: ChiCell[] = [
+  { row: 'Muy de acuerdo', col: 'Hombre', value: 41 },
+  { row: 'Muy de acuerdo', col: 'Mujer', value: 99 },
+  { row: 'De acuerdo', col: 'Hombre', value: 167 },
+  { row: 'De acuerdo', col: 'Mujer', value: 259 },
+  { row: 'En desacuerdo', col: 'Hombre', value: 291 },
+  { row: 'En desacuerdo', col: 'Mujer', value: 238 },
+  { row: 'Muy en desacuerdo', col: 'Hombre', value: 44 },
+  { row: 'Muy en desacuerdo', col: 'Mujer', value: 37 },
+  { row: 'No sabe / no contesta', col: 'Hombre', value: 13 },
+  { row: 'No sabe / no contesta', col: 'Mujer', value: 11 },
+]
 
-  const [observedData, setObservedData] = useState(initialData);
-  const [showExplanation, setShowExplanation] = useState(false);
-  const [dataVersion, setDataVersion] = useState(0);
+const rows = Array.from(new Set(INITIAL.map((cell) => cell.row)))
+const NO_ASSOCIATION = INITIAL.map((cell) => ({
+  ...cell,
+  value: [20, 60, 80, 15, 5][rows.indexOf(cell.row)],
+}))
+const STRONG_ASSOCIATION = INITIAL.map((cell) => ({
+  ...cell,
+  value: (cell.col === 'Hombre' ? [5, 20, 100, 30, 5] : [35, 80, 20, 5, 5])[rows.indexOf(cell.row)],
+}))
+const buttonClass = 'rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-bold text-[var(--text)]'
+const chiSquareDistribution = (jStat as unknown as {
+  chisquare: { cdf: (value: number, degreesOfFreedom: number) => number }
+}).chisquare
 
-  const rowLabels = ['Hombres', 'Mujeres'];
-  const colLabels = ['Muy fuerte', 'Fuerte', 'Débil', 'No existe'];
+export default function ChiSquareLabPage() {
+  const [data, setData] = useState(INITIAL)
+  const [mode, setMode] = useState<'observed' | 'expected' | 'residual' | 'contribution'>('observed')
+  const result = calculateChiSquare(data)
+  const pValue = result.degreesOfFreedom > 0
+    ? 1 - chiSquareDistribution.cdf(result.chiSquare, result.degreesOfFreedom)
+    : 1
 
-  const rowTotals = observedData.map(row => 
-    row.reduce((acc, val) => acc + val, 0)
-  );
-
-  const colTotals = observedData[0].map((_, colIndex) =>
-    observedData.reduce((acc, row) => acc + row[colIndex], 0)
-  );
-
-  const grandTotal = rowTotals.reduce((acc, val) => acc + val, 0);
-
-  const expectedData = observedData.map((row, i) =>
-    row.map((_, j) => (rowTotals[i] * colTotals[j]) / grandTotal)
-  );
-
-  const chiSquare = observedData.reduce((acc, row, i) =>
-    acc + row.reduce((rowAcc, observed, j) => {
-      const expected = expectedData[i][j];
-      return rowAcc + Math.pow(observed - expected, 2) / expected;
-    }, 0),
-    0
-  );
-
-  const degreesOfFreedom = (observedData.length - 1) * (observedData[0].length - 1);
-  const pValue = 1 - (jStat as any).chisquare.cdf(chiSquare, degreesOfFreedom);
-
-  const handleValueChange = (rowIndex: number, colIndex: number, value: string) => {
-    const newValue = parseInt(value) || 0;
-    const newData = observedData.map((row, i) =>
-      i === rowIndex
-        ? row.map((cell, j) => (j === colIndex ? newValue : cell))
-        : [...row]
-    );
-    setObservedData(newData);
-    setDataVersion(prev => prev + 1);
-  };
-
-  const resetData = () => {
-    setObservedData(initialData);
-    setDataVersion(prev => prev + 1);
-  };
-
-  // Función para calcular el desvío relativo
-  const getRelativeDeviation = (observed: number, expected: number) => {
-    return (observed - expected) / expected;
-  };
-
-  // Función para obtener el color de fondo basado en el desvío
-  const getBackgroundColor = (deviation: number) => {
-    // Normalizar el desvío para que valores extremos no generen colores muy saturados
-    // Usando ±0.5 (50% de diferencia) como valores extremos
-    const normalizedDev = Math.min(Math.max(deviation, -0.5), 0.5) / 0.5;
-    
-    if (normalizedDev < 0) {
-      // Rojo para valores menores que lo esperado
-      return `rgba(255, 0, 0, ${Math.abs(normalizedDev) * 0.3})`;
-    } else if (normalizedDev > 0) {
-      // Azul para valores mayores que lo esperado
-      return `rgba(0, 0, 255, ${normalizedDev * 0.3})`;
-    }
-    return 'white'; // Para valores cercanos a lo esperado
-  };
+  const update = (row: string, col: string, value: number) => {
+    setData((current) => current.map((cell) => cell.row === row && cell.col === col ? { ...cell, value } : cell))
+  }
 
   return (
-    <div className="py-8">
-      <LessonNavigation
-        currentStep={2}
-        totalSteps={2}
-        previousUrl="/lessons/chi-square"
-        showNext={false}
-      />
-      <article className="max-w-4xl mx-auto p-4">
-        <LessonHeader title="Chi cuadrado de independencia - Versión Editable" />
-        
-        <section className="mb-8">
-          <p className="mb-4">
-            En esta versión puedes modificar los valores de la tabla original y ver cómo los cambios 
-            afectan al estadístico Chi cuadrado y su significancia estadística.
-          </p>
-          <button
-            onClick={resetData}
-            className="bg-gray-500 text-white px-4 py-2 rounded mr-4"
-          >
-            Resetear Datos
-          </button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            onClick={() => setShowExplanation(!showExplanation)}
-          >
-            {showExplanation ? "Ocultar detalles" : "Mostrar más detalles"}
-          </motion.button>
-
-          {showExplanation && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-4"
-            >
-              <p className="mb-2">
-                Prueba diferentes escenarios modificando los valores en la tabla. Por ejemplo:
-              </p>
-              <ul className="list-disc ml-6 mb-4">
-                <li>¿Qué sucede si las proporciones son iguales entre hombres y mujeres?</li>
-                <li>¿Qué pasa si aumentas las diferencias entre los grupos?</li>
-                <li>¿Cómo afecta el tamaño total de la muestra al valor p?</li>
-              </ul>
-            </motion.div>
-          )}
-        </section>
-
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Datos Observados</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300 mb-4">
-              <thead>
-                <tr>
-                  <th className="border p-2">Género</th>
-                  {colLabels.map((label, i) => (
-                    <th key={i} className="border p-2">{label}</th>
-                  ))}
-                  <th className="border p-2">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {observedData.map((row, i) => (
-                  <tr key={i}>
-                    <td className="border p-2 font-semibold">{rowLabels[i]}</td>
-                    {row.map((val, j) => {
-                      const deviation = getRelativeDeviation(val, expectedData[i][j]);
-                      return (
-                        <td key={j} className="border p-2" style={{ backgroundColor: getBackgroundColor(deviation) }}>
-                          <input
-                            type="number"
-                            min="0"
-                            value={val}
-                            onChange={(e) => handleValueChange(i, j, e.target.value)}
-                            className="w-20 p-1 border rounded text-center bg-transparent"
-                          />
-                        </td>
-                      );
-                    })}
-                    <td className="border p-2 font-semibold">{rowTotals[i]}</td>
-                  </tr>
-                ))}
-                <tr>
-                  <td className="border p-2 font-semibold">Total</td>
-                  {colTotals.map((total, i) => (
-                    <td key={i} className="border p-2 font-semibold">{total}</td>
-                  ))}
-                  <td className="border p-2 font-semibold">{grandTotal}</td>
-                </tr>
-              </tbody>
-            </table>
+    <LessonStory
+      eyebrow="Laboratorio · chi cuadrado"
+      title="¿Qué hace crecer la evidencia contra la independencia?"
+      lead="Editá las celdas, reconstruí el mundo esperado y observá cómo responden χ² y el valor p."
+    >
+      <StoryBeat
+        layout="stacked"
+        number="01"
+        label="Laboratorio"
+        title="Cambian los conteos; cambia la distancia a lo esperado"
+        visual={
+          <div className="space-y-6">
+            <div className="flex flex-wrap gap-2">
+              <button type="button" className={buttonClass} onClick={() => { setData(INITIAL); setMode('observed') }}>Latinobarómetro</button>
+              <button type="button" className={buttonClass} onClick={() => setData(NO_ASSOCIATION)}>Mismo patrón</button>
+              <button type="button" className={buttonClass} onClick={() => setData(STRONG_ASSOCIATION)}>Contraste fuerte</button>
+              <button type="button" className={buttonClass} onClick={() => setData((current) => current.map((cell) => ({ ...cell, value: cell.value * 3 })))}>Triplicar N</button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-xl bg-[var(--surface-muted)] p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.13em] text-[var(--text-muted)]">N</p>
+                <p className="mt-1 font-mono text-3xl font-bold text-[var(--accent)]">{result.total}</p>
+              </div>
+              <div className="rounded-xl bg-[var(--surface-muted)] p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.13em] text-[var(--text-muted)]">χ²</p>
+                <p className="mt-1 font-mono text-3xl font-bold text-[var(--accent)]">{result.chiSquare.toFixed(2)}</p>
+              </div>
+              <div className={`rounded-xl p-4 ${pValue < 0.05 ? 'bg-[var(--success-soft)]' : 'bg-[var(--danger-soft)]'}`}>
+                <p className="text-xs font-bold uppercase tracking-[0.13em] text-[var(--text-muted)]">Valor p</p>
+                <p className="mt-1 font-mono text-3xl font-bold text-[var(--text)]">{pValue < 0.000001 ? '< 0,000001' : pValue.toFixed(4)}</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {([
+                ['observed', 'Editar observado'],
+                ['expected', 'Ver esperado'],
+                ['residual', 'Ver residuos'],
+                ['contribution', 'Ver aportes'],
+              ] as const).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={mode === value}
+                  onClick={() => setMode(value)}
+                  className={`${buttonClass} ${mode === value ? '!border-[var(--accent)] !bg-[var(--accent)] !text-white' : ''}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <ChiSquareTable data={data} mode={mode} editable onChange={update} />
           </div>
+        }
+      >
+        <p>“Mismo patrón” da a hombres y mujeres la misma distribución de respuestas: observado y esperado coinciden, y χ² cae a cero.</p>
+        <p>“Contraste fuerte” separa las distribuciones. Podés volver a “Editar observado” y localizar qué celdas empujan el resultado.</p>
+      </StoryBeat>
 
-          <h2 className="text-2xl font-semibold mb-4">Frecuencias Esperadas</h2>
-          <div className="mb-2 text-sm text-gray-600">
-            <p>Los colores indican la diferencia entre lo observado y lo esperado:</p>
-            <ul className="list-disc list-inside">
-              <li><span className="text-red-500">Rojo</span>: menos casos que lo esperado</li>
-              <li><span className="text-blue-500">Azul</span>: más casos que lo esperado</li>
-              <li>Blanco: similar a lo esperado</li>
-            </ul>
+      <StoryBeat
+        number="02"
+        label="La cantidad de casos"
+        title="Las mismas proporciones pueden producir evidencia distinta"
+        visual={
+          <div className="space-y-4">
+            <div className="h-4 overflow-hidden rounded-full bg-[var(--surface-muted)]">
+              <div className="h-full rounded-full bg-[var(--accent)]" style={{ width: `${Math.min(100, result.chiSquare)}%` }} />
+            </div>
+            <p className="font-mono text-2xl font-bold text-[var(--accent)]">χ² = {result.chiSquare.toFixed(2)}</p>
+            <p className="text-sm leading-relaxed text-[var(--text-muted)]">Triplicar todas las celdas conserva exactamente los porcentajes, pero triplica χ². Con más casos, una misma discrepancia proporcional es menos compatible con fluctuación muestral.</p>
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300 mb-4">
-              <thead>
-                <tr>
-                  <th className="border p-2">Género</th>
-                  {colLabels.map((label, i) => (
-                    <th key={i} className="border p-2">{label}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {expectedData.map((row, i) => (
-                  <tr key={i}>
-                    <td className="border p-2 font-semibold">{rowLabels[i]}</td>
-                    {row.map((val, j) => {
-                      const deviation = getRelativeDeviation(observedData[i][j], val);
-                      return (
-                        <td 
-                          key={j} 
-                          className="border p-2 text-center"
-                          style={{ backgroundColor: getBackgroundColor(deviation) }}
-                        >
-                          {val.toFixed(2)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        }
+      >
+        <p>Probá “Mismo patrón”, luego “Contraste fuerte” y finalmente “Triplicar N”. El valor p responde tanto al tamaño de la diferencia como a la cantidad de información.</p>
+        <p>Por eso un valor p pequeño no es una medida de importancia. Para interpretar el fenómeno hay que mirar porcentajes, residuos y tamaño del efecto.</p>
+      </StoryBeat>
 
-          <div className="bg-blue-50 p-4 rounded-lg mb-6">
-            <h3 className="text-xl font-semibold mb-2">Resultados:</h3>
-            <p>Estadístico χ² = {chiSquare.toFixed(2)}</p>
-            <p>Grados de libertad = {degreesOfFreedom}</p>
-            <p>Valor p = {pValue.toFixed(4)}</p>
-            <p className="mt-2 font-semibold">
-              {pValue < 0.05 
-                ? "Existe evidencia estadística de una asociación entre el género y la percepción del conflicto."
-                : "No hay evidencia suficiente para concluir que existe una asociación."}
-            </p>
-          </div>
-
-          {/* Preguntas dinámicas basadas en los datos actuales */}
-          <div className="space-y-8">
-            <Question
-              key={`q1-${dataVersion}`}
-              type="multiple-choice"
-              question="¿Qué sucede con el valor p cuando aumentas las diferencias entre los grupos?"
-              options={[
-                { text: "Aumenta, indicando menor evidencia de asociación", value: false },
-                { text: "Disminuye, indicando mayor evidencia de asociación", value: true },
-                { text: "No cambia, es independiente de las diferencias", value: false },
-                { text: "Siempre se mantiene en 0.05", value: false }
-              ]}
-              correctAnswer={1}
-              explanation="Cuando las diferencias entre los grupos son mayores (es decir, cuando los datos observados se alejan más de los esperados bajo independencia), el estadístico Chi cuadrado aumenta y el valor p disminuye, indicando mayor evidencia de una asociación entre las variables."
-            />
-
-            {/* Pregunta sobre la celda con mayor desvío */}
-            {(() => {
-              // Encontrar la celda con mayor desvío absoluto
-              let maxDeviation = 0;
-              let maxDevRow = 0;
-              let maxDevCol = 0;
-              observedData.forEach((row, i) => {
-                row.forEach((val, j) => {
-                  const deviation = Math.abs(getRelativeDeviation(val, expectedData[i][j]));
-                  if (deviation > maxDeviation) {
-                    maxDeviation = deviation;
-                    maxDevRow = i;
-                    maxDevCol = j;
-                  }
-                });
-              });
-
-              const observed = observedData[maxDevRow][maxDevCol];
-              const expected = expectedData[maxDevRow][maxDevCol];
-              const isMore = observed > expected;
-
-              return (
-                <Question
-                  key={`q2-${dataVersion}`}
-                  type="multiple-choice"
-                  question={`La diferencia más notable está en la celda "${rowLabels[maxDevRow]} - ${colLabels[maxDevCol]}", donde hay ${observed} casos observados y ${expected.toFixed(1)} esperados. ¿Qué significa esto?`}
-                  options={[
-                    { 
-                      text: `Hay ${isMore ? "más" : "menos"} ${rowLabels[maxDevRow].toLowerCase()} que perciben el conflicto como "${colLabels[maxDevCol].toLowerCase()}" de lo que esperaríamos si no hubiera relación con el género`,
-                      value: true 
-                    },
-                    { 
-                      text: "Es solo una variación aleatoria sin importancia",
-                      value: false 
-                    },
-                    { 
-                      text: "Indica un error en la recolección de datos",
-                      value: false 
-                    },
-                    { 
-                      text: "No se puede interpretar sin más información",
-                      value: false 
-                    }
-                  ]}
-                  correctAnswer={0}
-                  explanation={`La diferencia del ${(Math.abs(maxDeviation) * 100).toFixed(1)}% entre lo observado y lo esperado en esta celda sugiere un patrón sistemático en cómo ${rowLabels[maxDevRow].toLowerCase()} y ${rowLabels[1-maxDevRow].toLowerCase()} perciben diferentemente el conflicto.`}
-                />
-              );
-            })()}
-
-            {/* Pregunta sobre el nivel de significancia */}
-            <Question
-              key={`q3-${dataVersion}`}
-              type="multiple-choice"
-              question={`Con un valor p de ${pValue.toFixed(4)}, ¿cuál es el nivel de significancia más estricto al que podemos rechazar la hipótesis nula?`}
-              options={[
-                { text: "0.001 (0.1%)", value: pValue < 0.001 },
-                { text: "0.01 (1%)", value: pValue < 0.01 && pValue >= 0.001 },
-                { text: "0.05 (5%)", value: pValue < 0.05 && pValue >= 0.01 },
-                { text: "No se puede rechazar a ningún nivel convencional", value: pValue >= 0.05 }
-              ]}
-              correctAnswer={(() => {
-                if (pValue < 0.001) return 0;
-                if (pValue < 0.01) return 1;
-                if (pValue < 0.05) return 2;
-                return 3;
-              })()}
-              explanation={`Con un valor p de ${pValue.toFixed(4)}, ${
-                pValue < 0.05 
-                  ? `podemos rechazar la hipótesis nula de independencia al nivel ${
-                      pValue < 0.001 ? "0.1%" 
-                      : pValue < 0.01 ? "1%" 
-                      : "5%"
-                    }, indicando una fuerte evidencia estadística de asociación entre género y percepción del conflicto.`
-                  : "no tenemos evidencia suficiente para rechazar la hipótesis nula de independencia a ningún nivel convencional."
-              }`}
-            />
-
-            {/* Pregunta sobre el patrón general */}
-            {(() => {
-              // Calcular las proporciones por género y categoría
-              const proportions = rowLabels.map((_, rowIndex) => {
-                const total = rowTotals[rowIndex];
-                return colLabels.map((_, colIndex) => 
-                  (observedData[rowIndex][colIndex] / total) * 100
-                );
-              });
-
-              // Encontrar las diferencias más notables
-              const differences = colLabels.map((_, colIndex) => ({
-                category: colLabels[colIndex],
-                diff: proportions[0][colIndex] - proportions[1][colIndex],
-                prop1: proportions[0][colIndex],
-                prop2: proportions[1][colIndex]
-              }));
-
-              // Ordenar las diferencias por magnitud absoluta
-              differences.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
-
-              // Construir la descripción del patrón
-              const mainDiff = differences[0];
-              const secondDiff = differences[1];
-              
-              const patternDescription = pValue < 0.05
-                ? `Los ${rowLabels[0].toLowerCase()} tienen un ${mainDiff.prop1.toFixed(1)}% de respuestas "${mainDiff.category.toLowerCase()}" versus ${mainDiff.prop2.toFixed(1)}% en ${rowLabels[1].toLowerCase()}, y un ${proportions[0][colLabels.indexOf(secondDiff.category)].toFixed(1)}% versus ${proportions[1][colLabels.indexOf(secondDiff.category)].toFixed(1)}% en "${secondDiff.category.toLowerCase()}"`
-                : "Las diferencias observadas no son estadísticamente significativas";
-
-              return (
-                <Question
-                  key={`q4-${dataVersion}`}
-                  type="multiple-choice"
-                  question={`Con los datos actuales (p = ${pValue.toFixed(4)}), ¿cuál es la interpretación correcta del patrón de respuestas?`}
-                  options={[
-                    { 
-                      text: pValue < 0.05
-                        ? `Hay una asociación significativa: ${patternDescription}`
-                        : "No hay evidencia suficiente para concluir que existe una asociación entre género y percepción del conflicto",
-                      value: true 
-                    },
-                    { 
-                      text: pValue < 0.05
-                        ? "Las diferencias observadas son probablemente producto del azar"
-                        : "Hay diferencias importantes pero necesitamos más datos",
-                      value: false 
-                    },
-                    { 
-                      text: pValue < 0.05
-                        ? "Las diferencias son significativas pero no interpretables"
-                        : "La falta de significancia se debe al tamaño de la muestra",
-                      value: false 
-                    },
-                    { 
-                      text: "La distribución es uniforme entre géneros",
-                      value: false 
-                    }
-                  ]}
-                  correctAnswer={0}
-                  explanation={pValue < 0.05
-                    ? `Con un valor p de ${pValue.toFixed(4)}, hay evidencia estadística de una asociación. La diferencia más notable está en la categoría "${mainDiff.category.toLowerCase()}" (${Math.abs(mainDiff.diff).toFixed(1)} puntos porcentuales de diferencia), seguida por "${secondDiff.category.toLowerCase()}" (${Math.abs(secondDiff.diff).toFixed(1)} puntos porcentuales).`
-                    : `Con un valor p de ${pValue.toFixed(4)}, no podemos rechazar la hipótesis nula de independencia. Aunque hay algunas diferencias en las proporciones, no son lo suficientemente grandes para descartar que se deban al azar.`}
-                />
-              );
-            })()}
-          </div>
-        </div>
-      </article>
-      <LessonNavigation
-        currentStep={2}
-        totalSteps={2}
-        previousUrl="/lessons/chi-square"
-        showNext={false}
-      />
-    </div>
-  );
-} 
+      <section className="space-y-8 py-16 sm:py-24">
+        <StoryConclusion>Chi cuadrado aumenta cuando las celdas se alejan de la independencia y también cuando el mismo patrón se sostiene con más observaciones.</StoryConclusion>
+        <TransferTask question="Construí una tabla con una diferencia porcentual pequeña pero valor p muy bajo. ¿Qué tuviste que hacer con N?" />
+        <DataAttribution>Los valores iniciales reproducen Latinobarómetro 2023, Uruguay. Toda edición, preset o multiplicación crea un escenario hipotético y no nuevos datos de encuesta. <a className="font-bold text-[var(--accent)] underline" href="https://www.latinobarometro.org/agregados" target="_blank" rel="noreferrer">Fuente y política de uso</a>. El cálculo didáctico no incorpora ponderadores ni diseño muestral complejo.</DataAttribution>
+        <LessonNavigation currentStep={9} totalSteps={9} previousUrl="/lessons/chi-square" showNext={false} />
+      </section>
+    </LessonStory>
+  )
+}

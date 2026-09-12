@@ -6,7 +6,13 @@ import { LayoutGroup, motion } from 'framer-motion'
 import SmileyViridis from '@/app/components/SmileyViridis'
 import LessonNavigation from '@/app/components/LessonNavigation'
 import NarrativeSection from '@/app/components/narrative/NarrativeSection'
-import Question from '@/app/components/Question'
+import {
+  DataAttribution,
+  LessonStory,
+  PredictionPrompt,
+  StoryConclusion,
+  TransferTask,
+} from '@/app/components/narrative/LessonStory'
 
 const card =
   'rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_1px_4px_rgba(0,0,0,.05)]'
@@ -50,7 +56,7 @@ const N_A = 12
 const N_B = 12
 
 function happinessFromScore(score: number) {
-  return Math.max(0, Math.min(1, (score - 5) / 30))
+  return Math.max(0, Math.min(1, (score - 14) / 14))
 }
 
 function meanDiff(group: ('A' | 'B')[], scores: { id: number; score: number }[]) {
@@ -96,6 +102,7 @@ function drawDualHistogram(
       .select(el)
       .attr('width', width)
       .attr('height', height)
+      .attr('viewBox', `0 0 ${width} ${height}`)
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
 
@@ -166,6 +173,7 @@ function drawCombinedHistogram(
     .select(el)
     .attr('width', width)
     .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`)
     .append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`)
 
@@ -273,6 +281,7 @@ function drawNullDistribution(
     .select(el)
     .attr('width', width)
     .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`)
     .attr('role', 'img')
     .attr('aria-label', 'Distribución de la diferencia de medias bajo permutaciones aleatorias')
 
@@ -502,20 +511,13 @@ export default function RandomizationInferencePage() {
   const poolOrder = useMemo(() => [...SUBJECTS].sort((a, b) => a.id - b.id), [])
 
   return (
-    <article className="lesson-scroll">
-      <header className="narrative-beat pb-12 text-center">
-        <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-[var(--text-muted)]">
-          Inferencia · narrativa
-        </p>
-        <h1
-          className="text-balance text-3xl font-bold text-[var(--text)] sm:text-4xl"
-          style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}
-        >
-          Fundamentos de la inferencia: prueba de randomización
-        </h1>
-      </header>
+    <LessonStory
+      eyebrow="Lección 6 · inferencia por randomización"
+      title="¿La diferencia observada podría ser azar?"
+      lead="Partimos de dos grupos que parecen distintos. Después construimos, paso a paso, el mundo en que la etiqueta de grupo no importa."
+    >
 
-      <div className="mx-auto flex max-w-3xl flex-col gap-20 sm:gap-24">
+      <div className="mx-auto flex max-w-3xl flex-col gap-20 py-16 sm:gap-24 sm:py-24">
         <NarrativeSection id="smileys" className="narrative-beat">
           <p className="mb-4 text-sm font-semibold text-[var(--accent-strong)]">1 · Individuos</p>
           <h2 className="text-2xl font-semibold text-[var(--text)]" style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}>
@@ -523,7 +525,7 @@ export default function RandomizationInferencePage() {
           </h2>
           <p className="mt-4 text-pretty leading-relaxed text-[var(--foreground)]">
             Cada persona tiene una <strong>puntuación de satisfacción</strong> en la misma escala que ves en los
-            histogramas más abajo (aquí, valores típicos entre unos <strong>14 y 28</strong> puntos). El
+            histogramas más abajo. En esta simulación enfocamos el tramo de <strong>14 a 28 puntos</strong>. El
             componente traduce ese número en color (viridis) y en forma de boca.
           </p>
           <div className={`${card} not-prose mt-6`}>
@@ -531,7 +533,7 @@ export default function RandomizationInferencePage() {
               {[
                 {
                   score: 16,
-                  line: 'Puntuación baja en esta lección; suele verse más en el grupo A.',
+                  line: 'Puntuación baja en el tramo mostrado; gesto más triste.',
                 },
                 {
                   score: 21,
@@ -539,7 +541,7 @@ export default function RandomizationInferencePage() {
                 },
                 {
                   score: 26,
-                  line: 'Puntuación alta; más típica del grupo B.',
+                  line: 'Puntuación alta en el tramo mostrado; sonrisa marcada.',
                 },
               ].map(({ score, line }) => (
                 <div key={score} className="flex w-[10.5rem] flex-col items-center sm:w-[11.5rem]">
@@ -558,8 +560,7 @@ export default function RandomizationInferencePage() {
             </div>
             <p className="mt-5 border-t border-[var(--border)] pt-4 text-center text-xs leading-relaxed text-[var(--text-muted)]">
               <span className="font-mono text-[var(--text)]">SmileyViridis</span> usa por dentro{' '}
-              <span className="font-mono text-[var(--text)]">(puntuación − 5) / 30</span>; lo que importa para
-              leer el relato es la <strong>puntuación en 14–28</strong> (las medias del relato observado rondan{' '}
+              <span className="font-mono text-[var(--text)]">(puntuación − 14) / 14</span>; las medias de los grupos observados rondan{' '}
               <strong>{storyMeanA.toFixed(1)}</strong> y <strong>{storyMeanB.toFixed(1)}</strong>).
             </p>
           </div>
@@ -644,24 +645,13 @@ export default function RandomizationInferencePage() {
             centros distintos), o podría ser el sorteo de una misma “bolsa” de personas?
           </p>
           <div className="mt-8">
-            <Question
-              question="Solo con estas dos muestras, ¿qué afirmación es la más prudente?"
-              type="multiple-choice"
+            <PredictionPrompt
+              question="Solo con estas dos muestras, ¿qué afirmación sostendrías?"
               options={[
-                {
-                  text: 'Las medias difieren, así que con seguridad son dos poblaciones distintas.',
-                  value: false,
-                },
-                {
-                  text: 'No lo sabemos aún: la diferencia podría explicarse si ambas muestras salieron de la misma población.',
-                  value: true,
-                },
-                {
-                  text: 'Si las medias son distintas, la diferencia no puede deberse al azar.',
-                  value: false,
-                },
+                'Las medias difieren: seguro provienen de poblaciones distintas',
+                'Todavía no lo sé: una diferencia así podría aparecer por azar',
               ]}
-              explanation="La inferencia no “ve” la población completa. Necesitas un argumento que cuantifique qué tan sorprendente sería ver una diferencia así si en realidad no hubiera separación real entre grupos."
+              reveal="La diferencia observada es un hecho descriptivo. Para interpretarla necesitamos cuantificar qué tan frecuente sería bajo un mundo sin diferencia entre grupos."
             />
           </div>
         </NarrativeSection>
@@ -786,12 +776,13 @@ export default function RandomizationInferencePage() {
                       layout
                       layoutId={`sub-${s.id}`}
                       transition={layoutTransition}
-                      className="rounded-lg bg-[var(--surface)] p-1 shadow-sm"
+                      className="flex flex-col items-center rounded-lg bg-[var(--surface)] p-1 shadow-sm"
                       title={`id ${s.id}, puntuación ${s.score}`}
                     >
-                      <svg width={44} height={44} viewBox="0 0 36 36">
+                      <svg width={44} height={44} viewBox="0 0 36 36" aria-hidden>
                         <SmileyViridis cx={18} cy={18} radius={14} happiness={happinessFromScore(s.score)} />
                       </svg>
+                      <span className="font-mono text-[10px] font-bold text-[var(--text)]">{s.score}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -809,12 +800,13 @@ export default function RandomizationInferencePage() {
                       layout
                       layoutId={`sub-${s.id}`}
                       transition={layoutTransition}
-                      className="rounded-lg bg-[var(--surface)] p-1 shadow-sm"
+                      className="flex flex-col items-center rounded-lg bg-[var(--surface)] p-1 shadow-sm"
                       title={`id ${s.id}, puntuación ${s.score}`}
                     >
-                      <svg width={44} height={44} viewBox="0 0 36 36">
+                      <svg width={44} height={44} viewBox="0 0 36 36" aria-hidden>
                         <SmileyViridis cx={18} cy={18} radius={14} happiness={happinessFromScore(s.score)} />
                       </svg>
+                      <span className="font-mono text-[10px] font-bold text-[var(--text)]">{s.score}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -832,11 +824,12 @@ export default function RandomizationInferencePage() {
                       layout
                       layoutId={`sub-${s.id}`}
                       transition={layoutTransition}
-                      className="rounded-lg bg-[var(--surface-muted)] p-1"
+                      className="flex flex-col items-center rounded-lg bg-[var(--surface-muted)] p-1"
                     >
-                      <svg width={44} height={44} viewBox="0 0 36 36">
+                      <svg width={44} height={44} viewBox="0 0 36 36" aria-hidden>
                         <SmileyViridis cx={18} cy={18} radius={14} happiness={happinessFromScore(s.score)} />
                       </svg>
+                      <span className="font-mono text-[10px] font-bold text-[var(--text)]">{s.score}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -903,14 +896,27 @@ export default function RandomizationInferencePage() {
             </p>
           )}
         </NarrativeSection>
-      </div>
 
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={1}
-        previousUrl="/lessons/introduction"
-        nextUrl="/lessons/sampling"
-      />
-    </article>
+        <section className="space-y-8">
+          <StoryConclusion>
+            El valor p no mide cuán grande o importante es una diferencia. Mide qué tan incompatible resulta
+            el estadístico observado con las reasignaciones que permite H₀.
+          </StoryConclusion>
+          <TransferTask question="¿Qué tendrías que permutar en un estudio con medidas antes y después sobre las mismas personas?">
+            <p>Conservá la estructura del diseño: la randomización válida no puede romper dependencias que estaban presentes al obtener los datos.</p>
+          </TransferTask>
+          <DataAttribution>
+            Datos sintéticos construidos para esta simulación: 24 puntuaciones de satisfacción, 12 por grupo.
+            No corresponden a participantes reales. Cada permutación conserva puntuaciones y tamaños grupales.
+          </DataAttribution>
+          <LessonNavigation
+            currentStep={7}
+            totalSteps={9}
+            previousUrl="/lessons/confidence-interval"
+            nextUrl="/lessons/t-test"
+          />
+        </section>
+      </div>
+    </LessonStory>
   )
 }

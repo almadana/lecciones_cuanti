@@ -5,6 +5,14 @@ import * as d3 from 'd3'
 import SmileyViridis from '@/app/components/SmileyViridis'
 import jStat from 'jstat'
 import LessonNavigation from '@/app/components/LessonNavigation';
+import {
+  DataAttribution,
+  LessonStory,
+  PredictionPrompt,
+  StoryBeat,
+  StoryConclusion,
+  TransferTask,
+} from '@/app/components/narrative/LessonStory'
 
 interface DataPoint {
   value: number
@@ -21,10 +29,15 @@ interface SmileyPoint {
 
 interface SampleInterval {
   id: number
+  runId: number
+  sampleSize: number
+  confidenceLevel: number
   mean: number
   lower: number
   upper: number
   containsTrue: boolean
+  sampleStd: number
+  standardError: number
 }
 
 // Función para generar un valor de la distribución normal
@@ -40,8 +53,8 @@ export default function ConfidenceIntervalPage() {
   // Estados para la población
   const [populationData, setPopulationData] = useState<DataPoint[]>([])
   const [populationSmileys, setPopulationSmileys] = useState<SmileyPoint[]>([])
-  const [populationMean, setPopulationMean] = useState<number>(22.32)
-  const [populationStd, setPopulationStd] = useState<number>(5.78)
+  const [populationMean] = useState<number>(22.32)
+  const [populationStd] = useState<number>(5.78)
   const populationSize = 200 // Cambiado de 50 a 200
 
   // Estados para las muestras e intervalos
@@ -53,8 +66,11 @@ export default function ConfidenceIntervalPage() {
   const [isAnimating, setIsAnimating] = useState<boolean>(false)
   const [animationSpeed, setAnimationSpeed] = useState<number>(800)
   const [sampleCount, setSampleCount] = useState<number>(0)
-  const [coverage, setCoverage] = useState<number>(0)
-  const [showPopulationPanel, setShowPopulationPanel] = useState<boolean>(true) // Estado para controlar visibilidad del panel de población
+  const [runId, setRunId] = useState<number>(0)
+  const activeIntervals = sampleIntervals.filter((interval) => interval.runId === runId)
+  const coverage = activeIntervals.length > 0
+    ? activeIntervals.filter((interval) => interval.containsTrue).length / activeIntervals.length
+    : 0
 
   // Referencias para los gráficos
   const populationHistogramRef = useRef<SVGSVGElement>(null)
@@ -148,11 +164,11 @@ export default function ConfidenceIntervalPage() {
     const sampleMean = d3.mean(sampleValues) || 0
     const sampleStd = d3.deviation(sampleValues) || 0 // Desvío estándar muestral (con n-1 en denominador)
     const standardError = sampleStd / Math.sqrt(sampleSize)
-    const zValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, sampleSize - 1)
+    const criticalValue = jStat.studentt.inv(1 - (1 - confidenceLevel) / 2, sampleSize - 1)
     
     // Calcular intervalo de confianza
-    const lower = sampleMean - zValue * standardError
-    const upper = sampleMean + zValue * standardError
+    const lower = sampleMean - criticalValue * standardError
+    const upper = sampleMean + criticalValue * standardError
     const containsTrue = lower <= populationMean && upper >= populationMean
 
     // Actualizar el histograma de la muestra actual
@@ -171,22 +187,23 @@ export default function ConfidenceIntervalPage() {
     // Agregar el intervalo a la lista
     setSampleIntervals(prev => {
       const newIntervals = [...prev, { 
-        id: sampleCount, 
+        id: runId * 10000 + sampleCount,
+        runId,
+        sampleSize,
+        confidenceLevel,
         mean: sampleMean, 
         lower, 
         upper,
-        containsTrue 
+        containsTrue,
+        sampleStd,
+        standardError,
       }]
-      
-      // Actualizar la cobertura
-      const coverage = newIntervals.filter(interval => interval.containsTrue).length / newIntervals.length
-      setCoverage(coverage)
       
       return newIntervals
     })
 
     setSampleCount(prev => prev + 1)
-  }, [sampleCount, numSamples, sampleSize, populationSmileys, confidenceLevel, populationMean])
+  }, [sampleCount, numSamples, sampleSize, populationSmileys, confidenceLevel, populationMean, runId])
 
   // Efecto para manejar la animación del muestreo
   useEffect(() => {
@@ -219,6 +236,8 @@ export default function ConfidenceIntervalPage() {
     const svg = d3.select(ref.current)
       .attr('width', width)
       .attr('height', height)
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('role', 'img')
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
 
@@ -344,6 +363,9 @@ export default function ConfidenceIntervalPage() {
     const svg = d3.select(intervalsPlotRef.current)
       .attr('width', width)
       .attr('height', height)
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('role', 'img')
+      .attr('aria-label', 'Intervalos de confianza repetidos y media poblacional')
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
 
@@ -401,6 +423,11 @@ export default function ConfidenceIntervalPage() {
     lastIntervals.forEach((interval, i) => {
       // Ajustamos la posición vertical para dejar espacio para la línea azul
       const yPos = y(i + newIntervalPosition)
+      const belongsToCurrentRun = interval.runId === runId
+      const intervalColor = belongsToCurrentRun
+        ? (interval.containsTrue ? '#16A34A' : '#DC2626')
+        : '#77727f'
+      const intervalOpacity = belongsToCurrentRun ? 1 : 0.38
 
       // Línea del intervalo
       svg.append('line')
@@ -408,19 +435,21 @@ export default function ConfidenceIntervalPage() {
         .attr('x2', x(interval.upper))
         .attr('y1', yPos)
         .attr('y2', yPos)
-        .attr('stroke', interval.containsTrue ? '#16A34A' : '#DC2626')
+        .attr('stroke', intervalColor)
         .attr('stroke-width', 2)
+        .attr('opacity', intervalOpacity)
 
       // Punto de la media
       svg.append('circle')
         .attr('cx', x(interval.mean))
         .attr('cy', yPos)
         .attr('r', 3)
-        .attr('fill', interval.containsTrue ? '#16A34A' : '#DC2626')
+        .attr('fill', intervalColor)
+        .attr('opacity', intervalOpacity)
 
       // Si es el intervalo más reciente (i === 0), dibujamos la línea que conecta
       // con la media de la muestra actual
-      if (i === 0) {
+      if (i === 0 && belongsToCurrentRun) {
         // Línea vertical que conecta con la media de la muestra actual
         svg.append('line')
           .attr('x1', x(interval.mean))
@@ -442,12 +471,11 @@ export default function ConfidenceIntervalPage() {
       .style('font-size', '14px')
       .text(`Cobertura actual: ${(coverage * 100).toFixed(1)}% (Nivel de confianza: ${(confidenceLevel * 100).toFixed(0)}%)`)
 
-  }, [sampleIntervals, populationMean, coverage, confidenceLevel])
+  }, [sampleIntervals, populationMean, coverage, confidenceLevel, runId])
 
   // Efecto para actualizar los gráficos
   useEffect(() => {
-    // Solo actualizar gráfico de población si el panel está visible
-    if (showPopulationPanel && populationHistogramRef.current) {
+    if (populationHistogramRef.current) {
       updateHistogram(populationHistogramRef as React.RefObject<SVGSVGElement>, populationData, Math.ceil(populationSize * 0.4), false, [5, 35], 800, 200)
     }
     
@@ -456,13 +484,19 @@ export default function ConfidenceIntervalPage() {
       updateHistogram(currentSampleHistogramRef as React.RefObject<SVGSVGElement>, currentSampleData, Math.ceil(sampleSize * 0.4), true, [5, 35], 800, 200)
       updateIntervalsPlot()
     }
-  }, [updateHistogram, populationData, currentSampleData, updateIntervalsPlot, populationSize, sampleSize, showPopulationPanel])
+  }, [updateHistogram, populationData, currentSampleData, updateIntervalsPlot, populationSize, sampleSize])
+
+  const archiveCurrentRun = () => {
+    setIsAnimating(false)
+    setRunId((current) => current + 1)
+    setSampleCount(0)
+    setCurrentSampleData([])
+  }
 
   const startAnimation = () => {
-    setSampleIntervals([])
+    setRunId((current) => current + 1)
     setCurrentSampleData([])
     setSampleCount(0)
-    setCoverage(0)
     setIsAnimating(true)
   }
 
@@ -470,62 +504,49 @@ export default function ConfidenceIntervalPage() {
     setIsAnimating(false)
   }
 
+  const currentInterval = activeIntervals[activeIntervals.length - 1]
+
   return (
-    <div className="py-8">
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={1}
-        showPrevious={false}
-        showNext={false}
-      />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Intervalo de Confianza (1 de 1)
-          </h1>
-          <p className="mt-4 text-lg text-gray-500">
-            Observa cómo se construyen los intervalos de confianza y su cobertura.
-            La línea roja muestra la media poblacional.
-          </p>
-        </div>
+    <LessonStory
+      eyebrow="Lección 5.2 · intervalos de confianza"
+      title="¿Qué significa confiar un 95%?"
+      lead="Un intervalo aislado no trae una garantía propia. La confianza pertenece al procedimiento que usamos una y otra vez."
+    >
+      <StoryBeat
+        number="01"
+        label="Predicción"
+        title="El parámetro no se mueve; los intervalos sí"
+        visual={
+          <PredictionPrompt
+            question="Después de calcular un intervalo del 95%, ¿hay 95% de probabilidad de que μ esté adentro?"
+            options={['Sí, esa es la definición del 95%', 'No: μ es fijo; lo aleatorio es el intervalo']}
+            reveal="Una vez observada la muestra, el intervalo contiene o no contiene μ. El 95% describe qué proporción de intervalos construidos con este método acertaría al repetir el muestreo."
+          />
+        }
+      >
+        <p>En esta simulación conocemos la media poblacional, μ = {populationMean.toFixed(2)}, para poder comprobar qué ocurre.</p>
+        <p>En un estudio real no vemos μ. Solo vemos una muestra y el intervalo que construimos a partir de ella.</p>
+      </StoryBeat>
 
-        {/* Texto introductorio y instrucciones */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
-          <div className="prose text-gray-700 mb-6">
-            <p className="text-lg">
-              Los intervalos de confianza te permiten estimar parámetros poblacionales con un nivel 
-              de certeza específico. En esta lección verás cómo se construyen estos intervalos y 
-              cómo interpretar su cobertura real versus la teórica.
-            </p>
-          </div>
-          
-          <div className="bg-gris-claro p-4 rounded-lg">
-            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
-            <ul className="list-disc pl-5 space-y-2 text-sm">
-              <li>Observa la población original y su distribución</li>
-              <li>Cambia el tamaño de muestra para ver cómo afecta la precisión</li>
-              <li>Ajusta el nivel de confianza (68%, 90%, 95%, 99%)</li>
-              <li>Ejecuta la simulación para ver cómo se construyen los intervalos</li>
-              <li>Observa la cobertura real vs la teórica</li>
-              <li>Analiza qué intervalos contienen la media poblacional verdadera</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12">
+        <div className="mx-auto max-w-5xl py-16 sm:py-24">
           {/* Panel de control */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Controles de Simulación</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <section className="mb-8 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] sm:p-6">
+            <p className="text-xs font-bold uppercase tracking-[0.17em] text-[var(--accent)]">02 · Construí un intervalo</p>
+            <h2 className="mb-2 mt-2 text-2xl text-[var(--text)]">Primero, una muestra</h2>
+            <p className="mb-6 max-w-3xl text-sm text-[var(--text-muted)]">Elegí las condiciones y tomá una sola muestra. Después repetiremos el procedimiento sin cambiar las reglas.</p>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-[var(--text)]">
                   Tamaño de muestra
                 </label>
                 <select
                   value={sampleSize}
-                  onChange={(e) => setSampleSize(Number(e.target.value))}
+                  onChange={(e) => {
+                    archiveCurrentRun()
+                    setSampleSize(Number(e.target.value))
+                  }}
                   disabled={isAnimating}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--text)]"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
@@ -535,14 +556,14 @@ export default function ConfidenceIntervalPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-[var(--text)]">
                   Número de muestras
                 </label>
                 <select
                   value={numSamples}
                   onChange={(e) => setNumSamples(Number(e.target.value))}
                   disabled={isAnimating}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--text)]"
                 >
                   <option value={50}>50</option>
                   <option value={100}>100</option>
@@ -552,14 +573,17 @@ export default function ConfidenceIntervalPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-[var(--text)]">
                   Nivel de confianza
                 </label>
                 <select
                   value={confidenceLevel}
-                  onChange={(e) => setConfidenceLevel(Number(e.target.value))}
+                  onChange={(e) => {
+                    archiveCurrentRun()
+                    setConfidenceLevel(Number(e.target.value))
+                  }}
                   disabled={isAnimating}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--text)]"
                 >
                   <option value={0.68}>68%</option>
                   <option value={0.90}>90%</option>
@@ -568,13 +592,13 @@ export default function ConfidenceIntervalPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-[var(--text)]">
                   Velocidad de animación
                 </label>
                 <select
                   value={animationSpeed}
                   onChange={(e) => setAnimationSpeed(Number(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--text)]"
                 >
                   <option value={2000}>Muy lenta</option>
                   <option value={1200}>Lenta</option>
@@ -584,37 +608,40 @@ export default function ConfidenceIntervalPage() {
                 </select>
               </div>
             </div>
-            <div className="mt-4 flex space-x-4">
+            <div className="mt-5 flex flex-wrap gap-3">
               <button
-                onClick={isAnimating ? stopAnimation : startAnimation}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                type="button"
+                onClick={generateSample}
+                disabled={isAnimating || sampleCount >= numSamples}
+                className="rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {isAnimating ? 'Detener' : 'Comenzar Simulación'}
+                Tomar una muestra
+              </button>
+              <button
+                type="button"
+                onClick={isAnimating ? stopAnimation : startAnimation}
+                className="rounded-full border border-[var(--border-strong)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--accent-soft)]"
+              >
+                {isAnimating ? 'Detener repetición' : 'Repetir automáticamente'}
               </button>
             </div>
-          </div>
+          </section>
 
-          {/* Población - Solo mostrar si showPopulationPanel es true */}
-          {showPopulationPanel && (
-            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-900">Población (N={populationSize})</h3>
-                <button
-                  onClick={() => setShowPopulationPanel(!showPopulationPanel)}
-                  className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Ocultar Panel de Población
-                </button>
+          <details className="mb-8 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+              <summary className="cursor-pointer font-display font-semibold text-[var(--text)]">Ver población simulada (N={populationSize})</summary>
+              <p className="mt-3 text-sm text-[var(--text-muted)]">La línea roja marca μ. Las personas de la muestra más reciente aparecen resaltadas.</p>
+              <div className="mt-4 flex justify-center overflow-x-auto">
+                <svg ref={populationHistogramRef} className="h-auto min-w-[640px] max-w-full" aria-label="Histograma de la población simulada"></svg>
               </div>
-              <div className="mt-4 flex justify-center">
-                <svg ref={populationHistogramRef}></svg>
-              </div>
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4 flex justify-center overflow-x-auto">
                 <svg 
                   ref={populationSmileysRef}
                   width="600"
                   height={Math.ceil(populationSize / 20) * 30 + 30} // Ajustado para 20 columnas y 30px de altura
-                  className="border border-gray-200 rounded-lg"
+                  viewBox={`0 0 600 ${Math.ceil(populationSize / 20) * 30 + 30}`}
+                  className="h-auto min-w-[560px] max-w-full rounded-xl border border-[var(--border)]"
+                  role="img"
+                  aria-label="Personas de la población simulada"
                 >
                   {populationSmileys.map(smiley => (
                     <g key={smiley.id}>
@@ -637,94 +664,77 @@ export default function ConfidenceIntervalPage() {
                   ))}
                 </svg>
               </div>
-            </div>
-          )}
-
-          {/* Botón para mostrar panel de población cuando está oculto */}
-          {!showPopulationPanel && (
-            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-              <div className="flex justify-center">
-                <button
-                  onClick={() => setShowPopulationPanel(true)}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Mostrar Panel de Población
-                </button>
-              </div>
-            </div>
-          )}
+          </details>
 
           {/* Muestra Actual - Siempre mostrar */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Muestra Actual (n={sampleSize}, muestra #{sampleCount} de {numSamples})
+          <section className="mb-8 rounded-[var(--radius-card)] border border-[var(--border-strong)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] sm:p-6">
+            <p className="text-xs font-bold uppercase tracking-[0.17em] text-[var(--accent)]">Muestra actual</p>
+            <h3 className="mb-4 mt-1 text-xl text-[var(--text)]">
+              Muestra #{sampleCount} (n={sampleSize})
             </h3>
-            <div className="mt-4 flex justify-center">
-              <svg ref={currentSampleHistogramRef}></svg>
+            {currentInterval ? (
+              <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-live="polite">
+                {[
+                  ['Media', `x̄ = ${currentInterval.mean.toFixed(2)}`],
+                  ['Desvío muestral', `s = ${currentInterval.sampleStd.toFixed(2)}`],
+                  ['Error estándar', `EE = ${currentInterval.standardError.toFixed(2)}`],
+                  [`IC ${(confidenceLevel * 100).toFixed(0)}%`, `[${currentInterval.lower.toFixed(2)}, ${currentInterval.upper.toFixed(2)}]`],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-xl bg-[var(--surface-muted)] p-4">
+                    <p className="text-xs font-bold uppercase tracking-wide text-[var(--text-muted)]">{label}</p>
+                    <p className="mt-1 font-mono text-lg font-bold text-[var(--text)]">{value}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mb-5 rounded-xl border border-dashed border-[var(--border-strong)] p-5 text-sm text-[var(--text-muted)]">
+                Tomá una muestra para construir el primer intervalo.
+              </p>
+            )}
+            <div className="mt-4 flex justify-center overflow-x-auto">
+              <svg ref={currentSampleHistogramRef} className="h-auto min-w-[640px] max-w-full" aria-label="Histograma de la muestra actual y su intervalo"></svg>
             </div>
-          </div>
+          </section>
 
           {/* Intervalos de Confianza - Siempre mostrar */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Intervalos de Confianza ({sampleIntervals.length} muestras)
+          <section className="mb-8 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] sm:p-6">
+            <p className="text-xs font-bold uppercase tracking-[0.17em] text-[var(--accent)]">03 · Repetición</p>
+            <h3 className="mb-2 mt-1 text-xl text-[var(--text)]">
+              Muchos intervalos ({sampleIntervals.length} muestras)
             </h3>
-            <div className="mt-4 flex justify-center">
-              <svg ref={intervalsPlotRef}></svg>
+            <p className="max-w-3xl text-sm text-[var(--text-muted)]">
+              En la corrida actual, verde significa que el intervalo contiene μ y rojo, que no. Los intervalos
+              grises pertenecen a configuraciones anteriores. Cobertura actual:{' '}
+              <strong className="text-[var(--text)]">
+                {activeIntervals.length > 0 ? `${(coverage * 100).toFixed(1)}%` : '—'}
+              </strong>.
+            </p>
+            <div className="mt-4 flex justify-center overflow-x-auto">
+              <svg ref={intervalsPlotRef} className="h-auto min-w-[640px] max-w-full"></svg>
             </div>
-          </div>
+          </section>
 
-          {/* Explicación */}
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Explicación</h3>
-            <div className="prose max-w-none">
-              <h4 className="text-base font-medium text-gray-900">Intervalos de Confianza</h4>
-              <p className="text-gray-600 mb-4">
-                Los intervalos de confianza son rangos que tienen una probabilidad específica de contener
-                el verdadero parámetro poblacional. En esta simulación:
-              </p>
-              <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                <li>Las caritas resaltadas en rojo son los elementos seleccionados en la muestra actual</li>
-                <li>La línea azul en el histograma de la muestra muestra la media muestral</li>
-                <li>El área sombreada azul muestra el intervalo de confianza actual</li>
-                <li>En el gráfico de intervalos:
-                  <ul className="list-disc pl-5 mt-2">
-                    <li>Los intervalos verdes contienen la media poblacional</li>
-                    <li>Los intervalos rojos no contienen la media poblacional</li>
-                    <li>La cobertura muestra el porcentaje de intervalos que contienen la media</li>
-                  </ul>
-                </li>
-              </ul>
-
-              <h4 className="text-base font-medium text-gray-900 mt-4">Interpretación</h4>
-              <p className="text-gray-600 mb-4">
-                El nivel de confianza (por ejemplo, 95%) indica:
-              </p>
-              <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                <li>Si repitiéramos el muestreo muchas veces, aproximadamente el 95% de los intervalos contendrían la media poblacional</li>
-                <li>La cobertura empírica debería acercarse al nivel de confianza a medida que aumenta el número de muestras</li>
-                <li>Intervalos más anchos (mayor nivel de confianza) tienen más probabilidad de contener la media poblacional</li>
-                <li><strong>68%:</strong> Intervalos más estrechos, menor confianza pero mayor precisión</li>
-                <li><strong>95%:</strong> Nivel estándar, balance entre confianza y precisión</li>
-                <li><strong>99%:</strong> Intervalos más anchos, mayor confianza pero menor precisión</li>
-              </ul>
-
-              <h4 className="text-base font-medium text-gray-900 mt-4">Factores que Afectan la Precisión</h4>
-              <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                <li>El tamaño de la muestra afecta el ancho del intervalo (muestras más grandes = intervalos más estrechos)</li>
-                <li>El nivel de confianza afecta el ancho del intervalo (mayor confianza = intervalos más anchos)</li>
-                <li>La variabilidad de la población afecta el ancho del intervalo (mayor variabilidad = intervalos más anchos)</li>
-              </ul>
-            </div>
-          </div>
+          <section className="mt-12 space-y-8">
+            <StoryConclusion>
+              Un procedimiento del {(confidenceLevel * 100).toFixed(0)}% produce intervalos que contienen μ en
+              aproximadamente ese porcentaje de repeticiones. Subir la confianza ensancha los intervalos; aumentar
+              n suele estrecharlos.
+            </StoryConclusion>
+            <TransferTask question="Un informe dice: “hay 95% de probabilidad de que la media esté entre 20 y 24”. ¿Cómo lo reformularías?">
+              <p>Distinguí el intervalo concreto del comportamiento a largo plazo del método que lo produjo.</p>
+            </TransferTask>
+            <DataAttribution>
+              Simulación didáctica generada en el navegador. La población de 200 puntuaciones es sintética, con
+              μ objetivo 22,32 y σ de referencia 5,78; no representa observaciones reales.
+            </DataAttribution>
+            <LessonNavigation
+              currentStep={6}
+              totalSteps={9}
+              previousUrl="/lessons/sampling"
+              nextUrl="/lessons/randomization-inference"
+            />
+          </section>
         </div>
-      </div>
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={1}
-        showPrevious={false}
-        showNext={false}
-      />
-    </div>
+    </LessonStory>
   )
 } 

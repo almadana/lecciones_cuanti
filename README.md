@@ -1,56 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lecciones Cuanti v2
 
-## Getting Started
+Sitio de lecciones interactivas de estadística para Psicología. Las nuevas lecciones se construyen como historias breves: pregunta, predicción, datos, conflicto, herramienta, conclusión y transferencia.
 
-First, run the development server:
+## Desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrí [http://localhost:3000](http://localhost:3000). `next.config.js` activa la exportación estática solamente en producción, para que el modo de desarrollo no dependa de manifiestos de un build anterior.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Verificación:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Estilos personalizados
-
-El proyecto ahora incluye los colores principales y la fuente Roboto del diseño original en la configuración de Tailwind. Puedes usarlos así:
-
-```jsx
-<div className="bg-morado-claro text-negro font-sans p-4 rounded-lg">
-  Ejemplo de tarjeta con los nuevos estilos
-</div>
-
-<button className="bg-morado-oscuro hover:bg-verde-claro text-negro font-bold py-2 px-4 rounded">
-  Botón personalizado
-</button>
-
-<table className="border border-gris-borde bg-gris-claro">
-  ...
-</table>
+```bash
+npx tsc --noEmit
+npx eslint src/app
 ```
 
-Puedes seguir usando utilidades de Tailwind para espaciados, bordes, etc. La fuente Roboto es la predeterminada para todo el sitio.
+## Contrato narrativo
 
-## Learn More
+Los componentes reutilizables están en `src/app/components/narrative/LessonStory.tsx`:
 
-To learn more about Next.js, take a look at the following resources:
+1. `LessonStory`: portada y ancho general.
+2. `StoryBeat`: una escena con texto y visualización.
+3. `PredictionPrompt`: compromiso inicial antes de revelar una explicación.
+4. `StoryConclusion`: afirmación que los datos permiten sostener.
+5. `TransferTask`: aplicación a una situación nueva.
+6. `DataAttribution`: origen, licencia y transformaciones de los datos.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Una lección nueva debería presentar una idea principal en 6–8 escenas y reservar las fórmulas para el momento en que resuelven un problema ya visible. Las interacciones deben pedir predecir, clasificar, comparar o simular; no ser decorativas.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Sistema visual y accesibilidad
 
-## Deploy on Vercel
+- Poppins en títulos y Roboto en cuerpo, con fallbacks del sistema para que el desarrollo no dependa de una descarga del servidor.
+- Tokens de color, superficie, foco y espaciado en `src/app/globals.css`.
+- Violeta, lavanda y verde de Cuanti; fondos claros y bordes visibles.
+- Controles operables por teclado, foco visible y respeto por `prefers-reduced-motion`.
+- Visualizaciones anchas dentro de contenedores con desplazamiento horizontal en pantallas pequeñas.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El currículo vive en `src/app/data/curriculum.ts` y alimenta tanto la portada como el índice lateral. No dupliques las rutas en otro arreglo.

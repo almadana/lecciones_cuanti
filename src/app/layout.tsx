@@ -3,8 +3,8 @@ import "./globals.css";
 import ClientLayout from "./ClientLayout";
 
 export const metadata: Metadata = {
-  title: "Aprendizaje Interactivo de Estadística",
-  description: "Aprende estadística a través de visualizaciones y ejercicios interactivos",
+  title: "Lecciones Cuanti",
+  description: "Historias interactivas para aprender estadística con preguntas y datos",
 };
 
 export default function RootLayout({

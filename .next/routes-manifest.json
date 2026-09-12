@@ -150,12 +150,6 @@
       "namedRegex": "^/lessons/sampling(?:/)?$"
     },
     {
-      "page": "/lessons/sampling-editable",
-      "regex": "^/lessons/sampling\\-editable(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/lessons/sampling\\-editable(?:/)?$"
-    },
-    {
       "page": "/lessons/t-test",
       "regex": "^/lessons/t\\-test(?:/)?$",
       "routeKeys": {},

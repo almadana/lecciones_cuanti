@@ -1,26 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #f6f4fb;
-  --foreground: #14121c;
+  color-scheme: light;
+  --font-heading: 'Poppins';
+  --font-body: 'Roboto';
+  --background: #f8f7fc;
+  --foreground: #17141f;
   --surface: #ffffff;
-  --surface-muted: #ece8f4;
-  --border: rgba(105, 80, 200, 0.18);
-  --header-bg: rgba(255, 255, 255, 0.82);
-  --accent: #5b38f5;
-  --accent-soft: rgba(91, 56, 245, 0.1);
-  --accent-strong: #4320d6;
-  --text: #14121c;
-  --text-muted: #5c566b;
-  --color-morado-claro: #c4b5fc;
-  --color-morado-oscuro: #9078e8;
-  --color-verde-claro: #7ddf6a;
+  --surface-muted: #f0edff;
+  --surface-strong: #e7e6ff;
+  --border: rgba(75, 0, 249, 0.18);
+  --border-strong: rgba(75, 0, 249, 0.38);
+  --header-bg: rgba(248, 247, 252, 0.88);
+  --accent: #4b00f9;
+  --accent-hover: #3a00c2;
+  --accent-soft: rgba(75, 0, 249, 0.08);
+  --accent-strong: #4b00f9;
+  --success: #2f7d4b;
+  --success-soft: #e5f7e1;
+  --danger: #b42348;
+  --danger-soft: #fff0f3;
+  --text: #17141f;
+  --text-muted: #625c70;
+  --shadow-card: 0 16px 40px rgba(48, 35, 82, 0.08);
+  --radius-card: 1.25rem;
+  --content-wide: 72rem;
+  --content-reading: 47rem;
+  --color-morado-claro: #b4a5fa;
+  --color-morado-oscuro: #8c7ddc;
+  --color-verde-claro: #9bfa82;
   --color-verde-seleccion: #c8fab4;
-  --color-gris-claro: #ece8f4;
-  --color-gris-borde: #c4b5fc;
-  --color-negro: #14121c;
+  --color-gris-claro: #f0edff;
+  --color-gris-borde: #b4a5fa;
+  --color-negro: #17141f;
   --color-blanco: #ffffff;
   --color-violeta: #4b00f9;
 }
@@ -28,39 +41,25 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0c0a12;
-    --foreground: #f0ecf8;
-    --surface: #15121f;
-    --surface-muted: #1f1b2e;
-    --border: rgba(166, 150, 255, 0.12);
-    --header-bg: rgba(21, 18, 31, 0.88);
-    --accent: #a78bfa;
-    --accent-soft: rgba(167, 139, 250, 0.12);
-    --accent-strong: #c4b5fd;
-    --text: #f0ecf8;
-    --text-muted: #a19ab8;
-    --color-morado-claro: #6b46c1;
-    --color-morado-oscuro: #8b7dcf;
-    --color-verde-claro: #34d399;
-    --color-verde-seleccion: rgba(52, 211, 153, 0.2);
-    --color-gris-claro: #1f1b2e;
-    --color-gris-borde: #363048;
-    --color-negro: #f9fafb;
-    --color-blanco: #15121f;
-    --color-violeta: #a78bfa;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Roboto, Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
 }
 
 .lesson-scroll {
@@ -75,18 +74,30 @@ body {
 
 /* Estilos globales para títulos principales */
 h1 {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-heading), Poppins, sans-serif;
   font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 h2 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
+  font-family: var(--font-heading), Poppins, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 h3 {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-heading), Poppins, sans-serif;
   font-weight: 600;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, white);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--text);
+  background: var(--color-verde-seleccion);
 }
 
 /* Clase específica para bordes morados */
@@ -116,7 +127,7 @@ input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
-  background: #000000;
+  background: var(--range-track, var(--border-strong));
   height: 3px;
   border-radius: 2px;
 }
@@ -124,7 +135,7 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-track {
   width: 100%;
   height: 3px;
-  background: #000000;
+  background: var(--range-track, var(--border-strong));
   border-radius: 2px;
   cursor: pointer;
 }
@@ -132,7 +143,7 @@ input[type="range"]::-webkit-slider-track {
 input[type="range"]::-moz-range-track {
   width: 100%;
   height: 3px;
-  background: #000000;
+  background: var(--range-track, var(--border-strong));
   border-radius: 2px;
   cursor: pointer;
 }
@@ -143,9 +154,9 @@ input[type="range"]::-webkit-slider-thumb {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: #8c7ddc;
+  background: var(--range-color, var(--accent));
   cursor: pointer;
-  border: 2px solid #8c7ddc;
+  border: 2px solid var(--surface);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -153,13 +164,23 @@ input[type="range"]::-moz-range-thumb {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: #8c7ddc;
+  background: var(--range-color, var(--accent));
   cursor: pointer;
-  border: 2px solid #8c7ddc;
+  border: 2px solid var(--surface);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Ejemplo de uso de colores personalizados en Tailwind:
-   bg-[var(--color-morado-claro)] text-[var(--color-negro)]
-   border-[var(--color-morado-oscuro)]
-*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

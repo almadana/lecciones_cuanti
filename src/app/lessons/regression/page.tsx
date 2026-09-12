@@ -1,474 +1,135 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import * as d3 from 'd3'
-import Question from '@/app/components/Question'
+import { useState } from 'react'
 import LessonNavigation from '@/app/components/LessonNavigation'
+import { generateCorrelatedData } from '@/app/components/correlation/CorrelationPlot'
+import RegressionPlot, { calculateRegression } from '@/app/components/regression/RegressionPlot'
+import {
+  DataAttribution,
+  LessonStory,
+  PredictionPrompt,
+  StoryBeat,
+  StoryConclusion,
+  TransferTask,
+} from '@/app/components/narrative/LessonStory'
 
-interface DataPoint {
-  x: number
-  y: number
-}
+const DATA = generateCorrelatedData(-0.63, 36, 2026)
+const MODEL = calculateRegression(DATA)
 
-interface RegressionLine {
-  slope: number
-  intercept: number
-  rSquared: number
-}
-
-const calculateRegression = (data: DataPoint[]): RegressionLine => {
-  const n = data.length
-  const sumX = data.reduce((acc, point) => acc + point.x, 0)
-  const sumY = data.reduce((acc, point) => acc + point.y, 0)
-  const sumXY = data.reduce((acc, point) => acc + point.x * point.y, 0)
-  const sumX2 = data.reduce((acc, point) => acc + point.x * point.x, 0)
-  const sumY2 = data.reduce((acc, point) => acc + point.y * point.y, 0)
-
-  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX)
-  const intercept = (sumY - slope * sumX) / n
-
-  // Calculate R-squared
-  const meanY = sumY / n
-  const ssRes = data.reduce((acc, point) => {
-    const predicted = slope * point.x + intercept
-    return acc + Math.pow(point.y - predicted, 2)
-  }, 0)
-  const ssTot = data.reduce((acc, point) => {
-    return acc + Math.pow(point.y - meanY, 2)
-  }, 0)
-  const rSquared = 1 - (ssRes / ssTot)
-
-  return { slope, intercept, rSquared }
-}
-
-// Datos de ejemplo: Horas de estudio vs Calificación
-const sampleData: DataPoint[] = [
-  { x: 2, y: 65 },
-  { x: 3, y: 70 },
-  { x: 4, y: 75 },
-  { x: 5, y: 80 },
-  { x: 6, y: 85 },
-  { x: 7, y: 88 },
-  { x: 8, y: 92 },
-  { x: 9, y: 95 },
-  { x: 10, y: 98 },
-  { x: 12, y: 100 }
-]
-
-export default function Regression() {
-  const [data] = useState<DataPoint[]>(sampleData)
-  const [regression] = useState<RegressionLine>(calculateRegression(sampleData))
-  const [showLine, setShowLine] = useState(true)
-  const [showEquation, setShowEquation] = useState(false)
-  const svgRef = useRef<SVGSVGElement>(null)
-
-  useEffect(() => {
-    if (!svgRef.current) return
-
-    // Clear previous content
-    d3.select(svgRef.current).selectAll('*').remove()
-
-    // Set up dimensions
-    const margin = { top: 40, right: 40, bottom: 60, left: 60 }
-    const width = 600 - margin.left - margin.right
-    const height = 400 - margin.top - margin.bottom
-
-    // Create SVG
-    const svg = d3.select(svgRef.current)
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`)
-
-    // Create scales
-    const x = d3.scaleLinear()
-      .range([0, width])
-      .domain([0, d3.max(data, d => d.x) || 0])
-
-    const y = d3.scaleLinear()
-      .range([height, 0])
-      .domain([0, d3.max(data, d => d.y) || 0])
-
-    // Add X axis
-    svg.append('g')
-      .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(x))
-      .append('text')
-      .attr('x', width / 2)
-      .attr('y', 40)
-      .attr('fill', 'currentColor')
-      .text('Horas de Estudio')
-
-    // Add Y axis
-    svg.append('g')
-      .call(d3.axisLeft(y))
-      .append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('y', -40)
-      .attr('x', -height / 2)
-      .attr('fill', 'currentColor')
-      .text('Calificación')
-
-    // Add regression line
-    if (showLine) {
-      const line = d3.line<DataPoint>()
-        .x(d => x(d.x))
-        .y(d => y(regression.slope * d.x + regression.intercept))
-
-      svg.append('path')
-        .datum(data)
-        .attr('fill', 'none')
-        .attr('stroke', '#8c7ddc')
-        .attr('stroke-width', 2)
-        .attr('d', line)
-    }
-
-    // Add scatter plot
-    svg.selectAll('circle')
-      .data(data)
-      .enter()
-      .append('circle')
-      .attr('cx', d => x(d.x))
-      .attr('cy', d => y(d.y))
-      .attr('r', 5)
-      .attr('fill', '#8c7ddc')
-      .attr('stroke', '#6b5b95')
-      .attr('stroke-width', 1)
-
-    // Add equation text
-    if (showEquation) {
-      svg.append('text')
-        .attr('x', 10)
-        .attr('y', 30)
-        .attr('fill', '#8c7ddc')
-        .attr('font-size', '14px')
-        .text(`y = ${regression.slope.toFixed(2)}x + ${regression.intercept.toFixed(2)}`)
-
-      svg.append('text')
-        .attr('x', 10)
-        .attr('y', 50)
-        .attr('fill', '#8c7ddc')
-        .attr('font-size', '14px')
-        .text(`R² = ${regression.rSquared.toFixed(3)}`)
-    }
-
-  }, [data, regression, showLine, showEquation])
-
-  const predictValue = (x: number) => {
-    return regression.slope * x + regression.intercept
-  }
+export default function RegressionPage() {
+  const [predictionX, setPredictionX] = useState(7)
+  const predicted = MODEL.intercept + MODEL.slope * predictionX
 
   return (
-    <div className="py-8">
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={3}
-        previousUrl="/lessons/correlation-editable"
-        showPrevious={true}
-        nextUrl="/lessons/regression-editable"
-      />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-negro bg-morado-claro p-4 rounded-lg inline-block">
-            Regresión Lineal (1 de 2)
-          </h1>
-          <p className="mt-4 text-lg text-gray-600">
-            Relación entre horas de estudio y calificaciones
-          </p>
-        </div>
+    <LessonStory
+      eyebrow="Lección 5 · regresión"
+      title="Si alguien duerme siete horas, ¿cuánto estrés esperaríamos?"
+      lead="La correlación describía una dirección. La regresión agrega una recta que permite anticipar un valor —sin prometer acertar cada experiencia individual."
+    >
+      <StoryBeat
+        number="01"
+        label="Una predicción"
+        title="La nube orienta, pero no devuelve un número"
+        visual={
+          <PredictionPrompt
+            question="Para una persona que durmió 7 horas, ¿cuál sería una predicción razonable de estrés?"
+            options={['El centro de los puntos cercanos a 7 horas', 'El punto más alto de toda la nube', 'Cualquier valor da lo mismo']}
+            reveal="La primera estrategia usa el patrón colectivo. Una recta de regresión formaliza esa idea y produce la misma regla para cualquier valor de sueño."
+          />
+        }
+      >
+        <p>En la lección anterior vimos que menos sueño tendía a acompañarse de más estrés. Ahora aparece una necesidad distinta: pasar de una descripción general a una predicción concreta.</p>
+        <p>Los puntos cercanos a siete horas no coinciden exactamente. La mejor respuesta no será una certeza individual, sino el centro esperado para personas con ese valor de sueño.</p>
+      </StoryBeat>
 
-        {/* Texto introductorio y instrucciones */}
-        <div className="panel-contenido">
-          <div className="prose text-gray-700 mb-6">
-            <p className="text-lg">
-              La regresión lineal simple te permite modelar la relación entre una variable dependiente (Y) 
-              y una variable independiente (X) usando una línea recta. En esta lección aprenderás a interpretar 
-              la ecuación de regresión y evaluar la bondad del ajuste usando datos reales de horas de estudio y calificaciones.
+      <StoryBeat
+        layout="stacked"
+        number="02"
+        label="La recta"
+        title="Una predicción para cada cantidad de sueño"
+        visual={<RegressionPlot data={DATA} line={MODEL} />}
+      >
+        <p>La recta atraviesa el centro de la nube. Para cualquier valor horizontal, su altura indica el estrés predicho por el modelo.</p>
+        <p>No intenta tocar todos los puntos. Resume cómo cambia el valor esperado de estrés a medida que cambian las horas de sueño.</p>
+      </StoryBeat>
+
+      <StoryBeat
+        layout="stacked"
+        number="03"
+        label="La regla"
+        title="La pendiente convierte horas en cambio esperado"
+        visual={
+          <div className="space-y-5">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-xl bg-[var(--surface-muted)] p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--text-muted)]">Pendiente</p>
+                <p className="mt-1 font-mono text-2xl font-bold text-[var(--accent)]">{MODEL.slope.toFixed(2)}</p>
+              </div>
+              <div className="rounded-xl bg-[var(--surface-muted)] p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--text-muted)]">Sueño elegido</p>
+                <p className="mt-1 font-mono text-2xl font-bold text-[var(--accent)]">{predictionX.toFixed(1)} h</p>
+              </div>
+              <div className="rounded-xl bg-[var(--success-soft)] p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--success)]">Estrés predicho</p>
+                <p className="mt-1 font-mono text-2xl font-bold text-[var(--success)]">{predicted.toFixed(1)}</p>
+              </div>
+            </div>
+            <label className="block text-sm font-bold text-[var(--text)]">
+              Horas de sueño
+              <input
+                type="range"
+                min="4"
+                max="10"
+                step="0.1"
+                value={predictionX}
+                onChange={(event) => setPredictionX(Number(event.target.value))}
+                className="mt-3 w-full"
+              />
+            </label>
+            <RegressionPlot data={DATA} line={MODEL} predictionX={predictionX} />
+            <p className="rounded-xl bg-[var(--text)] p-4 font-mono text-sm text-white">
+              estrés predicho = {MODEL.intercept.toFixed(2)} {MODEL.slope < 0 ? '−' : '+'} {Math.abs(MODEL.slope).toFixed(2)} × horas
             </p>
           </div>
-          
-          <div className="bg-gris-claro p-4 rounded-lg">
-            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
-            <ul className="list-disc pl-5 space-y-2 text-sm">
-              <li>Observa la línea de regresión que se ajusta a los datos</li>
-              <li>Activa/desactiva la línea de regresión para comparar</li>
-              <li>Muestra la ecuación de la línea para ver la pendiente e intercepto</li>
-              <li>Interpreta el coeficiente R² que indica qué tan bien predice el modelo</li>
-              <li>Usa la ecuación para predecir calificaciones para diferentes horas de estudio</li>
-              <li>Observa cómo la pendiente indica el cambio en Y por cada unidad de X</li>
-            </ul>
-          </div>
-        </div>
+        }
+      >
+        <p>La pendiente es el cambio predicho en estrés por cada hora adicional de sueño. Como es negativa, la recta baja: una hora más se asocia con {Math.abs(MODEL.slope).toFixed(2)} puntos menos de estrés, en promedio.</p>
+        <p>Mové el control y seguí las líneas verdes. La ecuación transforma un valor de sueño en un punto sobre la recta.</p>
+      </StoryBeat>
 
-        <div className="mt-12 space-y-8">
-          {/* Introducción */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              ¿Qué es la Regresión Lineal?
-            </h2>
-            <div className="prose text-gray-700">
-              <p className="mb-4">
-                La <strong>regresión lineal</strong> es una técnica estadística que modela la relación 
-                entre una variable dependiente (Y) y una o más variables independientes (X) usando 
-                una línea recta.
-              </p>
-              <div className="grid md:grid-cols-2 gap-6 mt-6">
-                <div className="bg-gris-claro p-4 rounded-lg">
-                  <h3 className="font-bold text-negro mb-2">Ecuación de la Línea</h3>
-                  <p className="text-sm">
-                    <strong>y = mx + b</strong><br/>
-                    Donde:<br/>
-                    • m = pendiente (slope)<br/>
-                    • b = intercepto (intercept)<br/>
-                    • x = variable independiente<br/>
-                    • y = variable dependiente
-                  </p>
-                </div>
-                <div className="bg-gris-claro p-4 rounded-lg">
-                  <h3 className="font-bold text-negro mb-2">Coeficiente de Determinación</h3>
-                  <p className="text-sm">
-                    <strong>R²</strong> indica qué porcentaje de la variabilidad en Y 
-                    puede ser explicado por X. Un valor más cercano a 1 indica 
-                    una mejor predicción.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+      <StoryBeat
+        layout="stacked"
+        number="04"
+        label="Los errores"
+        title="Cada persona conserva una distancia a la predicción"
+        visual={<RegressionPlot data={DATA} line={MODEL} showResiduals />}
+      >
+        <p>Las líneas rojas son residuos: la diferencia vertical entre el estrés observado y el predicho para cada persona.</p>
+        <p>La recta de mínimos cuadrados es la que hace menor la suma de esos residuos elevados al cuadrado. Es la menos equivocada entre todas las rectas posibles para esta nube.</p>
+      </StoryBeat>
 
-          {/* Datos y Visualización */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Datos y Visualización
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-bold text-negro mb-3">Datos de Ejemplo</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gris-borde">
-                    <thead>
-                      <tr className="bg-morado-claro">
-                        <th className="px-4 py-2 text-left text-xs font-medium text-negro">Horas (X)</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-negro">Calificación (Y)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-blanco divide-y divide-gris-borde">
-                      {data.map((point, index) => (
-                        <tr key={index}>
-                          <td className="px-4 py-2 text-sm text-gray-600">{point.x}</td>
-                          <td className="px-4 py-2 text-sm text-gray-600">{point.y}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-bold text-negro mb-3">Gráfico de Dispersión</h3>
-                <div className="flex justify-center">
-                  <svg ref={svgRef}></svg>
-                </div>
-                <div className="mt-4 space-y-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={showLine}
-                      onChange={(e) => setShowLine(e.target.checked)}
-                      className="mr-2"
-                    />
-                    Mostrar línea de regresión
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={showEquation}
-                      onChange={(e) => setShowEquation(e.target.checked)}
-                      className="mr-2"
-                    />
-                    Mostrar ecuación
-                  </label>
-                </div>
-              </div>
-            </div>
+      <StoryBeat
+        number="05"
+        label="El borde"
+        title="La ecuación sigue; la evidencia termina"
+        visual={
+          <div className="space-y-4 rounded-2xl bg-[var(--danger-soft)] p-6">
+            <p className="text-sm font-bold uppercase tracking-[0.15em] text-[var(--danger)]">Fuera del rango observado</p>
+            <p className="font-mono text-3xl font-bold text-[var(--text)]">0 horas → {MODEL.intercept.toFixed(1)} puntos</p>
+            <p className="text-sm leading-relaxed text-[var(--text-muted)]">La cuenta existe, pero no observamos personas cerca de cero horas. El intercepto organiza la recta; acá no tiene una interpretación psicológica segura.</p>
           </div>
+        }
+      >
+        <p>Los datos abarcan aproximadamente entre cuatro y diez horas. Usar la ecuación mucho más allá de ese rango es extrapolar.</p>
+        <p>Además, una relación lineal no puede continuar indefinidamente: las escalas tienen límites y el fenómeno puede cambiar de forma.</p>
+      </StoryBeat>
 
-          {/* Resultados del Análisis */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Resultados del Análisis
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-gris-claro p-4 rounded-lg text-center">
-                <h3 className="font-bold text-negro mb-2">Pendiente (m)</h3>
-                <p className="text-2xl font-bold text-morado-oscuro">{regression.slope.toFixed(2)}</p>
-                <p className="text-sm text-gray-600 mt-2">
-                  Por cada hora adicional de estudio, la calificación aumenta en {regression.slope.toFixed(2)} puntos en promedio.
-                </p>
-              </div>
-              <div className="bg-gris-claro p-4 rounded-lg text-center">
-                <h3 className="font-bold text-negro mb-2">Intercepto (b)</h3>
-                <p className="text-2xl font-bold text-morado-oscuro">{regression.intercept.toFixed(2)}</p>
-                <p className="text-sm text-gray-600 mt-2">
-                  Calificación esperada cuando no se estudia (0 horas). Nota: este valor puede no tener sentido práctico.
-                </p>
-              </div>
-              <div className="bg-gris-claro p-4 rounded-lg text-center">
-                <h3 className="font-bold text-negro mb-2">R²</h3>
-                <p className="text-2xl font-bold text-morado-oscuro">{(regression.rSquared * 100).toFixed(1)}%</p>
-                <p className="text-sm text-gray-600 mt-2">
-                  Porcentaje de variabilidad explicada por el modelo.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Predicciones */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Predicciones
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-bold text-negro mb-3">Ecuación de Predicción</h3>
-                <div className="bg-gris-claro p-4 rounded-lg">
-                  <p className="text-lg font-mono">
-                    Calificación = {regression.slope.toFixed(2)} × Horas + {regression.intercept.toFixed(2)}
-                  </p>
-                </div>
-                <p className="text-sm text-gray-600 mt-2">
-                  Usa esta ecuación para predecir calificaciones basadas en horas de estudio.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold text-negro mb-3">Ejemplos de Predicción</h3>
-                <div className="space-y-2">
-                  {[1, 5, 10, 15].map(hours => (
-                    <div key={hours} className="bg-gris-claro p-3 rounded-lg">
-                      <p className="text-sm">
-                        <strong>{hours} hora{hours !== 1 ? 's' : ''}:</strong> 
-                        Calificación predicha = {predictValue(hours).toFixed(1)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Preguntas de Evaluación */}
-          <div className="space-y-6">
-            <Question
-              question={`¿Qué significa la pendiente de ${regression.slope.toFixed(1)} en este contexto?`}
-              type="multiple-choice"
-              options={[
-                { text: 'La calificación máxima posible es 3.5', value: false },
-                { text: `Por cada hora de estudio, la calificación aumenta ${regression.slope.toFixed(1)} puntos`, value: true },
-                { text: 'El 3.5% de la variabilidad es explicada por el modelo', value: false },
-                { text: 'La calificación mínima es 3.5', value: false }
-              ]}
-              explanation={`La pendiente de ${regression.slope.toFixed(1)} significa que por cada hora adicional de estudio, la calificación aumenta en ${regression.slope.toFixed(1)} puntos en promedio.`}
-            />
-
-            <Question
-              question="¿Cuál sería la calificación predicha para alguien que estudia 6 horas?"
-              type="numeric"
-              hint={`Usa la ecuación: Calificación = 3.68 × Horas + ${regression.intercept.toFixed(1)}`}
-              correctAnswer={predictValue(6)}
-              explanation={`Para 6 horas de estudio: Calificación = 3.68 × 6 + 60.5 = 82.58`}
-            />
-
-            <Question
-              question="¿Qué tan bien predice el modelo las calificaciones?"
-              type="multiple-choice"
-              options={[
-                { text: 'Muy mal (R² < 0.3)', value: false },
-                { text: 'Regular (R² entre 0.3 y 0.7)', value: false },
-                { text: 'Bien (R² entre 0.7 y 0.9)', value: false },
-                { text: 'Excelente (R² > 0.9)', value: true }
-              ]}
-              explanation={`Con un R² de ${(regression.rSquared * 100).toFixed(1)}%, el modelo explica excelentemente la relación entre horas de estudio y calificaciones.`}
-            />
-          </div>
-
-          {/* Interpretación */}
-          <div className="panel-contenido">
-            <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-              Interpretación de Resultados
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-bold text-negro mb-2">Fortalezas del Modelo:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li>R² alto indica buena capacidad predictiva</li>
-                  <li>Pendiente positiva muestra relación directa</li>
-                  <li>Datos bien distribuidos alrededor de la línea</li>
-                  <li>Ecuación simple y fácil de interpretar</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold text-negro mb-2">Limitaciones:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li>Asume relación lineal</li>
-                  <li>No considera otros factores (motivación, inteligencia)</li>
-                  <li>Predicciones fuera del rango pueden ser poco confiables</li>
-                  <li>No establece causalidad</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Resumen de la Lección */}
-        <div className="panel-contenido">
-          <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-            Resumen de Conceptos Clave
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-bold text-negro mb-2">Regresión Lineal:</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm">
-                <li><strong>Ecuación:</strong> y = mx + b</li>
-                <li><strong>Pendiente (m):</strong> Cambio en Y por unidad de cambio en X</li>
-                <li><strong>Intercepto (b):</strong> Valor de Y cuando X = 0</li>
-                <li><strong>R²:</strong> Porcentaje de variabilidad explicada</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm">
-                <li><strong>R² &gt; 0.9:</strong> Excelente predicción</li>
-                <li><strong>R² 0.7-0.9:</strong> Buena predicción</li>
-                <li><strong>R² 0.3-0.7:</strong> Predicción moderada</li>
-                <li><strong>R² &lt; 0.3:</strong> Predicción débil</li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-4 p-4 bg-gris-claro rounded-lg">
-            <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <strong>Pendiente:</strong><br/>
-                <code>m = (nΣxy - ΣxΣy) / (nΣx² - (Σx)²)</code><br/>
-                <strong>Intercepto:</strong><br/>
-                <code>b = (Σy - mΣx) / n</code>
-              </div>
-              <div>
-                <strong>R²:</strong><br/>
-                <code>R² = 1 - (SSres / SStot)</code><br/>
-                <strong>Predicción:</strong><br/>
-                <code>ŷ = mx + b</code>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={3}
-        previousUrl="/lessons/correlation-editable"
-        showPrevious={true}
-        nextUrl="/lessons/regression-editable"
-      />
-    </div>
+      <section className="space-y-8 py-16 sm:py-24">
+        <StoryConclusion>La regresión convierte una relación lineal en una regla de predicción. La pendiente describe cambio esperado, los residuos muestran el error y el rango observado marca hasta dónde confiar.</StoryConclusion>
+        <TransferTask question="Si la pendiente fuera −2,5, ¿cómo explicarías su significado sin afirmar que dormir una hora más causa una reducción del estrés?" />
+        <DataAttribution>Datos sintéticos, compartidos con la lección de correlación. Adaptación conceptual de Matthew J. C. Crump, capítulo “Correlación”, traducido al español rioplatense bajo supervisión de Álvaro Cabana.</DataAttribution>
+        <LessonNavigation currentStep={5} totalSteps={9} previousUrl="/lessons/correlation-editable" nextUrl="/lessons/regression-editable" />
+      </section>
+    </LessonStory>
   )
-} 
+}

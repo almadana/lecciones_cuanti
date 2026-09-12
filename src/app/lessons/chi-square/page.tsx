@@ -1,307 +1,143 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import Question from '@/app/components/Question';
-import jStat from 'jstat';
-import LessonHeader from '@/app/components/LessonHeader';
-import LessonNavigation from '@/app/components/LessonNavigation';
+import { useState } from 'react'
+import jStat from 'jstat'
+import LessonNavigation from '@/app/components/LessonNavigation'
+import ChiSquareTable, {
+  calculateChiSquare,
+  type ChiCell,
+} from '@/app/components/chi-square/ChiSquareTable'
+import {
+  DataAttribution,
+  LessonStory,
+  PredictionPrompt,
+  StoryBeat,
+  StoryConclusion,
+  TransferTask,
+} from '@/app/components/narrative/LessonStory'
+
+const DATA: ChiCell[] = [
+  { row: 'Muy de acuerdo', col: 'Hombre', value: 41 },
+  { row: 'Muy de acuerdo', col: 'Mujer', value: 99 },
+  { row: 'De acuerdo', col: 'Hombre', value: 167 },
+  { row: 'De acuerdo', col: 'Mujer', value: 259 },
+  { row: 'En desacuerdo', col: 'Hombre', value: 291 },
+  { row: 'En desacuerdo', col: 'Mujer', value: 238 },
+  { row: 'Muy en desacuerdo', col: 'Hombre', value: 44 },
+  { row: 'Muy en desacuerdo', col: 'Mujer', value: 37 },
+  { row: 'No sabe / no contesta', col: 'Hombre', value: 13 },
+  { row: 'No sabe / no contesta', col: 'Mujer', value: 11 },
+]
+
+const chiSquareDistribution = (jStat as unknown as {
+  chisquare: { cdf: (value: number, degreesOfFreedom: number) => number }
+}).chisquare
+const RESULT = calculateChiSquare(DATA)
+const P_VALUE = 1 - chiSquareDistribution.cdf(RESULT.chiSquare, RESULT.degreesOfFreedom)
 
 export default function ChiSquarePage() {
-  const [showExplanation, setShowExplanation] = useState(false);
-
-  // Datos del Latinobarómetro
-  const observedData = [
-    [52, 183, 226, 80],  // Hombres
-    [114, 280, 194, 58], // Mujeres
-  ];
-
-  const rowLabels = ['Hombres', 'Mujeres'];
-  const colLabels = ['Muy fuerte', 'Fuerte', 'Débil', 'No existe'];
-
-  // Cálculo de totales
-  const rowTotals = observedData.map(row => 
-    row.reduce((acc, val) => acc + val, 0)
-  );
-
-  const colTotals = observedData[0].map((_, colIndex) =>
-    observedData.reduce((acc, row) => acc + row[colIndex], 0)
-  );
-
-  const grandTotal = rowTotals.reduce((acc, val) => acc + val, 0);
-
-  // Cálculo de frecuencias esperadas
-  const expectedData = observedData.map((row, i) =>
-    row.map((_, j) => (rowTotals[i] * colTotals[j]) / grandTotal)
-  );
-
-  // Cálculo de Chi cuadrado
-  const chiSquare = observedData.reduce((acc, row, i) =>
-    acc + row.reduce((rowAcc, observed, j) => {
-      const expected = expectedData[i][j];
-      return rowAcc + Math.pow(observed - expected, 2) / expected;
-    }, 0),
-    0
-  );
-
-  const degreesOfFreedom = (observedData.length - 1) * (observedData[0].length - 1);
-  const pValue = 1 - (jStat as any).chisquare.cdf(chiSquare, degreesOfFreedom);
-
-  // Determinar nivel de significancia
-  const getSignificanceLevel = () => {
-    if (pValue < 0.001) return 3;
-    if (pValue < 0.01) return 2;
-    if (pValue < 0.05) return 1;
-    return 0;
-  };
-
-  const significanceLevel = getSignificanceLevel();
-
-  // Función para calcular el desvío relativo
-  const getRelativeDeviation = (observed: number, expected: number) => {
-    return (observed - expected) / expected;
-  };
-
-  // Función para obtener el color de fondo basado en el desvío
-  const getBackgroundColor = (deviation: number) => {
-    // Normalizar el desvío para que valores extremos no generen colores muy saturados
-    // Usando ±0.5 (50% de diferencia) como valores extremos
-    const normalizedDev = Math.min(Math.max(deviation, -0.5), 0.5) / 0.5;
-    
-    if (normalizedDev < 0) {
-      // Rojo para valores menores que lo esperado
-      return `rgba(255, 0, 0, ${Math.abs(normalizedDev) * 0.3})`;
-    } else if (normalizedDev > 0) {
-      // Azul para valores mayores que lo esperado
-      return `rgba(0, 0, 255, ${normalizedDev * 0.3})`;
-    }
-    return 'white'; // Para valores cercanos a lo esperado
-  };
+  const [mode, setMode] = useState<'observed' | 'expected' | 'residual' | 'contribution'>('observed')
 
   return (
-    <div className="py-8">
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={2}
-        nextUrl="/lessons/chi-square-editable"
-        showPrevious={false}
-      />
-      <article className="max-w-4xl mx-auto p-4">
-        <LessonHeader title="Chi cuadrado de independencia" />
-        
-        {/* Texto introductorio y instrucciones */}
-        <div className="mb-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
-          <div className="prose text-gray-700 mb-6">
-            <p className="text-lg">
-              La prueba de Chi cuadrado de independencia te permite determinar si existe una relación 
-              estadísticamente significativa entre dos variables categóricas. En esta lección aprenderás 
-              a comparar frecuencias observadas con frecuencias esperadas para evaluar la independencia.
-            </p>
-          </div>
-          
-          <div className="bg-gris-claro p-4 rounded-lg">
-            <h3 className="font-bold text-negro mb-3">💡 Cosas que puedes probar:</h3>
-            <ul className="list-disc pl-5 space-y-2 text-sm">
-              <li>Observa las frecuencias observadas en la primera tabla</li>
-              <li>Compara con las frecuencias esperadas en la segunda tabla</li>
-              <li>Interpreta los colores que indican desvíos de lo esperado</li>
-              <li>Analiza el valor del Chi cuadrado y su significancia</li>
-              <li>Observa cómo se calculan los grados de libertad</li>
-              <li>Interpreta el p-valor para tomar decisiones estadísticas</li>
-            </ul>
-          </div>
-        </div>
-        
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Datos de Latinobarómetro</h2>
-          <p className="mb-4">
-            A continuación se reproduce la tabla acerca de la existencia de diferencias o conflictos 
-            entre hombres y mujeres. Si bien puede verse una clara diferencia en las respuestas entre 
-            hombres y mujeres, cabe preguntarse si esta diferencia existente en la muestra podría 
-            generalizarse a la población de la que procede.
-          </p>
-          <p className="mb-4">
-            Con ese fin, en esta lección se realiza una prueba de <strong>Chi cuadrado</strong> de 
-            independencia. Abajo podrás ver la tabla con las frecuencias absolutas provenientes del 
-            estudio, las frecuencias esperadas si existiera independencia entre las variables, y el 
-            valor del estadístico Chi cuadrado y su p-valor asociado.
-          </p>
-        </section>
+    <LessonStory
+      eyebrow="Lección 8 · chi cuadrado"
+      title="¿Las diferencias entre hombres y mujeres son solo fluctuación muestral?"
+      lead="Ya vimos porcentajes distintos frente a la misma afirmación. Chi cuadrado enfrenta la tabla observada con una tabla hipotética donde el sexo y la respuesta no están asociados."
+    >
+      <StoryBeat
+        layout="stacked"
+        number="01"
+        label="La diferencia observada"
+        title="La tabla vuelve, pero la pregunta cambia"
+        visual={<ChiSquareTable data={DATA} mode="observed" />}
+      >
+        <p>Entre los hombres, el 37,4% expresó algún grado de acuerdo. Entre las mujeres, lo hizo el 55,6%. La diferencia está en esta muestra de Uruguay.</p>
+        <p>Ahora queremos saber cuán extraña sería una tabla así si, en la población, el patrón de respuestas no dependiera del sexo registrado en la encuesta.</p>
+      </StoryBeat>
 
-        <section className="mb-8">
-          {/* Tabla de frecuencias observadas */}
-          <div className="overflow-x-auto mb-8">
-            <h3 className="text-xl font-bold mb-4">Frecuencias observadas</h3>
-            <table className="min-w-full bg-white border border-gray-300">
-              <thead>
-                <tr>
-                  <th className="border p-2"></th>
-                  {colLabels.map((label, i) => (
-                    <th key={i} className="border p-2">{label}</th>
-                  ))}
-                  <th className="border p-2">Totales</th>
-                </tr>
-              </thead>
-              <tbody>
-                {observedData.map((row, i) => (
-                  <tr key={i}>
-                    <th className="border p-2">{rowLabels[i]}</th>
-                    {row.map((value, j) => {
-                      const deviation = getRelativeDeviation(value, expectedData[i][j]);
-                      return (
-                        <td 
-                          key={j} 
-                          className="border p-2 text-center"
-                          style={{ backgroundColor: getBackgroundColor(deviation) }}
-                        >
-                          {value}
-                        </td>
-                      );
-                    })}
-                    <th className="border p-2">{rowTotals[i]}</th>
-                  </tr>
-                ))}
-                <tr>
-                  <th className="border p-2">Totales</th>
-                  {colTotals.map((total, i) => (
-                    <th key={i} className="border p-2">{total}</th>
-                  ))}
-                  <th className="border p-2">{grandTotal}</th>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Tabla de frecuencias esperadas */}
-          <div className="overflow-x-auto mb-8">
-            <h3 className="text-xl font-bold mb-4">Frecuencias esperadas</h3>
-            <div className="mb-2 text-sm text-gray-600">
-              <p>Los colores indican la diferencia entre lo observado y lo esperado:</p>
-              <ul className="list-disc list-inside">
-                <li><span className="text-red-500">Rojo</span>: menos casos que lo esperado</li>
-                <li><span className="text-blue-500">Azul</span>: más casos que lo esperado</li>
-                <li>Blanco: similar a lo esperado</li>
-              </ul>
-            </div>
-            <table className="min-w-full bg-white border border-gray-300">
-              <thead>
-                <tr>
-                  <th className="border p-2"></th>
-                  {colLabels.map((label, i) => (
-                    <th key={i} className="border p-2">{label}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {expectedData.map((row, i) => (
-                  <tr key={i}>
-                    <th className="border p-2">{rowLabels[i]}</th>
-                    {row.map((value, j) => {
-                      const deviation = getRelativeDeviation(observedData[i][j], value);
-                      return (
-                        <td 
-                          key={j} 
-                          className="border p-2 text-center"
-                          style={{ backgroundColor: getBackgroundColor(deviation) }}
-                        >
-                          {value.toFixed(2)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Resultados */}
-          <div className={`p-4 border rounded mb-8 significance-${significanceLevel}`}>
-            <p className="mb-2">
-              Chi cuadrado: {chiSquare.toFixed(2)} || p-valor: 
-              <span className="font-bold ml-1">
-                {pValue.toFixed(5)}
-                {significanceLevel > 0 && '*'.repeat(significanceLevel)}
-              </span>
-            </p>
-            <p>
-              La asociación entre las variables
-              {significanceLevel === 0 ? (
-                <span> no es </span>
-              ) : (
-                <span> es </span>
-              )}
-              estadísticamente significativa a nivel alfa = 
-              {significanceLevel === 0 && <span> 0.05</span>}
-              {significanceLevel === 1 && <span> 0.05</span>}
-              {significanceLevel === 2 && <span> 0.01</span>}
-              {significanceLevel === 3 && <span> 0.001</span>}
-            </p>
-          </div>
-
-          <Question
-            question="¿Qué significa el p-valor en este contexto?"
-            type="multiple-choice"
-            options={[
-              { text: "La probabilidad de que las variables sean independientes", value: false },
-              { text: "La probabilidad de obtener una diferencia igual o más extrema que la observada si las variables fueran independientes", value: true },
-              { text: "La probabilidad de que las variables estén relacionadas", value: false },
-              { text: "El porcentaje de casos que no siguen el patrón observado", value: false }
-            ]}
-            correctAnswer={1}
-            explanation="El p-valor representa la probabilidad de obtener una diferencia igual o más extrema que la observada en la muestra, asumiendo que las variables son independientes en la población (hipótesis nula)."
+      <StoryBeat
+        number="02"
+        label="Un mundo sin asociación"
+        title="Los márgenes permanecen; las combinaciones cambian"
+        visual={
+          <PredictionPrompt
+            question="Hay 140 respuestas “Muy de acuerdo” y 644 mujeres sobre 1.200 casos. Bajo independencia, ¿cuántas mujeres esperaríamos en esa celda?"
+            options={['Alrededor de 75', 'Exactamente 99', 'Alrededor de 140']}
+            reveal="La proporción de mujeres es 644 / 1.200. Aplicada a las 140 respuestas “Muy de acuerdo”, produce 140 × 644 / 1.200 = 75,1 casos esperados."
           />
-        </section>
+        }
+      >
+        <p>Independencia no significa repartir cada fila mitad y mitad. Hay más mujeres que hombres en la muestra, así que esa diferencia se conserva.</p>
+        <p>El valor esperado de cada celda combina su total de fila con su total de columna: E = total de fila × total de columna / N.</p>
+      </StoryBeat>
 
-        {/* Resumen de la Lección */}
-        <div className="mt-8 bg-blanco rounded-lg shadow-lg p-6 border border-gris-borde">
-          <h2 className="text-xl font-bold text-negro bg-morado-claro p-3 rounded-lg inline-block mb-4">
-            Resumen de Conceptos Clave
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-bold text-negro mb-2">Prueba Chi Cuadrado:</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm">
-                <li><strong>Propósito:</strong> Analizar independencia entre variables categóricas</li>
-                <li><strong>Hipótesis nula:</strong> Las variables son independientes</li>
-                <li><strong>Hipótesis alternativa:</strong> Las variables están relacionadas</li>
-                <li><strong>Nivel de significancia:</strong> α = 0.05</li>
-              </ul>
+      <StoryBeat
+        layout="stacked"
+        number="03"
+        label="Observado y esperado"
+        title="Cada celda deja una discrepancia"
+        visual={
+          <div className="space-y-5">
+            <div className="flex flex-wrap gap-2">
+              {([
+                ['observed', 'Observado'],
+                ['expected', 'Esperado'],
+                ['residual', 'Residuo'],
+                ['contribution', 'Aporte a χ²'],
+              ] as const).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={mode === value}
+                  onClick={() => setMode(value)}
+                  className={`rounded-full border px-4 py-2 text-sm font-bold ${mode === value ? 'border-[var(--accent)] bg-[var(--accent)] text-white' : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text)]'}`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-            <div>
-              <h3 className="font-bold text-negro mb-2">Interpretación:</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm">
-                <li><strong>p &lt; 0.05:</strong> Rechazar H₀, variables relacionadas</li>
-                <li><strong>p ≥ 0.05:</strong> No rechazar H₀, variables independientes</li>
-                <li><strong>Chi cuadrado:</strong> Mide la magnitud de la asociación</li>
-                <li><strong>Grados de libertad:</strong> (r-1)(c-1)</li>
-              </ul>
+            <ChiSquareTable data={DATA} mode={mode} />
+            {mode === 'residual' ? (
+              <p className="text-xs text-[var(--text-muted)]">Verde: más casos que los esperados. Rosa: menos. La intensidad aumenta con la discrepancia estandarizada.</p>
+            ) : null}
+          </div>
+        }
+      >
+        <p>En “Muy de acuerdo” observamos 99 mujeres donde la independencia predecía 75,1; entre los hombres observamos 41 donde esperaba 64,9.</p>
+        <p>Los residuos dividen esas diferencias por el tamaño esperado de la celda. “Aporte a χ²” eleva cada discrepancia estandarizada al cuadrado: así ninguna se cancela y podemos sumarlas.</p>
+      </StoryBeat>
+
+      <StoryBeat
+        number="04"
+        label="La tabla completa"
+        title="Una sola medida reúne todas las discrepancias"
+        visual={
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl bg-[var(--surface-muted)] p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--text-muted)]">χ²</p>
+              <p className="mt-1 font-mono text-3xl font-bold text-[var(--accent)]">{RESULT.chiSquare.toFixed(2)}</p>
+            </div>
+            <div className="rounded-xl bg-[var(--surface-muted)] p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--text-muted)]">Grados de libertad</p>
+              <p className="mt-1 font-mono text-3xl font-bold text-[var(--accent)]">{RESULT.degreesOfFreedom}</p>
+            </div>
+            <div className="rounded-xl bg-[var(--success-soft)] p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--success)]">Valor p</p>
+              <p className="mt-1 font-mono text-3xl font-bold text-[var(--success)]">&lt; 0,000001</p>
             </div>
           </div>
-          <div className="mt-4 p-4 bg-gris-claro rounded-lg">
-            <h3 className="font-bold text-negro mb-2">Fórmulas Importantes:</h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <strong>Chi cuadrado:</strong><br/>
-                <code>χ² = Σ[(O-E)²/E]</code><br/>
-                <strong>Frecuencia esperada:</strong><br/>
-                <code>E = (R×C)/N</code>
-              </div>
-              <div>
-                <strong>Grados de libertad:</strong><br/>
-                <code>df = (r-1)(c-1)</code><br/>
-                <strong>Residuo:</strong><br/>
-                <code>Residuo = (O-E)/√E</code>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-      <LessonNavigation
-        currentStep={1}
-        totalSteps={2}
-        nextUrl="/lessons/chi-square-editable"
-        showPrevious={false}
-      />
-    </div>
-  );
-} 
+        }
+      >
+        <p>La suma da χ² = {RESULT.chiSquare.toFixed(2)}. Bajo el modelo de independencia, una discrepancia igual o mayor tendría una probabilidad extremadamente pequeña (p = {P_VALUE.toExponential(2)}).</p>
+        <p>Hay evidencia contra la independencia en este análisis. Eso no mide la importancia psicológica de la diferencia, no demuestra causalidad y no identifica por sí solo qué procesos sociales producen el patrón.</p>
+      </StoryBeat>
+
+      <section className="space-y-8 py-16 sm:py-24">
+        <StoryConclusion>Chi cuadrado pregunta cuánto se aleja la tabla observada de la que esperaríamos bajo independencia. El resultado global necesita volver a las celdas para entender dónde está el patrón.</StoryConclusion>
+        <TransferTask question="¿Qué celdas explican la mayor parte de χ²? Describí su dirección comparando observado y esperado, sin usar lenguaje causal." />
+        <DataAttribution>Latinobarómetro 2023, Uruguay (N = 1.200). Tabulación provista por el usuario de la afirmación “Los hombres tienen grandes ventajas sobre las mujeres a la hora de comenzar un negocio”. <a className="font-bold text-[var(--accent)] underline" href="https://www.latinobarometro.org/agregados" target="_blank" rel="noreferrer">Fuente y política de uso</a>. “No sabe / no contesta” se conserva como categoría. La prueba pedagógica trata los casos como observaciones independientes simples y no incorpora ponderadores ni el diseño complejo de la encuesta; no debe sustituir un análisis de encuesta completo.</DataAttribution>
+        <LessonNavigation currentStep={9} totalSteps={9} previousUrl="/lessons/t-test-editable-2" nextUrl="/lessons/chi-square-editable" />
+      </section>
+    </LessonStory>
+  )
+}

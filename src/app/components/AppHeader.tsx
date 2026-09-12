@@ -10,7 +10,8 @@ type Props = {
 
 export default function AppHeader({ onOpenNav, navOpen }: Props) {
   return (
-    <header className="app-header-fixed fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--header-bg)] px-4 backdrop-blur-md sm:px-6">
+    <header className="app-header-fixed fixed left-0 right-0 top-0 z-40 h-14 border-b border-[var(--border)] bg-[var(--header-bg)] backdrop-blur-md">
+      <div className="mx-auto flex h-full max-w-[var(--content-wide)] items-center justify-between gap-4 px-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
         <Link
           href="/"
@@ -22,8 +23,7 @@ export default function AppHeader({ onOpenNav, navOpen }: Props) {
         <div className="min-w-0">
           <Link
             href="/"
-            className="block truncate text-sm font-semibold tracking-tight text-[var(--text)] sm:text-base"
-            style={{ fontFamily: "'Poppins', system-ui, sans-serif" }}
+            className="block truncate font-display text-sm font-semibold tracking-tight text-[var(--text)] sm:text-base"
           >
             Lecciones Cuanti
           </Link>
@@ -43,6 +43,7 @@ export default function AppHeader({ onOpenNav, navOpen }: Props) {
         <Bars3Icon className="h-5 w-5" />
         <span className="hidden sm:inline">Índice</span>
       </button>
+      </div>
     </header>
   )
 }

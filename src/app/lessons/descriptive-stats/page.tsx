@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import * as d3 from 'd3'
 import LessonNavigation from '@/app/components/LessonNavigation'
+import { QuartileBoxPlotMarks, QuartilesToggle } from '@/app/components/descriptive/QuartileBoxPlot'
 import {
   DataAttribution,
   LessonStory,
@@ -116,16 +117,7 @@ function DistributionPlot({
       ))}
 
       {showQuartiles ? (
-        <g>
-          <line x1={x(d3.min(data) ?? 0)} x2={x(q1)} y1={boxY} y2={boxY} stroke="var(--accent)" />
-          <rect x={x(q1)} y={boxY - 18} width={x(q3) - x(q1)} height={36} fill="var(--color-verde-seleccion)" stroke="var(--accent)" />
-          <line x1={x(median)} x2={x(median)} y1={boxY - 18} y2={boxY + 18} stroke="var(--accent)" strokeWidth={3} />
-          <line x1={x(q3)} x2={x(d3.max(data) ?? 0)} y1={boxY} y2={boxY} stroke="var(--accent)" />
-          {[d3.min(data) ?? 0, d3.max(data) ?? 0].map((value) => (
-            <line key={value} x1={x(value)} x2={x(value)} y1={boxY - 10} y2={boxY + 10} stroke="var(--accent)" />
-          ))}
-          <text x={MARGIN.left} y={boxY + 42} fontSize={11} fill="var(--text-muted)">50% central entre Q1 y Q3</text>
-        </g>
+        <QuartileBoxPlotMarks data={data} x={x} y={boxY} labelX={MARGIN.left} />
       ) : null}
     </svg>
   )
@@ -190,14 +182,7 @@ export default function DescriptiveStatsPage() {
               >
                 {showAtypical ? 'Quitar noches atípicas' : 'Agregar dos noches de 12 h'}
               </button>
-              <button
-                type="button"
-                aria-pressed={showQuartiles}
-                onClick={() => setShowQuartiles((value) => !value)}
-                className="rounded-full border border-[var(--border-strong)] px-4 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--accent-soft)]"
-              >
-                {showQuartiles ? 'Ocultar cuartiles' : 'Mostrar cuartiles'}
-              </button>
+              <QuartilesToggle shown={showQuartiles} onToggle={() => setShowQuartiles((value) => !value)} />
             </div>
           </div>
         }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { appHref } from '@/app/lib/navigation'
 
 interface LessonNavigationProps {
   currentStep: number;
@@ -23,21 +23,15 @@ export default function LessonNavigation({
   showPrevious = true,
   showNext = true
 }: LessonNavigationProps) {
-  const router = useRouter();
-
   const handlePrevious = () => {
     if (onPrevious) {
       onPrevious();
-    } else if (previousUrl) {
-      router.push(previousUrl);
     }
   };
 
   const handleNext = () => {
     if (onNext) {
       onNext();
-    } else if (nextUrl) {
-      router.push(nextUrl);
     }
   };
 
@@ -47,12 +41,21 @@ export default function LessonNavigation({
   return (
     <section className="mt-16 flex flex-col gap-6 border-t border-[var(--border)] pt-10 sm:flex-row sm:items-center sm:justify-between">
       {showPrevious ? (
-        <button type="button" onClick={handlePrevious} className={btn}>
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Anterior
-        </button>
+        onPrevious ? (
+          <button type="button" onClick={handlePrevious} className={btn}>
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Anterior
+          </button>
+        ) : previousUrl ? (
+          <a href={appHref(previousUrl)} className={btn}>
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Anterior
+          </a>
+        ) : <span />
       ) : (
         <span />
       )}
@@ -62,12 +65,21 @@ export default function LessonNavigation({
       </p>
 
       {showNext ? (
-        <button type="button" onClick={handleNext} className={`${btn} border-[var(--accent)] bg-[var(--accent-soft)]`}>
-          Siguiente
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+        onNext ? (
+          <button type="button" onClick={handleNext} className={`${btn} border-[var(--accent)] bg-[var(--accent-soft)]`}>
+            Siguiente
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        ) : nextUrl ? (
+          <a href={appHref(nextUrl)} className={`${btn} border-[var(--accent)] bg-[var(--accent-soft)]`}>
+            Siguiente
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        ) : <span />
       ) : (
         <span />
       )}

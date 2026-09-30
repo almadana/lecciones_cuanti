@@ -6,15 +6,20 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/lessons/sampling/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/lessons/sampling/page.js"
+      "static/chunks/app/page.js"
     ],
-    "/lessons/confidence-interval/page": [
+    "/lessons/mean-deviation-editable/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/lessons/confidence-interval/page.js"
+      "static/chunks/app/lessons/mean-deviation-editable/page.js"
+    ],
+    "/lessons/descriptive-stats/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/lessons/descriptive-stats/page.js"
     ]
   }
 }

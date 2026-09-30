@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import * as d3 from 'd3'
 import LessonNavigation from '@/app/components/LessonNavigation'
+import { QuartileBoxPlot, QuartilesToggle } from '@/app/components/descriptive/QuartileBoxPlot'
 import {
   DataAttribution,
   LessonStory,
@@ -16,12 +17,18 @@ const HEIGHT = 420
 const MARGIN = { top: 48, right: 24, bottom: 56, left: 48 }
 const DOMAIN: [number, number] = [5, 35]
 
-function makeData(n: number, mean: number, targetStd: number, seed: number) {
+function makeData(n: number, mean: number, targetStd: number, skew: number, seed: number) {
   const raw = Array.from({ length: n }, (_, index) => {
     const phase = (index + 1) * (1.73 + seed * 0.013)
     return Math.sin(phase) + 0.55 * Math.cos(phase * 2.17) + 0.2 * Math.sin(phase * 4.03)
   })
-  const centered = raw.map((value) => value - (d3.mean(raw) ?? 0))
+  const rawMean = d3.mean(raw) ?? 0
+  const rawCentered = raw.map((value) => value - rawMean)
+  const rawVariance = d3.mean(rawCentered, (value) => value ** 2) ?? 1
+  const shaped = rawCentered.map(
+    (value) => value + skew * 0.65 * (value ** 2 - rawVariance),
+  )
+  const centered = shaped.map((value) => value - (d3.mean(shaped) ?? 0))
   const rawStd = d3.deviation(centered) || 1
   const deviations = centered.map((value) => (value / rawStd) * targetStd)
   const boundaryScale = deviations.reduce((scale, deviation) => {
@@ -75,11 +82,13 @@ function EditableHistogram({ data }: { data: number[] }) {
 export default function MeanDeviationEditablePage() {
   const [targetMean, setTargetMean] = useState(22.3)
   const [targetStd, setTargetStd] = useState(5.8)
+  const [targetSkew, setTargetSkew] = useState(0)
   const [sampleSize, setSampleSize] = useState(100)
   const [seed, setSeed] = useState(1)
+  const [showQuartiles, setShowQuartiles] = useState(false)
   const data = useMemo(
-    () => makeData(sampleSize, targetMean, targetStd, seed),
-    [sampleSize, targetMean, targetStd, seed],
+    () => makeData(sampleSize, targetMean, targetStd, targetSkew, seed),
+    [sampleSize, targetMean, targetStd, targetSkew, seed],
   )
   const mean = d3.mean(data) ?? 0
   const std = d3.deviation(data) ?? 0
@@ -87,14 +96,14 @@ export default function MeanDeviationEditablePage() {
   return (
     <LessonStory
       eyebrow="Lección 1 · laboratorio de media y desvío"
-      title="Mové el centro y abrí la distribución"
-      lead="Los controles están ligados al gráfico: la media ocupa la misma posición en el slider y en el eje."
+      title="Mové el centro, abrí la distribución y estirá una cola"
+      lead="Los controles están ligados al gráfico: media, desvío y asimetría modifican propiedades diferentes de la misma distribución."
     >
       <StoryBeat
         layout="stacked"
         number="01"
         label="Exploración"
-        title="Centro y dispersión son controles independientes"
+        title="Centro, dispersión y forma son controles independientes"
         visual={
           <div>
             <div className="flex flex-wrap items-end gap-4 border-b border-[var(--border)] pb-4">
@@ -111,6 +120,11 @@ export default function MeanDeviationEditablePage() {
             <div className="mt-4 overflow-x-auto rounded-xl border border-[var(--border)]">
               <div className="mx-auto pb-3" style={{ width: WIDTH }}>
                 <EditableHistogram data={data} />
+                {showQuartiles ? (
+                  <div aria-live="polite">
+                    <QuartileBoxPlot data={data} domain={DOMAIN} width={WIDTH} left={MARGIN.left} right={MARGIN.right} />
+                  </div>
+                ) : null}
                 <div style={{ paddingLeft: MARGIN.left, paddingRight: MARGIN.right }}>
                   <label className="px-1 text-sm font-bold text-[#7f1235]">Media objetivo: {targetMean.toFixed(1)}</label>
                   <input
@@ -129,11 +143,32 @@ export default function MeanDeviationEditablePage() {
               Desvío objetivo: <span className="font-mono">{targetStd.toFixed(1)}</span>
               <input type="range" min={0.5} max={9} step={0.1} value={targetStd} onChange={(event) => setTargetStd(Number(event.target.value))} className="mt-2 w-full" />
             </label>
+            <label className="mt-5 block text-sm font-medium text-[var(--text)]">
+              Asimetría: <span className="font-mono">{targetSkew.toFixed(1)}</span>
+              <input
+                type="range"
+                min={-1.5}
+                max={1.5}
+                step={0.1}
+                value={targetSkew}
+                onChange={(event) => setTargetSkew(Number(event.target.value))}
+                className="mt-2 w-full"
+              />
+              <span className="mt-1 flex justify-between text-xs font-normal text-[var(--text-muted)]">
+                <span>Cola izquierda</span>
+                <span>Simétrica</span>
+                <span>Cola derecha</span>
+              </span>
+            </label>
+            <div className="mt-5 flex flex-wrap gap-3 border-t border-[var(--border)] pt-4">
+              <QuartilesToggle shown={showQuartiles} onToggle={() => setShowQuartiles((value) => !value)} />
+            </div>
           </div>
         }
       >
         <p>Mové primero la media sin tocar el desvío: la distribución se desplaza sobre el eje.</p>
-        <p>Después dejá fija la media y cambiá el desvío: el centro permanece mientras la forma se abre o se cierra.</p>
+        <p>Después dejá fija la media y cambiá el desvío: el centro permanece mientras la distribución se abre o se cierra.</p>
+        <p>Por último, mové la asimetría: una cola se alarga mientras la media permanece en la posición elegida.</p>
       </StoryBeat>
 
       <StoryBeat

@@ -1,10 +1,10 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useEffect, useRef } from 'react'
 import { curriculum } from '@/app/data/curriculum'
+import { appHref } from '@/app/lib/navigation'
 
 type Props = {
   open: boolean
@@ -95,8 +95,8 @@ export default function NavDrawer({ open, onClose }: Props) {
               const activeMod = pathname === mod.href || mod.subLessons.some((s) => s.href === pathname)
               return (
                 <li key={mod.id}>
-                  <Link
-                    href={mod.href}
+                  <a
+                    href={appHref(mod.href)}
                     onClick={onClose}
                     className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                       pathname === mod.href && mod.subLessons.length === 0
@@ -107,15 +107,15 @@ export default function NavDrawer({ open, onClose }: Props) {
                     }`}
                   >
                     {mod.title}
-                  </Link>
+                  </a>
                   {mod.subLessons.length > 0 && (
                     <ul className="ml-2 mt-1 space-y-0.5 border-l border-[var(--border)] pl-3">
                       {mod.subLessons.map((sub) => {
                         const active = pathname === sub.href
                         return (
                           <li key={sub.id}>
-                            <Link
-                              href={sub.href}
+                            <a
+                              href={appHref(sub.href)}
                               onClick={onClose}
                               className={`block rounded-md py-1.5 pr-2 text-xs transition-colors ${
                                 active
@@ -124,7 +124,7 @@ export default function NavDrawer({ open, onClose }: Props) {
                               }`}
                             >
                               {sub.title}
-                            </Link>
+                            </a>
                           </li>
                         )
                       })}

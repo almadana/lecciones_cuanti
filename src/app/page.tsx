@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { curriculum } from '@/app/data/curriculum'
+import { appHref } from '@/app/lib/navigation'
 
 export default function Home() {
   return (
@@ -14,13 +14,13 @@ export default function Home() {
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)] sm:text-xl">
             Cada lección es una investigación breve: primero predecís, después mirás los datos y recién entonces aparece la herramienta estadística que necesitás.
           </p>
-          <Link
-            href={curriculum[0].href}
+          <a
+            href={appHref(curriculum[0].href)}
             className="mt-9 inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3 font-medium text-white transition-colors hover:bg-[var(--accent-hover)]"
           >
             Empezar el recorrido
             <ArrowRightIcon className="h-5 w-5" aria-hidden />
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -34,8 +34,8 @@ export default function Home() {
         <ol className="mt-10 grid gap-4 md:grid-cols-2">
           {curriculum.map((lesson, index) => (
             <li key={lesson.id}>
-              <Link
-                href={lesson.href}
+              <a
+                href={appHref(lesson.href)}
                 className="group flex h-full gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:shadow-[var(--shadow-card)] sm:p-6"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] font-display text-sm font-bold text-[var(--accent)]">
@@ -46,7 +46,7 @@ export default function Home() {
                   <span className="mt-2 block font-display text-lg font-semibold leading-snug text-[var(--text)] group-hover:text-[var(--accent)]">{lesson.question}</span>
                   <span className="mt-2 block text-sm leading-relaxed text-[var(--text-muted)]">{lesson.description}</span>
                 </span>
-              </Link>
+              </a>
             </li>
           ))}
         </ol>

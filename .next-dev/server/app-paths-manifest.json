@@ -1,6 +1,5 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/lessons/mean-deviation-editable/page": "app/lessons/mean-deviation-editable/page.js",
-  "/lessons/descriptive-stats/page": "app/lessons/descriptive-stats/page.js"
+  "/lessons/univariate-tables-editable/page": "app/lessons/univariate-tables-editable/page.js",
+  "/lessons/univariate-tables/page": "app/lessons/univariate-tables/page.js"
 }

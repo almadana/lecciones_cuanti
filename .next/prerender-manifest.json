@@ -1,7 +1,7 @@
 {
   "version": 4,
   "routes": {
-    "/lessons/descriptive-stats-editable": {
+    "/lessons/t-test-editable-2": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -14,8 +14,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/descriptive-stats-editable",
-      "dataRoute": "/lessons/descriptive-stats-editable.rsc",
+      "srcRoute": "/lessons/t-test-editable-2",
+      "dataRoute": "/lessons/t-test-editable-2.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -25,7 +25,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/correlation": {
+    "/lessons/t-test-editable": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -38,8 +38,56 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/correlation",
-      "dataRoute": "/lessons/correlation.rsc",
+      "srcRoute": "/lessons/t-test-editable",
+      "dataRoute": "/lessons/t-test-editable.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/t-test": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/t-test",
+      "dataRoute": "/lessons/t-test.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/univariate-tables": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/univariate-tables",
+      "dataRoute": "/lessons/univariate-tables.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -73,7 +121,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/t-test-editable": {
+    "/": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -86,8 +134,104 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/t-test-editable",
-      "dataRoute": "/lessons/t-test-editable.rsc",
+      "srcRoute": "/",
+      "dataRoute": "/index.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/regression-editable": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/regression-editable",
+      "dataRoute": "/lessons/regression-editable.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/mean-deviation-editable": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/mean-deviation-editable",
+      "dataRoute": "/lessons/mean-deviation-editable.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/sampling": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/sampling",
+      "dataRoute": "/lessons/sampling.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/correlation": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/correlation",
+      "dataRoute": "/lessons/correlation.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -126,7 +270,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/chi-square-editable": {
+    "/lessons/introduction": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -139,200 +283,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/chi-square-editable",
-      "dataRoute": "/lessons/chi-square-editable.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/",
-      "dataRoute": "/index.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/t-test": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/t-test",
-      "dataRoute": "/lessons/t-test.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/regression-editable": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/regression-editable",
-      "dataRoute": "/lessons/regression-editable.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/univariate-tables": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/univariate-tables",
-      "dataRoute": "/lessons/univariate-tables.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/regression": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/regression",
-      "dataRoute": "/lessons/regression.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/bivariate-tables": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/bivariate-tables",
-      "dataRoute": "/lessons/bivariate-tables.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/bivariate-tables-editable-2": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/bivariate-tables-editable-2",
-      "dataRoute": "/lessons/bivariate-tables-editable-2.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/sampling": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/sampling",
-      "dataRoute": "/lessons/sampling.rsc",
+      "srcRoute": "/lessons/introduction",
+      "dataRoute": "/lessons/introduction.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -366,7 +318,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/chi-square": {
+    "/lessons/bivariate-tables-editable-2": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -379,32 +331,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/chi-square",
-      "dataRoute": "/lessons/chi-square.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/lessons/t-test-editable-2": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/t-test-editable-2",
-      "dataRoute": "/lessons/t-test-editable-2.rsc",
+      "srcRoute": "/lessons/bivariate-tables-editable-2",
+      "dataRoute": "/lessons/bivariate-tables-editable-2.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -438,7 +366,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/bivariate-tables-editable": {
+    "/lessons/mean-deviation": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -451,8 +379,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/bivariate-tables-editable",
-      "dataRoute": "/lessons/bivariate-tables-editable.rsc",
+      "srcRoute": "/lessons/mean-deviation",
+      "dataRoute": "/lessons/mean-deviation.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -462,7 +390,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/confidence-interval": {
+    "/lessons/bivariate-tables": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -475,8 +403,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/confidence-interval",
-      "dataRoute": "/lessons/confidence-interval.rsc",
+      "srcRoute": "/lessons/bivariate-tables",
+      "dataRoute": "/lessons/bivariate-tables.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -510,6 +438,54 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/lessons/chi-square": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/chi-square",
+      "dataRoute": "/lessons/chi-square.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/regression": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/regression",
+      "dataRoute": "/lessons/regression.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/lessons/regression-interactive": {
       "experimentalBypassFor": [
         {
@@ -534,7 +510,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/mean-deviation": {
+    "/lessons/confidence-interval": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -547,8 +523,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/mean-deviation",
-      "dataRoute": "/lessons/mean-deviation.rsc",
+      "srcRoute": "/lessons/confidence-interval",
+      "dataRoute": "/lessons/confidence-interval.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -558,7 +534,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/mean-deviation-editable": {
+    "/lessons/bivariate-tables-editable": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -571,8 +547,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/mean-deviation-editable",
-      "dataRoute": "/lessons/mean-deviation-editable.rsc",
+      "srcRoute": "/lessons/bivariate-tables-editable",
+      "dataRoute": "/lessons/bivariate-tables-editable.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -582,7 +558,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/lessons/introduction": {
+    "/lessons/chi-square-editable": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -595,8 +571,32 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/lessons/introduction",
-      "dataRoute": "/lessons/introduction.rsc",
+      "srcRoute": "/lessons/chi-square-editable",
+      "dataRoute": "/lessons/chi-square-editable.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/lessons/descriptive-stats-editable": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/lessons/descriptive-stats-editable",
+      "dataRoute": "/lessons/descriptive-stats-editable.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -610,8 +610,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "fdb7104978171a56830a2babb6e880bf",
-    "previewModeSigningKey": "3c46612226521acd1e10905bc623d65cfb33057063b660b4fcfaa945f9ff0762",
-    "previewModeEncryptionKey": "e7699e0e2794a216eafef567b9ce101dc376f50381fb639fa5808c58201f11c1"
+    "previewModeId": "f9e7fae9f03dd4341181b6994c2dc30c",
+    "previewModeSigningKey": "42fe311da7f7beafecec65ae0939eeec168e4dc5cb72e595e92f928996eae2d7",
+    "previewModeEncryptionKey": "0ebae2e8f01873ad57202fd89f0df881faf348fd994c616c74105cbc6938578b"
   }
 }

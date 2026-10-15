@@ -11,15 +11,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/lessons/univariate-tables-editable/page": [
+    "/lessons/regression-editable/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/lessons/univariate-tables-editable/page.js"
-    ],
-    "/lessons/univariate-tables/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/lessons/univariate-tables/page.js"
+      "static/chunks/app/lessons/regression-editable/page.js"
     ]
   }
 }

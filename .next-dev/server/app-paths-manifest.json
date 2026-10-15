@@ -1,5 +1,5 @@
 {
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/lessons/univariate-tables-editable/page": "app/lessons/univariate-tables-editable/page.js",
-  "/lessons/univariate-tables/page": "app/lessons/univariate-tables/page.js"
+  "/lessons/regression-editable/page": "app/lessons/regression-editable/page.js"
 }

@@ -1,8 +1,8 @@
-// File: /home/perezoso/Dropbox/cursos2/cuanti/cse/cuanti/v2/src/app/lessons/univariate-tables/page.tsx
-import * as entry from '../../../../../src/app/lessons/univariate-tables/page.js'
+// File: /home/perezoso/Dropbox/cursos2/cuanti/cse/cuanti/v2/src/app/lessons/regression-editable/page.tsx
+import * as entry from '../../../../../src/app/lessons/regression-editable/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../../src/app/lessons/univariate-tables/page.js')
+type TEntry = typeof import('../../../../../src/app/lessons/regression-editable/page.js')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }

@@ -80,6 +80,12 @@ export default function RegressionLabPage() {
         title="Una misma hora, una respuesta que depende de la nube"
         visual={
           <div className="space-y-5">
+            <div className="flex flex-wrap gap-2">
+              <button type="button" className={buttonClass} onClick={() => setData(INITIAL)}>Restablecer</button>
+              <button type="button" className={buttonClass} onClick={() => setData(generateCorrelatedData(-0.9, 24, 92))}>Nube ajustada</button>
+              <button type="button" className={buttonClass} onClick={() => setData(generateCorrelatedData(-0.2, 24, 92))}>Nube dispersa</button>
+              <button type="button" className={buttonClass} onClick={() => setData((current) => current.map((point, index) => index === 0 ? { x: 9.7, y: 38 } : point))}>Caso influyente</button>
+            </div>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <label className="min-w-[16rem] flex-1 text-sm font-bold text-[var(--text)]">
                 Horas de sueño: <span className="font-mono text-[var(--accent)]">{predictionX.toFixed(1)}</span>
@@ -90,7 +96,8 @@ export default function RegressionLabPage() {
                 <p className="font-mono text-3xl font-bold text-[var(--success)]">{prediction.toFixed(1)}</p>
               </div>
             </div>
-            <RegressionPlot data={data} line={model} predictionX={predictionX} />
+            <RegressionPlot data={data} line={model} predictionX={predictionX} editable onChange={movePoint} />
+            <p className="text-xs text-[var(--text-muted)]">Cambiá la nube con los controles o arrastrá un punto: la recta y la predicción se actualizan en el momento.</p>
           </div>
         }
       >

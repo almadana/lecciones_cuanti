@@ -66,6 +66,12 @@ export default function RegressionPlot({
   const yInvert = (value: number) => yDomain[0] + ((HEIGHT - MARGIN.bottom - value) / (HEIGHT - MARGIN.top - MARGIN.bottom)) * (yDomain[1] - yDomain[0])
   const ticks = [0, 0.25, 0.5, 0.75, 1]
   const predictionY = line && predictionX !== undefined ? line.intercept + line.slope * predictionX : undefined
+  const formatTick = (value: number, domain: [number, number]) => {
+    const span = Math.abs(domain[1] - domain[0])
+    const digits = span >= 20 ? 0 : span >= 2 ? 1 : 2
+    const fixed = value.toFixed(digits)
+    return fixed.includes('.') ? fixed.replace(/0+$/, '').replace(/\.$/, '') : fixed
+  }
 
   return (
     <svg
@@ -98,9 +104,9 @@ export default function RegressionPlot({
         return (
           <g key={position} fill="var(--text-muted)" fontSize="12">
             <line x1={xScale(xValue)} x2={xScale(xValue)} y1={MARGIN.top} y2={HEIGHT - MARGIN.bottom} stroke="var(--border)" />
-            <text x={xScale(xValue)} y={HEIGHT - MARGIN.bottom + 22} textAnchor="middle">{xValue.toFixed(xValue % 1 ? 1 : 0)}</text>
+            <text x={xScale(xValue)} y={HEIGHT - MARGIN.bottom + 22} textAnchor="middle">{formatTick(xValue, xDomain)}</text>
             <line x1={MARGIN.left} x2={WIDTH - MARGIN.right} y1={yScale(yValue)} y2={yScale(yValue)} stroke="var(--border)" />
-            <text x={MARGIN.left - 10} y={yScale(yValue) + 4} textAnchor="end">{yValue.toFixed(0)}</text>
+            <text x={MARGIN.left - 10} y={yScale(yValue) + 4} textAnchor="end">{formatTick(yValue, yDomain)}</text>
           </g>
         )
       })}
